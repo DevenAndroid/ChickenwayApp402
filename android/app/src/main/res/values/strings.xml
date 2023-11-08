@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aabitzapp</string>
+    <string name="facebook_app_id">2184458211746668</string>
+    <string name="facebook_client_token">YOUR_CLIENT_TOKEN</string>
+</resources>

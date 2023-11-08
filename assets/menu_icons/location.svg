@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="37" height="37" viewBox="0 0 37 37">
+  <g id="Icon" transform="translate(0.5 0.5)">
+    <rect id="Rectangle" width="36" height="36" rx="18" transform="translate(0 0)" fill="#fff" stroke="#eaeaea" stroke-width="1"/>
+    <g id="Icon-2" data-name="Icon" transform="translate(10 8)">
+      <path id="Path" d="M16,8.182C16,14.545,8,20,8,20S0,14.545,0,8.182A8.092,8.092,0,0,1,8,0a8.092,8.092,0,0,1,8,8.182Z" fill="#e02020"/>
+      <ellipse id="Oval" cx="2.667" cy="2.727" rx="2.667" ry="2.727" transform="translate(5.333 5.455)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

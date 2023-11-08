@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "833059812033",
+    "project_id": "chickenway-c67b0",
+    "storage_bucket": "chickenway-c67b0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:833059812033:android:415d90092f6fbe49adda40",
+        "android_client_info": {
+          "package_name": "com.chickenway.moka"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "833059812033-r6krf8d483n13kft3dfn54d0ia2octoc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chickenway.moka",
+            "certificate_hash": "816e508e771bf4ea597323645a662d7dc4ac5f1f"
+          }
+        },
+        {
+          "client_id": "833059812033-k5icsgqlcc9mgb7npdt8bv839bb78vd2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDl0WSnldzIu5kKFlwrW32-IkOedYMTZlY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "833059812033-k5icsgqlcc9mgb7npdt8bv839bb78vd2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
