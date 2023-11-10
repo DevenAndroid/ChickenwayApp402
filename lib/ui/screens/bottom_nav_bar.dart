@@ -443,14 +443,19 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      Image.asset(
+                                      model.value.data!.bestSellerData!.icon == null ?
+                                     Image.network(
+                                        'assets/images/chicken_icon.png',
+                                        width: 25,
+                                        height: 25,
+                                      ):  Image.asset(
                                         'assets/images/chicken_icon.png',
                                         width: 25,
                                         height: 25,
                                       ).toAppIcon,
                                       addWidth(9),
                                       Text(
-                                        'BESTSELLERS',
+                                       model.value.data!.bestSellerData!.title!.toUpperCase().toString(),
                                         style: GoogleFonts.poppins(
                                           color: const Color(0xFF292323),
                                           fontSize: 14.5,
@@ -469,27 +474,23 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                           horizontal: 15),
                                       scrollDirection: Axis.horizontal,
                                       itemCount:
-                                          model.value.data!.bestSeller!.length,
+                                          model.value.data!.vSlider!.length,
                                       // padding: const EdgeInsets.fromLTRB(2, 2, 2, 2),
                                       itemBuilder: (context, index) {
                                         return Row(
                                           children: [
                                             InkWell(
                                               onTap: () {
+
                                                 Get.toNamed(SingleProductScreen.route, arguments: [
-                                                  model.value.data!.categoryProducts!
-                                                      .products![index].id
-                                                      .toString(),
-                                                  model.value.data!.categoryProducts!
-                                                      .products![index].imageUrl
-                                                      .toString(),
-                                                  model.value.data!.categoryProducts!
-                                                      .products![index].name
-                                                      .toString()
+                                                  model.value.data!.vSlider![index].productId.toString(),
+                                                  model.value.data!.vSlider![index].image.toString(),
+
                                                 ]);
                                               },
                                               child: Container(
-                                                width: 160,
+                                                width: 180,
+                                                height:170,
                                                 decoration: BoxDecoration(
                                                     borderRadius:
                                                         BorderRadius.circular(
@@ -502,8 +503,8 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                                       imageUrl: model
                                                           .value
                                                           .data!
-                                                          .bestSeller![index]
-                                                          .bestsellerSliderUrl
+                                                          .vSlider![index]
+                                                          .image
                                                           .toString(),
                                                       fit: BoxFit.cover,
                                                       errorWidget:
@@ -529,7 +530,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                     },
                                     child: SizedBox(
                                       width: context.getDeviceSize.width,
-                                      height: 140,
+                                      height: 180,
                                       child: Stack(
                                         children: [
                                           Positioned.fill(
@@ -541,7 +542,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                                   margin:
                                                       const EdgeInsets.fromLTRB(
                                                           3, 0, 6, 15),
-                                                  height: 125,
+
                                                   child: Card(
                                                     elevation: 4,
                                                     child: Row(
@@ -569,7 +570,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                                                       color: const Color(
                                                                           0xffE02020),
                                                                       fontSize:
-                                                                          22,
+                                                                          20,
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .bold),
@@ -811,7 +812,6 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                     arguments: [
                       e.productId.toString(),
                       e.image.toString(),
-                      e.productLink.toString()
                     ],
                   );
                 },
@@ -999,14 +999,19 @@ class MainHomeScreenState extends State<MainHomeScreen> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Image.asset(
+          model.value.data!.yallaData!.icon == null?
+         Image.network(
+           model.value.data!.yallaData!.icon.toString(),
+           width: 25,
+            height: 25,
+          ):    Image.asset(
             'assets/images/chicken_icon.png',
             width: 25,
             height: 25,
           ).toAppIcon,
           addWidth(9),
           Text(
-            'YALLA MENU',
+           model.value.data!.yallaData!.title!.toUpperCase().toString(),
             style: GoogleFonts.poppins(
               color: const Color(0xFF292323),
               fontSize: 14.5,
@@ -1167,14 +1172,19 @@ class MainHomeScreenState extends State<MainHomeScreen> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Image.asset(
+          model.value.data!.deliciousData!.icon == null ?
+          Image.network(
+            'assets/images/chicken_icon.png',
+            width: 25,
+            height: 25,
+          ):  Image.asset(
             'assets/images/chicken_icon.png',
             width: 25,
             height: 25,
           ).toAppIcon,
           addWidth(6),
           Text(
-            'DELICIOUS',
+          model.value.data!.deliciousData!.title!.toUpperCase().toString(),
             style: GoogleFonts.poppins(
               color: const Color(0xFF292323),
               fontSize: 14.5,

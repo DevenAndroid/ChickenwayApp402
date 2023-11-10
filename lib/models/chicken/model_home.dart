@@ -42,6 +42,10 @@ class Data {
   List<PopularProduct>? popularProducts;
   List<Slider>? hSlider;
   List<Slider>? vSlider;
+  BestSellerDataClass? yallaData;
+  BestSellerDataClass? bestSellerData;
+  BestSellerDataClass? deliciousData;
+  BestSellerDataClass? shortcutsData;
   CategoryProducts? categoryProducts;
   List<OffersGallery>? offersGallery;
   List<TimeBannerAd>? timeBannerAd;
@@ -57,6 +61,10 @@ class Data {
     this.popularProducts,
     this.hSlider,
     this.vSlider,
+    this.yallaData,
+    this.bestSellerData,
+    this.deliciousData,
+    this.shortcutsData,
     this.categoryProducts,
     this.offersGallery,
     this.timeBannerAd,
@@ -73,6 +81,10 @@ class Data {
     popularProducts: json["popular_products"] == null ? [] : List<PopularProduct>.from(json["popular_products"]!.map((x) => PopularProduct.fromJson(x))),
     hSlider: json["h_slider"] == null ? [] : List<Slider>.from(json["h_slider"]!.map((x) => Slider.fromJson(x))),
     vSlider: json["v_slider"] == null ? [] : List<Slider>.from(json["v_slider"]!.map((x) => Slider.fromJson(x))),
+    yallaData: json["yalla_data"] == null ? null : BestSellerDataClass.fromJson(json["yalla_data"]),
+    bestSellerData: json["best_seller_data"] == null ? null : BestSellerDataClass.fromJson(json["best_seller_data"]),
+    deliciousData: json["delicious_data"] == null ? null : BestSellerDataClass.fromJson(json["delicious_data"]),
+    shortcutsData: json["shortcuts_data"] == null ? null : BestSellerDataClass.fromJson(json["shortcuts_data"]),
     categoryProducts: json["category_products"] == null ? null : CategoryProducts.fromJson(json["category_products"]),
     offersGallery: json["offers_gallery"] == null ? [] : List<OffersGallery>.from(json["offers_gallery"]!.map((x) => OffersGallery.fromJson(x))),
     timeBannerAd: json["time_banner_ad"] == null ? [] : List<TimeBannerAd>.from(json["time_banner_ad"]!.map((x) => TimeBannerAd.fromJson(x))),
@@ -89,6 +101,10 @@ class Data {
     "popular_products": popularProducts == null ? [] : List<dynamic>.from(popularProducts!.map((x) => x.toJson())),
     "h_slider": hSlider == null ? [] : List<dynamic>.from(hSlider!.map((x) => x.toJson())),
     "v_slider": vSlider == null ? [] : List<dynamic>.from(vSlider!.map((x) => x.toJson())),
+    "yalla_data": yallaData?.toJson(),
+    "best_seller_data": bestSellerData?.toJson(),
+    "delicious_data": deliciousData?.toJson(),
+    "shortcuts_data": shortcutsData?.toJson(),
     "category_products": categoryProducts?.toJson(),
     "offers_gallery": offersGallery == null ? [] : List<dynamic>.from(offersGallery!.map((x) => x.toJson())),
     "time_banner_ad": timeBannerAd == null ? [] : List<dynamic>.from(timeBannerAd!.map((x) => x.toJson())),
@@ -113,6 +129,26 @@ class BestSeller {
 
   Map<String, dynamic> toJson() => {
     "bestseller_slider_url": bestsellerSliderUrl,
+  };
+}
+
+class BestSellerDataClass {
+  String? icon;
+  String? title;
+
+  BestSellerDataClass({
+    this.icon,
+    this.title,
+  });
+
+  factory BestSellerDataClass.fromJson(Map<String, dynamic> json) => BestSellerDataClass(
+    icon: json["icon"],
+    title: json["title"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "icon": icon,
+    "title": title,
   };
 }
 

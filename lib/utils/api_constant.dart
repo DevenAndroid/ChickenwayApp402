@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ApiUrls {
-  static const String apiBaseUrl = 'https://chickenway.app/wp-json/api/';
+  static const String apiBaseUrl = 'https://chickenway.app/statging/wp-json/api/';
 
   static const String loginUrl = "${apiBaseUrl}woocustomer/sign_in";
   static const String deleteAddress =

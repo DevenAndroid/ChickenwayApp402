@@ -28,6 +28,17 @@ extension PaddedWidget on Widget{
         height: 20,
       );
   }
+  Widget get toAppIconLarge{
+    return Padding(
+      padding: const EdgeInsets.all(50.0),
+      child: SvgPicture.asset(
+          'assets/icons/chicken.svg',
+          width: double.maxFinite,
+          height: double.maxFinite,
+        fit: BoxFit.contain,
+        ),
+    );
+  }
   Widget get toLargeAppIcon => SvgPicture.asset(
     'assets/icons/logo_and_name.svg',
     width: 280,
