@@ -93,7 +93,7 @@ class _SplashScreen2State extends State<SplashScreen2> {
   Widget build(BuildContext context) {
     log("ghjgjh$image");
     return Scaffold(
-      backgroundColor: Colors.red,
+      backgroundColor: Colors.white,
       body: Obx(() {
         return AnimatedOpacity(
           opacity: animate.value ? 1.0 : 0.0,
@@ -115,7 +115,7 @@ class _SplashScreen2State extends State<SplashScreen2> {
             ),
           )
               : Center(child: const Center(child: CircularProgressIndicator(
-            color: Colors.white,
+            color: Colors.red,
           ))),
         );
       }),
