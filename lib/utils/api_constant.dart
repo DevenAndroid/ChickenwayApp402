@@ -66,6 +66,11 @@ class ApiUrls {
   static const String getWishListUrl = "${apiBaseUrl}get_wishlist_items";
   static const String siteUrl = "${apiBaseUrl}woohomepage/site_url";
   static const String addReviewUrl = "${apiBaseUrl}woo_api/product_review";
+
+  static const String switchOffUrl = "https://chickenway.app/statging/wp-json/api/woohomepage/switch_off_store";
+  static const String popUpUrl = "https://chickenway.app/statging/wp-json/api/woohomepage/popup_data";
+
+
   static const String getAllMenuProductsUrl =
       "${apiBaseUrl}woo_api/category_all_products";
   static const String shippingMethodsUrl =

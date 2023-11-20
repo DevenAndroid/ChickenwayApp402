@@ -239,6 +239,7 @@ class Repositories {
 clearAll() async {
   SharedPreferences preferences = await SharedPreferences.getInstance();
   await preferences.clear();
+  preferences.setString("initial_dialog", "done");
   Get.back();
   Get.back();
   Get.back();

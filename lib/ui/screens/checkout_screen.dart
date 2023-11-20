@@ -344,6 +344,7 @@ class _CheckoutCScreenState extends State<CheckoutCScreen> {
                                               fontSize: 14,
                                               fontWeight: FontWeight.w600),
                                         ),
+
                             ),
                             InkWell(
                               onTap: () {

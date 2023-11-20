@@ -33,6 +33,8 @@ class CartController extends GetxController {
   Rx<UserAddress> deliveryAddress = UserAddress().obs;
   bool allowNavigation = false;
   final TextEditingController specialRequest = TextEditingController();
+  final TextEditingController crispyPlus = TextEditingController();
+
   final TextEditingController couponCode = TextEditingController();
   RxInt refreshInt = 0.obs;
   Map<String, int> productsMap = {};

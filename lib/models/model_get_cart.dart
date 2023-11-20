@@ -386,42 +386,42 @@ class Addons {
   }
 }
 
-// class CustomOptions {
-//   String? tmcpRadio0;
-//   String? tmcpCheckbox10;
-//   String? tmcpCheckbox11;
-//   String? tmcpCheckbox12;
-//   String? tmcpCheckbox13;
-//   String? tmcpCheckbox14;
-//
-//   CustomOptions(
-//       {this.tmcpRadio0,
-//         this.tmcpCheckbox10,
-//         this.tmcpCheckbox11,
-//         this.tmcpCheckbox12,
-//         this.tmcpCheckbox13,
-//         this.tmcpCheckbox14});
-//
-//   CustomOptions.fromJson(Map<String, dynamic> json) {
-//     tmcpRadio0 = json['tmcp_radio_0'];
-//     tmcpCheckbox10 = json['tmcp_checkbox_1_0'];
-//     tmcpCheckbox11 = json['tmcp_checkbox_1_1'];
-//     tmcpCheckbox12 = json['tmcp_checkbox_1_2'];
-//     tmcpCheckbox13 = json['tmcp_checkbox_1_3'];
-//     tmcpCheckbox14 = json['tmcp_checkbox_1_4'];
-//   }
-//
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = <String, dynamic>{};
-//     data['tmcp_radio_0'] = tmcpRadio0;
-//     data['tmcp_checkbox_1_0'] = tmcpCheckbox10;
-//     data['tmcp_checkbox_1_1'] = tmcpCheckbox11;
-//     data['tmcp_checkbox_1_2'] = tmcpCheckbox12;
-//     data['tmcp_checkbox_1_3'] = tmcpCheckbox13;
-//     data['tmcp_checkbox_1_4'] = tmcpCheckbox14;
-//     return data;
-//   }
-// }
+class CustomOptions {
+  String? tmcpRadio0;
+  String? tmcpCheckbox10;
+  String? tmcpCheckbox11;
+  String? tmcpCheckbox12;
+  String? tmcpCheckbox13;
+  String? tmcpCheckbox14;
+
+  CustomOptions(
+      {this.tmcpRadio0,
+        this.tmcpCheckbox10,
+        this.tmcpCheckbox11,
+        this.tmcpCheckbox12,
+        this.tmcpCheckbox13,
+        this.tmcpCheckbox14});
+
+  CustomOptions.fromJson(Map<String, dynamic> json) {
+    tmcpRadio0 = json['tmcp_radio_0'];
+    tmcpCheckbox10 = json['tmcp_checkbox_1_0'];
+    tmcpCheckbox11 = json['tmcp_checkbox_1_1'];
+    tmcpCheckbox12 = json['tmcp_checkbox_1_2'];
+    tmcpCheckbox13 = json['tmcp_checkbox_1_3'];
+    tmcpCheckbox14 = json['tmcp_checkbox_1_4'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['tmcp_radio_0'] = tmcpRadio0;
+    data['tmcp_checkbox_1_0'] = tmcpCheckbox10;
+    data['tmcp_checkbox_1_1'] = tmcpCheckbox11;
+    data['tmcp_checkbox_1_2'] = tmcpCheckbox12;
+    data['tmcp_checkbox_1_3'] = tmcpCheckbox13;
+    data['tmcp_checkbox_1_4'] = tmcpCheckbox14;
+    return data;
+  }
+}
 
 class CouponCode {
   String? title;

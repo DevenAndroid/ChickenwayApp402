@@ -18,10 +18,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../controller/new_controllers/address_controller.dart';
 import '../../helper/helper.dart';
+import '../../models/switch_off_model.dart';
 import '../../utils/api_constant.dart';
 import '../../utils/price_format.dart';
 import '../widget/app_bar.dart';
@@ -53,9 +55,8 @@ class CartScreenState extends State<CartScreen> {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled().then((value) {
       if (!value) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text(
-                'Location services are disabled. Please enable the services')));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Location services are disabled. Please enable the services')));
       }
       return value;
     });
@@ -64,17 +65,15 @@ class CartScreenState extends State<CartScreen> {
     }
     permission = await Geolocator.checkPermission().then((value) {
       if (value == LocationPermission.deniedForever) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text(
-                'Location permissions are permanently denied, we cannot request permissions.')));
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location permissions are permanently denied, we cannot request permissions.')));
       }
       return value;
     });
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission().then((value) {
         if (value == LocationPermission.denied) {
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Location permissions are denied')));
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Location permissions are denied')));
         }
         return value;
       });
@@ -94,10 +93,8 @@ class CartScreenState extends State<CartScreen> {
     await Permission.locationWhenInUse.request();
     final hasPermission = await _handleLocationPermission();
     if (!hasPermission) return;
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
-        .then((Position position) async {
-      currentLatLong =
-          LatLng(position.latitude, position.longitude).checkLatLong;
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high).then((Position position) async {
+      currentLatLong = LatLng(position.latitude, position.longitude).checkLatLong;
       _getAddressFromLatLng(currentLatLong);
       if (mounted) {
         setState(() {});
@@ -110,11 +107,9 @@ class CartScreenState extends State<CartScreen> {
   String address = "";
 
   _getAddressFromLatLng(LatLng latLong) async {
-    await placemarkFromCoordinates(latLong.latitude, latLong.longitude)
-        .then((List<Placemark> placemarks) {
+    await placemarkFromCoordinates(latLong.latitude, latLong.longitude).then((List<Placemark> placemarks) {
       var place = placemarks[0];
-      address =
-          '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
+      address = '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
       if (mounted) {
         setState(() {});
       }
@@ -123,32 +118,37 @@ class CartScreenState extends State<CartScreen> {
     });
   }
 
-  updateCartCount({
-    required CartProductItem product,
-    required bool increase,
-    required Function() updated
-  }) async {
+  switchUser() {
+    // Map<String, dynamic> map = {};
+
+    repositories.getApi(url: ApiUrls.switchOffUrl, mapData: {}).then((value) {
+      modelSwitchOff.value = ModelSwitchOff.fromJson(jsonDecode(value));
+      if (modelSwitchOff.value.status!) {
+        statusSwitchOff.value = RxStatus.success();
+      } else {
+        statusSwitchOff.value = RxStatus.error();
+      }
+    });
+  }
+
+  updateCartCount({required CartProductItem product, required bool increase, required Function() updated}) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     // if (preferences.getString('user_details') != null) {
     Map<String, dynamic> map = {};
     map["product_id"] = product.product!.id;
     map["quantity"] = increase ? "1" : "-1";
-    if (product.addons!.cCustomOptions != null &&
-        product.addons!.cCustomOptions!.isNotEmpty) {
+    if (product.addons!.cCustomOptions != null && product.addons!.cCustomOptions!.isNotEmpty) {
       map["option_values"] = product.addons!.cCustomOptions!;
-      map["option_price"] = preferences.getString('user_details') != null
-          ? product.addons!.iCustomPrice
-          : product.addons!.option_price;
+      map["option_price"] =
+          preferences.getString('user_details') != null ? product.addons!.iCustomPrice : product.addons!.option_price;
     }
 
-    repositories
-        .postApi(url: ApiUrls.updateCartUrl, mapData: map, context: context)
-        .then((value) {
-          log("update Response....     $value");
-          ModelResponseCommon modelResponseCommon = ModelResponseCommon.fromJson(jsonDecode(value));
-          if(modelResponseCommon.status == true){
-             updated();
-          }
+    repositories.postApi(url: ApiUrls.updateCartUrl, mapData: map, context: context).then((value) {
+      log("update Response....     $value");
+      ModelResponseCommon modelResponseCommon = ModelResponseCommon.fromJson(jsonDecode(value));
+      if (modelResponseCommon.status == true) {
+        updated();
+      }
       cartController.getData();
     });
   }
@@ -156,12 +156,16 @@ class CartScreenState extends State<CartScreen> {
   RxString currentCoupon = "".obs;
   RxString appliedCoupon = "".obs;
 
+  Rx<ModelSwitchOff> modelSwitchOff = ModelSwitchOff().obs;
+  Rx<RxStatus> statusSwitchOff = RxStatus.empty().obs;
+
   @override
   void initState() {
     super.initState();
     _getCurrentPosition();
     cartController.getData();
     addressController.getAddresses();
+    switchUser();
     getShippingList().then((value) {
       setState(() {});
     });
@@ -177,13 +181,14 @@ class CartScreenState extends State<CartScreen> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: const Color(0xffF5F5F5),
-      appBar: commonAppBar(
-          title: "BASKET", showCart: false, backGround: Colors.white),
+      appBar: commonAppBar(title: "BASKET", showCart: false, backGround: Colors.white),
       body: Obx(() {
         if (cartController.refreshInt.value > 0) {}
         return (cartController.isDataLoading.value &&
+                statusSwitchOff.value.isSuccess &&
                 cartController.model.value.data != null)
             ? cartController.model.value.data!.items!.isNotEmpty
+        &&statusSwitchOff.value.isSuccess
                 ? RefreshIndicator(
                     onRefresh: () async {
                       _getCurrentPosition();
@@ -203,9 +208,7 @@ class CartScreenState extends State<CartScreen> {
                                   width: 20,
                                 ),
                                 Container(
-                                  decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.white),
+                                  decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.white),
                                   padding: const EdgeInsets.all(5),
                                   child: const Icon(
                                     Icons.location_on_rounded,
@@ -217,28 +220,28 @@ class CartScreenState extends State<CartScreen> {
                                 Expanded(
                                     child: Text(
                                   address,
-                                  style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.w500),
+                                  style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
                                 ))
                               ],
                             ),
                           const SizedBox(
                             height: 16,
                           ),
-                          ...cartController.model.value.data!.items!
-                              .map((product) => cartItems(product, (){cartController.model.value.data!.items!.remove(product);setState(() {});}))
-                              .toList(),
+                          ...cartController.model.value.data?.items
+                              ?.map((product) => cartItems(product, () {
+                            cartController.model.value.data!.items!.remove(product);
+                            setState(() {});
+                          }))
+                              ?.toList() ?? [],
                           Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 5),
+                            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                             child: Card(
                               elevation: 0,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 6),
+                                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -259,13 +262,9 @@ class CartScreenState extends State<CartScreen> {
                                       decoration: InputDecoration(
                                           border: InputBorder.none,
                                           hintStyle: GoogleFonts.poppins(
-                                              color: const Color(0xff999999),
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 10),
-                                          prefixIcon: Image.asset(
-                                              'assets/images/special.png'),
-                                          hintText:
-                                              'write your special request here'),
+                                              color: const Color(0xff999999), fontWeight: FontWeight.w400, fontSize: 10),
+                                          prefixIcon: Image.asset('assets/images/special.png'),
+                                          hintText: 'write your special request here'),
                                     ),
                                     addHeight(20),
                                   ],
@@ -274,8 +273,7 @@ class CartScreenState extends State<CartScreen> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 6, horizontal: 15),
+                            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 15),
                             child: Card(
                               elevation: 0,
                               shape: RoundedRectangleBorder(
@@ -287,8 +285,7 @@ class CartScreenState extends State<CartScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text('Save on your order',
                                             style: GoogleFonts.poppins(
@@ -313,68 +310,41 @@ class CartScreenState extends State<CartScreen> {
                                       },
                                       decoration: InputDecoration(
                                           enabled: true,
-                                          contentPadding:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 15, vertical: 10),
+                                          contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                                           enabledBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
+                                              borderRadius: BorderRadius.circular(10),
                                               borderSide: BorderSide(
                                                 color: Colors.grey.shade400,
                                               )),
                                           border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
+                                              borderRadius: BorderRadius.circular(10),
                                               borderSide: const BorderSide(
                                                 color: Colors.grey,
                                               )),
                                           suffixIcon: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10),
+                                            padding: const EdgeInsets.symmetric(horizontal: 10),
                                             child: TextButton(
                                               onPressed: () {
-                                                if (cartController
-                                                    .couponCode.text
-                                                    .trim()
-                                                    .isNotEmpty) {
-                                                  cartController
-                                                      .getData(context: context)
-                                                      .then((value) {
-                                                    if (cartController
-                                                        .model
-                                                        .value
-                                                        .data!
-                                                        .couponCode!
-                                                        .isNotEmpty) {
-                                                      showToast(
-                                                          "Coupon Code Applied");
-                                                      appliedCoupon.value =
-                                                          cartController
-                                                              .couponCode.text
-                                                              .trim();
+                                                if (cartController.couponCode.text.trim().isNotEmpty) {
+                                                  cartController.getData(context: context).then((value) {
+                                                    if (cartController.model.value.data!.couponCode!.isNotEmpty) {
+                                                      showToast("Coupon Code Applied");
+                                                      appliedCoupon.value = cartController.couponCode.text.trim();
                                                     }
                                                   });
                                                 } else {
-                                                  showToast(
-                                                      "Please enter coupon code");
+                                                  showToast("Please enter coupon code");
                                                 }
                                               },
                                               child: Obx(() {
                                                 return Text(
-                                                  currentCoupon.value !=
-                                                          appliedCoupon.value
+                                                  currentCoupon.value != appliedCoupon.value
                                                       ? "Apply"
-                                                      : cartController
-                                                              .model
-                                                              .value
-                                                              .data!
-                                                              .couponCode!
-                                                              .isNotEmpty
+                                                      : cartController.model.value.data!.couponCode!.isNotEmpty
                                                           ? " Applied"
                                                           : "Apply",
                                                   style: GoogleFonts.poppins(
-                                                    color:
-                                                        AppTheme.primaryColor,
+                                                    color: AppTheme.primaryColor,
                                                     fontSize: 15,
                                                   ),
                                                 );
@@ -426,29 +396,42 @@ class CartScreenState extends State<CartScreen> {
               const SizedBox(
                 width: 20,
               ),
-              Expanded(
-                child: CommonButton(
-                  buttonHeight: 6.7,
-                  btnColor: const Color(0xffE02020),
-                  text: 'Checkout',
-                  onTap: () async {
-                    prefs.SharedPreferences preferences =
-                        await prefs.SharedPreferences.getInstance();
-                    if (preferences.getString('user_details') != null) {
-                      if (cartController.model.value.data!.items!.isNotEmpty) {
-                        Get.toNamed(CheckoutCScreen.route);
+              if (modelSwitchOff.value.data?.switchOffStore != null)
+                if (modelSwitchOff.value.data!.switchOffStore != 'hide')
+                Expanded(
+                  child: CommonButton(
+                    buttonHeight: 6.7,
+                    btnColor: const Color(0xffE02020),
+                    text: 'Checkout',
+                    onTap: () async {
+                      prefs.SharedPreferences preferences = await prefs.SharedPreferences.getInstance();
+                      if (preferences.getString('user_details') != null) {
+                        if (cartController.model.value.data!.items!.isNotEmpty) {
+                          Get.toNamed(CheckoutCScreen.route);
+                        } else {
+                          showToast("Please add item in your cart");
+                        }
                       } else {
-                        showToast("Please add item in your cart");
+                        showToast("Please log in to continue");
+                        Get.to(() => const LoginScreen());
+                        Get.to(() => const SignUpScreen());
                       }
-                    } else {
-                      showToast("Please log in to continue");
-                      Get.to(() => const LoginScreen());
-                      Get.to(() => const SignUpScreen());
-                    }
-                  },
-                  buttonWidth: 0,
-                ),
-              )
+                    },
+                    buttonWidth: 0,
+                  ),
+                )
+              else
+
+                 CommonButton(
+                        buttonHeight: 6.7,
+                        btnColor: const Color(0xffE02020),
+                        text: 'Closed',
+                        onTap: () {
+                          FlutterError("we are currently closed please comeback tomorrow");
+                        },
+                        buttonWidth: 0,
+                      )
+
             ],
           ),
         ),
@@ -480,31 +463,22 @@ class CartScreenState extends State<CartScreen> {
                   children: [
                     Text.rich(TextSpan(
                         text: "${product.quantity}x ",
-                        style: GoogleFonts.poppins(
-                            color: const Color(0xFFE02020),
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600),
+                        style:
+                            GoogleFonts.poppins(color: const Color(0xFFE02020), fontSize: 15, fontWeight: FontWeight.w600),
                         children: <InlineSpan>[
                           TextSpan(
                               text: product.product!.name ?? "",
                               style: GoogleFonts.poppins(
-                                  color: const Color(0xFF292323),
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600))
+                                  color: const Color(0xFF292323), fontSize: 15, fontWeight: FontWeight.w600))
                         ])),
                     const SizedBox(
                       height: 4,
                     ),
                     if (product.addons != null)
                       Text(
-                        product.addons!.cCustomOptions!.entries
-                            .map((e) => e.value.toString())
-                            .toList()
-                            .join(" + "),
-                        style: GoogleFonts.poppins(
-                            color: const Color(0xFF444444),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400),
+                        product.addons!.cCustomOptions!.entries.map((e) => e.value.toString()).toList().join(" + "),
+                        style:
+                            GoogleFonts.poppins(color: const Color(0xFF444444), fontSize: 14, fontWeight: FontWeight.w400),
                       ),
                   ],
                 ),
@@ -541,19 +515,12 @@ class CartScreenState extends State<CartScreen> {
                           product.addons!.cCustomOptions!.isNotEmpty
                               ? product.totalPrice.toString() != "0"
                                   ? int.parse(product.totalPrice.toString())
-                                  : (int.parse(
-                                          product.product!.price.toString()) *
-                                      (int.tryParse(
-                                              product.quantity.toString()) ??
-                                          1))
+                                  : (int.parse(product.product!.price.toString()) *
+                                      (int.tryParse(product.quantity.toString()) ?? 1))
                               : (int.parse(product.product!.price.toString()) *
-                                  (int.tryParse(product.quantity.toString()) ??
-                                      1)),
+                                  (int.tryParse(product.quantity.toString()) ?? 1)),
                           product.product!.currencySymbol!,
-                          GoogleFonts.poppins(
-                              color: const Color(0xFF444444),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400),
+                          GoogleFonts.poppins(color: const Color(0xFF444444), fontSize: 16, fontWeight: FontWeight.w400),
                         )),
                   ],
                 ),
@@ -561,16 +528,15 @@ class CartScreenState extends State<CartScreen> {
               InkWell(
                 onTap: () {
                   updateCartCount(
-                    product: product,
-                    increase: false,
-                    updated: (){
-                      product.quantity = ((int.tryParse(product.quantity.toString()) ?? 0) - 1).toString();
-                      if((int.tryParse(product.quantity.toString()) ?? 0) <= 0){
-                        remove();
-                      }
-                      setState(() {});
-                    }
-                  );
+                      product: product,
+                      increase: false,
+                      updated: () {
+                        product.quantity = ((int.tryParse(product.quantity.toString()) ?? 0) - 1).toString();
+                        if ((int.tryParse(product.quantity.toString()) ?? 0) <= 0) {
+                          remove();
+                        }
+                        setState(() {});
+                      });
                 },
                 child: Container(
                   height: 31,
@@ -590,21 +556,20 @@ class CartScreenState extends State<CartScreen> {
               ),
               Text(
                 product.quantity.toString(),
-                style: GoogleFonts.poppins(
-                    color: const Color(0xFF333333),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600),
+                style: GoogleFonts.poppins(color: const Color(0xFF333333), fontSize: 16, fontWeight: FontWeight.w600),
               ),
               const SizedBox(
                 width: 10,
               ),
               InkWell(
                 onTap: () {
-                  updateCartCount(product: product, increase: true,
-                  updated: (){
-                    product.quantity = ((int.tryParse(product.quantity.toString()) ?? 0) + 1).toString();
-                    setState(() {});
-                  });
+                  updateCartCount(
+                      product: product,
+                      increase: true,
+                      updated: () {
+                        product.quantity = ((int.tryParse(product.quantity.toString()) ?? 0) + 1).toString();
+                        setState(() {});
+                      });
                 },
                 child: Container(
                   height: 31,
@@ -632,8 +597,7 @@ cartBottomWidget({onTap}) {
   return Obx(() {
     if (cartController.refreshInt.value > 0) {}
     return cartController.hasInternetConnection
-        ? (cartController.isDataLoading.value &&
-                cartController.model.value.data != null)
+        ? (cartController.isDataLoading.value && cartController.model.value.data != null)
             ? cartController.model.value.data!.items!.isNotEmpty
                 ? Hero(
                     tag: "Cart",
@@ -648,30 +612,25 @@ cartBottomWidget({onTap}) {
                             },
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: AppTheme.primaryColor,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(4))),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
                             child: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 8),
                               child: Row(
                                 children: [
                                   Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 13, vertical: 5),
+                                    padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 5),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(5),
                                       color: const Color(0xFFFFA5A5),
                                     ),
                                     child: Text(
                                       cartController.model.value.data!.items!
-                                          .map((e) => int.parse(
-                                              (e.quantity ?? 0).toString()))
+                                          .map((e) => int.parse((e.quantity ?? 0).toString()))
                                           .toList()
                                           .sum
                                           .toString(),
                                       style: GoogleFonts.poppins(
-                                          color: const Color(0xFFFFFFFF),
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w600),
+                                          color: const Color(0xFFFFFFFF), fontSize: 12, fontWeight: FontWeight.w600),
                                     ),
                                   ),
                                   const SizedBox(
@@ -680,36 +639,26 @@ cartBottomWidget({onTap}) {
                                   Text(
                                     'View Basket',
                                     style: GoogleFonts.poppins(
-                                        color: const Color(0xFFFFFFFF),
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600),
+                                        color: const Color(0xFFFFFFFF), fontSize: 14, fontWeight: FontWeight.w600),
                                   ),
                                   const Spacer(),
                                   Padding(
                                     padding: const EdgeInsets.only(right: 8.0),
                                     child: Obx(() {
-                                      int total = cartController
-                                          .model.value.data!.items!
+                                      int total = cartController.model.value.data!.items!
                                           .map((e) =>
-                                              double.tryParse(
-                                                  e.totalPrice.toString() != "0"
-                                                      ? e.totalPrice.toString()
-                                                      : (int.parse(e.product!
-                                                                  .price
-                                                                  .toString()) *
-                                                              int.parse(e
-                                                                  .quantity
-                                                                  .toString()))
-                                                          .toString()) ??
+                                              double.tryParse(e.totalPrice.toString() != "0"
+                                                  ? e.totalPrice.toString()
+                                                  : (int.parse(e.product!.price.toString()) *
+                                                          int.parse(e.quantity.toString()))
+                                                      .toString()) ??
                                               0)
                                           .toList()
                                           .sum
                                           .toInt();
                                       return formatPrice2(
                                           total,
-                                          cartController.model.value.data!
-                                                  .cartmeta!.currencySymbol ??
-                                              '',
+                                          cartController.model.value.data!.cartmeta!.currencySymbol ?? '',
                                           GoogleFonts.poppins(
                                               color: const Color(0xFFFFFFFF),
                                               fontSize: 14,
@@ -736,16 +685,13 @@ cartBottomWidget({onTap}) {
                     onPressed: onTap ?? () {},
                     style: ElevatedButton.styleFrom(
                         backgroundColor: AppTheme.primaryColor,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4))),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Text(
                         'No Internet Connection',
-                        style: GoogleFonts.poppins(
-                            color: const Color(0xFFFFFFFF),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600),
+                        style:
+                            GoogleFonts.poppins(color: const Color(0xFFFFFFFF), fontSize: 14, fontWeight: FontWeight.w600),
                       ),
                     ),
                   )),
@@ -757,16 +703,13 @@ cartBottomWidget({onTap}) {
 buildHero(Size size, {String? deliveryFee, int? shippingAmount}) {
   final cartController = Get.put(CartController());
   int total = cartController.model.value.data!.items!
-      .map((e) =>
-          double.tryParse(e.totalPrice.toString() != "0"
-              ? e.totalPrice.toString()
-              : (int.parse(e.product!.price.toString()) *
-                      int.parse(e.quantity.toString()))
-                  .toString()) ??
-          0)
-      .toList()
-      .sum
-      .toInt();
+      .map((e) => double.tryParse(e.totalPrice.toString() != "0" ? e.totalPrice.toString() : (int.parse(e.product!.price.toString()) * int.parse(e.quantity.toString())).toString()) ?? 0).toList().sum.toInt();
+
+  final cleanedDeliveryFee = deliveryFee?.replaceAll(RegExp(r'[^0-9.]'), '');
+  final formattedDeliveryFee = cleanedDeliveryFee != null
+      ? NumberFormat.decimalPattern().format(double.parse(cleanedDeliveryFee))
+      : null;
+
   return Material(
     color: Colors.white,
     elevation: 0,
@@ -785,10 +728,7 @@ buildHero(Size size, {String? deliveryFee, int? shippingAmount}) {
         children: [
           Text(
             'Payment Summary',
-            style: GoogleFonts.poppins(
-                color: const Color(0xFF333333),
-                fontSize: 14,
-                fontWeight: FontWeight.w600),
+            style: GoogleFonts.poppins(color: const Color(0xFF333333), fontSize: 14, fontWeight: FontWeight.w600),
           ),
           const Divider(
             thickness: 0,
@@ -803,19 +743,10 @@ buildHero(Size size, {String? deliveryFee, int? shippingAmount}) {
             children: [
               Text(
                 'Basket Total',
-                style: GoogleFonts.poppins(
-                    color: const Color(0xFF555555),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500),
+                style: GoogleFonts.poppins(color: const Color(0xFF555555), fontSize: 14, fontWeight: FontWeight.w500),
               ),
-              formatPrice2(
-                  total,
-                  cartController.model.value.data!.cartmeta!.currencySymbol ??
-                      '',
-                  GoogleFonts.poppins(
-                      color: const Color(0xFF555555),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500),
+              formatPrice2(total, cartController.model.value.data!.cartmeta!.currencySymbol ?? '',
+                  GoogleFonts.poppins(color: const Color(0xFF555555), fontSize: 14, fontWeight: FontWeight.w500),
                   textAlign: TextAlign.end),
             ],
           ),
@@ -830,19 +761,12 @@ buildHero(Size size, {String? deliveryFee, int? shippingAmount}) {
               children: [
                 Text(
                   'Applied Coupon Code discount',
-                  style: GoogleFonts.poppins(
-                      color: Colors.red,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500),
+                  style: GoogleFonts.poppins(color: Colors.red, fontSize: 12, fontWeight: FontWeight.w500),
                 ),
                 formatPrice2(
                     cartController.model.value.data!.couponCode!.first.discount,
-                    cartController.model.value.data!.cartmeta!.currencySymbol ??
-                        '',
-                    GoogleFonts.poppins(
-                        color: Colors.red,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500),
+                    cartController.model.value.data!.cartmeta!.currencySymbol ?? '',
+                    GoogleFonts.poppins(color: Colors.red, fontSize: 12, fontWeight: FontWeight.w500),
                     textAlign: TextAlign.end),
               ],
             ),
@@ -853,23 +777,14 @@ buildHero(Size size, {String? deliveryFee, int? shippingAmount}) {
           if (deliveryFee != null)
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.max,
               children: [
                 Text(
                   'Delivery Fee',
-                  style: GoogleFonts.poppins(
-                      color: const Color(0xFF555555),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500),
+                  style: GoogleFonts.poppins(color: const Color(0xFF555555), fontSize: 14, fontWeight: FontWeight.w500),
                 ),
-                Expanded(
-                  child: Text(
-                    deliveryFee,
-                    style: GoogleFonts.poppins(
-                        color: const Color(0xFF555555),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500),
-                  ),
+                Text(
+                  formattedDeliveryFee!, // Use the formatted delivery fee
+                  style: GoogleFonts.poppins(color: const Color(0xFF555555), fontSize: 14, fontWeight: FontWeight.w500),
                 ),
               ],
             ),
@@ -883,28 +798,17 @@ buildHero(Size size, {String? deliveryFee, int? shippingAmount}) {
             children: [
               Text(
                 'Total amount',
-                style: GoogleFonts.poppins(
-                    color: const Color(0xFF555555),
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600),
+                style: GoogleFonts.poppins(color: const Color(0xFF555555), fontSize: 15, fontWeight: FontWeight.w600),
               ),
               formatPrice2(
                   (total -
-                          (cartController
-                                  .model.value.data!.couponCode!.isNotEmpty
-                              ? (int.tryParse(cartController.model.value.data!
-                                      .couponCode!.first.discount
-                                      .toString()) ??
-                                  0)
-                              : 0) +
-                          (shippingAmount ?? 0))
+                      (cartController.model.value.data!.couponCode!.isNotEmpty
+                          ? (int.tryParse(cartController.model.value.data!.couponCode!.first.discount.toString()) ?? 0)
+                          : 0) +
+                      (shippingAmount ?? 0))
                       .toString(),
-                  cartController.model.value.data!.cartmeta!.currencySymbol ??
-                      '',
-                  GoogleFonts.poppins(
-                      color: const Color(0xFF555555),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600),
+                  cartController.model.value.data!.cartmeta!.currencySymbol ?? '',
+                  GoogleFonts.poppins(color: const Color(0xFF555555), fontSize: 16, fontWeight: FontWeight.w600),
                   textAlign: TextAlign.end),
             ],
           ),
@@ -913,3 +817,6 @@ buildHero(Size size, {String? deliveryFee, int? shippingAmount}) {
     ),
   );
 }
+
+
+
