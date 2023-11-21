@@ -495,54 +495,42 @@ class _MenuScreenState extends State<MenuScreen> {
         },
       ),
       actions: [
-        AnimatedBuilder(
-            animation: scrollControllerVertical,
-            builder: (context, child) {
-              return Opacity(
-                opacity: (scrollControllerVertical.offset / 375) > 1
-                    ? 1
-                    : scrollControllerVertical.offset / 375,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 24.0, top: 8),
-                  child: Obx(() {
-                    if (cartController.refreshInt.value > 0) {}
-                    return InkWell(
-                      onTap: () {
-                        Get.toNamed(CartScreen.route);
-                      },
-                      child: (cartController.isDataLoading.value &&
-                              cartController.model.value.data != null &&
-                              cartController
-                                  .model.value.data!.items!.isNotEmpty)
-                          ? Badge(
-                              // badgeColor: Colors.black,
-                              badgeStyle:
-                                  const BadgeStyle(badgeColor: Colors.black),
-                              badgeContent: Text(
-                                cartController.model.value.data!.items!
-                                    .map((e) =>
-                                        int.parse((e.quantity ?? 0).toString()))
-                                    .toList()
-                                    .sum
-                                    .toString(),
-                                style: GoogleFonts.poppins(
-                                    color: Colors.white, fontSize: 10),
-                              ),
-                              child: Image.asset(
-                                'assets/images/cooking_icon.png',
-                                width: 26,
-                                height: 26,
-                              ))
-                          : Image.asset(
-                              'assets/images/cooking_icon.png',
-                              width: 26,
-                              height: 26,
-                            ),
-                    );
-                  }),
+        if (cartController.model.value.data!.items!.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(right: 24.0, top: 8),
+            child: Obx(() {
+              return InkWell(
+                onTap: () {
+                  Get.toNamed(CartScreen.route);
+                },
+                child: (cartController.isDataLoading.value &&
+                    cartController.model.value.data != null &&
+                    cartController.model.value.data!.items!.isNotEmpty)
+                    ? Badge(
+                    badgeStyle: const BadgeStyle(badgeColor: Colors.black),
+                    badgeContent: Text(
+                      cartController.model.value.data!.items!
+                          .map((e) => int.parse((e.quantity ?? 0).toString()))
+                          .toList()
+                          .sum
+                          .toString(),
+                      style: GoogleFonts.poppins(color: Colors.white, fontSize: 10),
+                    ),
+                    child: Image.asset(
+                      'assets/images/cooking_icon.png',
+                      width: 26,
+                      height: 26,
+                    ))
+                    : Image.asset(
+                  'assets/images/cooking_icon.png',
+                  width: 26,
+                  height: 26,
                 ),
               );
-            })
+            }),
+          )
+        else
+          SizedBox.shrink()
       ],
     );
   }

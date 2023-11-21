@@ -458,7 +458,82 @@ class _OrderDetailsState extends State<OrderDetails> {
                                               ],
                                             ),
                                             const SizedBox(
-                                              height: 8,
+                                              height: 5,
+                                            ),
+                                            Row(  mainAxisAlignment:
+                                            MainAxisAlignment
+                                                .spaceBetween,
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: [
+
+                                                Text("Delivery Fees: ",
+                                                    style:
+                                                    GoogleFonts.poppins(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                      FontWeight.w500,
+                                                    )),
+
+                                                SizedBox(
+                                                  width: 120,
+                                                  child: formatPrice2(
+                                                      model.value.data!.shippingTotal,
+                                                      model
+                                                          .value
+                                                          .data!
+                                                          .orderData!
+                                                          .lineItems![index]
+                                                          .currencySymbol,
+                                                    GoogleFonts.poppins(
+                                                        color: const Color(
+                                                            0xFF333333),
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                        FontWeight.w500),),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            Row(  mainAxisAlignment:
+                                            MainAxisAlignment
+                                                .spaceBetween,
+                                              mainAxisSize: MainAxisSize.max,
+
+                                              children: [
+
+                                                Text(
+                                                    'Total Amount',
+                                                    style:
+                                                    GoogleFonts.poppins(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                      FontWeight.w500,
+                                                    )
+                                                ),
+
+                                                SizedBox(
+                                                  width: 120,
+                                                  child: formatPrice2(
+                                                    model.value.data!.total.toString(),
+                                                    model
+                                                        .value
+                                                        .data!
+                                                        .orderData!
+                                                        .lineItems![index]
+                                                        .currencySymbol??"",
+                                                      GoogleFonts.poppins(
+                                                          color: const Color(
+                                                              0xFF333333),
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                          FontWeight.w500)
+                                                  ),
+                                                )],
+                                            ),
+                                            const SizedBox(
+                                              height: 5,
                                             ),
                                           ],
                                         );
@@ -490,7 +565,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                     ],
                                   ),
                                   const SizedBox(
-                                    height: 8,
+                                    height: 5,
                                   ),
                                   Row(
                                     mainAxisAlignment:

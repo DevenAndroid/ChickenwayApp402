@@ -114,7 +114,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
 
       for (var i = 0; i < radioOptions.length; i++) {
         optionValues["tmcp_radio_1_$i"] = radioOptions[i];
-        optionValues["crispy_plus_text_box"] = crispyPlus.text;
+        // optionValues["crispy_plus_text_box"] = crispyPlus.text;
         optionPrice["radio_price"] = radioPrice.sum;
       }
 
@@ -150,7 +150,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
   void initState() {
     super.initState();
     if (Get.arguments != null) {
-      productId = Get.arguments[0];
+      productId = Get.arguments[0].toString();
       List gg = Get.arguments;
       if (gg.length == 3) {
         imageUrl = Get.arguments[1];
@@ -200,6 +200,45 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                   //       .map((e) => addonsCheckLists(size, addon: e))
                   //       .toList(),
                   // ...addonsCheckLists(size),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
+                    child: Card(
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Crispy Plus ',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w600,
+                                )),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            const Divider(
+                              height: 2,
+                              thickness: 1,
+                            ),
+                            TextField(
+                              controller: cartController.crispyPlus,
+                              decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintStyle: GoogleFonts.poppins(
+                                      color: const Color(0xff999999), fontWeight: FontWeight.w400, fontSize: 10),
+                                  prefixIcon: Image.asset('assets/images/special.png'),
+                                  hintText: 'write your special request here'),
+                            ),
+
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
                 appBottomLogo()
               ],
@@ -877,42 +916,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
             ),
           ),
           addHeight(10),
-          Card(
-            elevation: 0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Crispy Plus ',
-                      style: GoogleFonts.poppins(
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w600,
-                      )),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const Divider(
-                    height: 2,
-                    thickness: 1,
-                  ),
-                  TextField(
-                    controller: cartController.crispyPlus,
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintStyle: GoogleFonts.poppins(
-                            color: const Color(0xff999999), fontWeight: FontWeight.w400, fontSize: 10),
-                        prefixIcon: Image.asset('assets/images/special.png'),
-                        hintText: 'write your special request here'),
-                  ),
 
-                ],
-              ),
-            ),
-          ),
         ],
       ),
 

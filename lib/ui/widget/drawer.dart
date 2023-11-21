@@ -230,6 +230,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                 Get.toNamed(MyRouter.support);
                               }),
                           if (userLoggedIn)
+                            if( wishList.model.value.data! .isNotEmpty)
                             _drawerTile(
                                 active: true,
                                 icon: "fav",

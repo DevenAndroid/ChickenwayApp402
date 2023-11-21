@@ -49,8 +49,7 @@ ModelSiteUrl modelSiteUrl = ModelSiteUrl();
 
 Future manageSiteUrl() async {
   if (modelSiteUrl.data == null) {
-    await Repositories()
-        .postApi(url: ApiUrls.siteUrl, mapData: {}).then((value) {
+    await Repositories().postApi(url: ApiUrls.siteUrl, mapData: {}).then((value) {
       modelSiteUrl = ModelSiteUrl.fromJson(jsonDecode(value));
       getShippingList();
     });
@@ -59,8 +58,6 @@ Future manageSiteUrl() async {
 
 bool showSplashScreen = false;
 bool shouldShowCartIcon = true;
-
-
 
 Future<bool> isFirstTime() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -73,9 +70,6 @@ Future<bool> isFirstTime() async {
   return isFirstTime;
 }
 
-
-
-
 ModelShippingMethodsList shippingMethodsList = ModelShippingMethodsList();
 
 class MainHomeScreen extends StatefulWidget {
@@ -86,78 +80,86 @@ class MainHomeScreen extends StatefulWidget {
   @override
   MainHomeScreenState createState() => MainHomeScreenState();
 
-  static fromColors(
-      {required Color baseColor,
-      required Color highlightColor,
-      required Container child}) {}
+  static fromColors({required Color baseColor, required Color highlightColor, required Container child}) {}
 }
+
 class MainHomeScreenState extends State<MainHomeScreen> {
   popup() {
     repositories.getApi(url: ApiUrls.popUpUrl, mapData: {}).then((value) {
       modelPopUp.value = ModelPopUp.fromJson(jsonDecode(value));
       if (modelPopUp.value.status!) {
         statusOfPopUp.value = RxStatus.success();
+        _showPopup();
       } else {
         statusOfPopUp.value = RxStatus.error();
       }
     });
   }
+
   Rx<ModelPopUp> modelPopUp = ModelPopUp().obs;
   Rx<RxStatus> statusOfPopUp = RxStatus.empty().obs;
   final Repositories repositories = Repositories();
 
-  void _showPopup(){
+  void _showPopup() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return statusOfPopUp.value.isSuccess?
+        return SizedBox(
+          height: 500,
+
+          child: Dialog(
+            child: SingleChildScrollView(
+              child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: AddSize.padding16,
+                    vertical: AddSize.padding16,
+                  ),
+                  child: Column(     crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                       Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          InkWell(
+                            onTap: (){
+                              Get.back();
+                            },
+                            child: const Icon(
+                              Icons.close,
+                              color: Colors.red,
+
+                            ),
+                          ),
 
 
-          Dialog(
+                        ],
+                      ),
+                      Column( crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(modelPopUp.value.data!.title.toString(),style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
 
-          child: SingleChildScrollView(
-            child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AddSize.padding16,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Stack(
-                      children: [
-
-                        Positioned(
-
-                            top: 10,
-                            right: 10,
-
-                            child: Icon(Icons.close,color: Colors.red,))
-                      ],
-                    ),
-                    Text(modelPopUp.value.data!.title.toString()),
-                    SizedBox(height: AddSize.size10),
-                  Image(image: NetworkImage(modelPopUp.value.data!.img.toString()),
-                        ),
-                  ],
-                )),
+                          ),
+                          SizedBox(height: AddSize.size10),
+                          Image(
+                            image: NetworkImage(modelPopUp.value.data!.img.toString()),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )),
+            ),
           ),
-        )  : statusOfPopUp.value.isError
-            ? CommonErrorWidget(
-          errorText: modelPopUp.value.message.toString(),
-          onTap: () {
-            popup();
-          },
-        )
-            : const CommonProgressIndicator();
+        );
+
+        // : const CommonProgressIndicator();
       },
     );
   }
 
   checkFirstAppLaunch() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    if(sharedPreferences.getString("initial_dialog") == null){
-      _showPopup();
+    if (sharedPreferences.getString("initial_dialog") == null) {
+      popup();
       sharedPreferences.setString("initial_dialog", "done");
     }
   }
@@ -174,8 +176,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
     required id,
     required bool increase,
   }) {
-    repositories
-        .postApi(context: context, url: ApiUrls.updateCartUrl, mapData: {
+    repositories.postApi(context: context, url: ApiUrls.updateCartUrl, mapData: {
       "product_id": id,
       "quantity": increase ? "1" : "-1",
     }).then((value) {
@@ -194,8 +195,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       child: Container(
         width: width,
         height: height,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(border), color: Colors.white),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(border), color: Colors.white),
       ),
     );
   }
@@ -204,19 +204,12 @@ class MainHomeScreenState extends State<MainHomeScreen> {
   Rx<RxStatus> status = RxStatus.empty().obs;
 
   Future homeData() async {
-    await repositories
-        .postApi(
-            url: ApiUrls.homePage,
-            mapData: {},
-            showMap: true,
-            showResponse: true)
-        .then((value) {
+    await repositories.postApi(url: ApiUrls.homePage, mapData: {}, showMap: true, showResponse: true).then((value) {
       model.value = HomeModel.fromJson(jsonDecode(value));
       if (model.value.data != null) {
         DateTime? time11;
         try {
-          time11 = DateFormat("yyyy-MM-dd").parse(
-              model.value.data!.timeBannerAd![0].offerDuration.toString());
+          time11 = DateFormat("yyyy-MM-dd").parse(model.value.data!.timeBannerAd![0].offerDuration.toString());
           if (kDebugMode) {
             print("Time...........       $time11");
           }
@@ -240,9 +233,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
     Map<String, dynamic> map = {};
     map['quantity'] = '1';
     map['product_id'] = id;
-    repositories
-        .postApi(url: ApiUrls.addToCart, mapData: map, context: context)
-        .then((value) {
+    repositories.postApi(url: ApiUrls.addToCart, mapData: map, context: context).then((value) {
       modelAddToCart.value = ModelResponseCommon.fromJson(jsonDecode(value));
       cartController.getData();
       if (modelAddToCart.value.status!) {
@@ -258,16 +249,12 @@ class MainHomeScreenState extends State<MainHomeScreen> {
   addToWishlist(id) {
     Map<String, dynamic> map = {};
     map['product_id'] = id;
-    repositories
-        .postApi(url: ApiUrls.addToWishlist, mapData: map, context: context)
-        .then((value) {
-      modelAddToWishlist.value =
-          ModelResponseCommon.fromJson(jsonDecode(value));
+    repositories.postApi(url: ApiUrls.addToWishlist, mapData: map, context: context).then((value) {
+      modelAddToWishlist.value = ModelResponseCommon.fromJson(jsonDecode(value));
       if (modelAddToWishlist.value.message.toString().contains("added")) {
         wishList.favProductsList.add(id.toString());
       } else {
-        wishList.favProductsList
-            .removeWhere((element) => element.toString() == id.toString());
+        wishList.favProductsList.removeWhere((element) => element.toString() == id.toString());
       }
       if (modelAddToWishlist.value.status!) {
         showToast(modelAddToWishlist.value.message.toString().split("'").first);
@@ -301,7 +288,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       manageSiteUrl();
       homeData();
       cartController.resetAll();
-      popup();
+
     });
   }
 
@@ -318,10 +305,8 @@ class MainHomeScreenState extends State<MainHomeScreen> {
     if (timer != null) {
       timer!.cancel();
     }
-    int seconds =
-        ((givenTime.millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond) -
-            DateTime.now().millisecondsSinceEpoch ~/
-                Duration.millisecondsPerSecond);
+    int seconds = ((givenTime.millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond) -
+        DateTime.now().millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond);
     // DateTime.now().millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond
     // referenceTime = DateTime.parse("2022-09-10 00:00:00.000000").add(Duration(seconds: timeInSeconds));
 
@@ -330,8 +315,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
     if (kDebugMode) {
       print("Time...........       $seconds");
     }
-    referenceTime = DateTime.parse("2022-09-10 00:00:00.000000")
-        .add(Duration(seconds: seconds.abs()));
+    referenceTime = DateTime.parse("2022-09-10 00:00:00.000000").add(Duration(seconds: seconds.abs()));
     fiveMinute = seconds;
     log(time.value);
     var logTime1 = DateFormat("mm:ss");
@@ -340,8 +324,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
         fiveMinute--;
         hours = fiveMinute ~/ (60 * 60);
         referenceTime = referenceTime.subtract(const Duration(seconds: 1));
-        time.value =
-            "${hours == 0 ? "00" : hours < 10 ? "0$hours" : hours}:${logTime1.format(referenceTime)}";
+        time.value = "${hours == 0 ? "00" : hours < 10 ? "0$hours" : hours}:${logTime1.format(referenceTime)}";
       } else {
         timer.cancel();
         fiveMinute = 0;
@@ -364,535 +347,426 @@ class MainHomeScreenState extends State<MainHomeScreen> {
     return showSplashScreen
         ? const SplashScreen()
         : WillPopScope(
-      onWillPop: () async {
-        repositories.hideLoader();
-        return true;
-      },
-      child: Container(
-        color: Colors.white,
-        child: Scaffold(
-          key: scaffoldKey,
-          drawer: const CustomDrawer(),
-          backgroundColor: Colors.white,
-          body: SafeArea(
-            child: Obx(() {
-              // if(menuItemsModel.data == null &&
-              //     menuController.storeInfo.data == null){
-              //   menuController.getAll();
-              // }
-              return status.value.isSuccess
-                  ? RefreshIndicator(
-                onRefresh: () async {
-                  await homeData();
-                  await cartController.getData();
-                  await wishList.getWishListData();
-                  // if (menuController.forMenuScreen.isEmpty &&
-                  //     menuController.storeInfo.data == null) {
-                  await menuController.getAllAsync();
-                  // }
-                  manageSiteUrl();
-                  setState(() {});
-                },
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        decoration: const BoxDecoration(
-                            color: Colors.white,
-                            image: DecorationImage(
-                                image: AssetImage(
-                                    AppAssets.dashboardNewBg),
-                                alignment: Alignment.topLeft)),
-                        child: Column(
-                          crossAxisAlignment:
-                          CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    scaffoldKey.currentState!
-                                        .openDrawer();
-                                  },
-                                  icon: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 13, top: 8),
-                                    child: Image.asset(
-                                      'assets/images/drawer_icon.png',
-                                      width: 20,
-                                      height: 20,
-                                    ),
-                                  ),
-                                ),
-                                if (cartController
-                                    .model
-                                    .value
-                                    .data!.items!.isNotEmpty)
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 24.0, top: 8),
-                                  child: Obx(() {
-                                    return InkWell(
-                                      onTap: () {
-                                        Get.toNamed(
-                                            CartScreen.route);
-                                      },
-                                      child: (cartController
-                                          .isDataLoading
-                                          .value &&
-                                          cartController.model
-                                              .value.data !=
-                                              null &&
-                                          cartController
-                                              .model
-                                              .value
-                                              .data!
-                                              .items!
-                                              .isNotEmpty)
-                                          ? Badge(
-                                          badgeStyle:
-                                          const BadgeStyle(
-                                              badgeColor:
-                                              Colors
-                                                  .black),
-                                          badgeContent: Text(
-                                            cartController
-                                                .model
-                                                .value
-                                                .data!
-                                                .items!
-                                                .map((e) =>
-                                                int.parse(
-                                                    (e.quantity ??
-                                                        0)
-                                                        .toString()))
-                                                .toList()
-                                                .sum
-                                                .toString(),
-                                            style: GoogleFonts
-                                                .poppins(
-                                                color: Colors
-                                                    .white,
-                                                fontSize:
-                                                10),
-                                          ),
-                                          child: Image.asset(
-                                            'assets/images/cooking_icon.png',
-                                            width: 26,
-                                            height: 26,
-                                          ))
-                                          : Image.asset(
-                                        'assets/images/cooking_icon.png',
-                                        width: 26,
-                                        height: 26,
-                                      ),
-                                    );
-                                  }),
-                                )
-                                else
-                                  SizedBox.shrink()
-                              ],
-                            ),
-                            addHeight(10),
-                            GestureDetector(
-                              onTap: () async {
-                                // log((DateTime.now().millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond).toString());
-                                if (kDebugMode) {
-                                  log((await FirebaseMessaging
-                                      .instance
-                                      .getToken())!);
-                                }
-                              },
-                              child: Padding(
-                                padding:
-                                const EdgeInsets.only(left: 5),
-                                child: Text(
-                                    'What would you\nlike to eat?',
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 18,
-                                      color: const Color(
-                                          0xFF292323),
-                                      fontWeight:
-                                      FontWeight.w600,
-                                    ))
-                                    .padded(
-                                    givePadding:
-                                    const EdgeInsets.only(
-                                        left: 15)),
-                              ),
-                            ),
-                            addHeight(20),
-                            menuItems(),
-                            addHeight(40),
-                            bannerSlider(),
-                            addHeight(35),
-                            ...yallaMenu()
-                          ],
-                        ),
-                      ),
-                      if (time.value != "00:00") timerAd(context),
-                      addHeight(20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment:
-                        CrossAxisAlignment.center,
-                        children: [
-                          model.value.data!.bestSellerData!.icon == null ?
-                          Image.network(
-                            'assets/images/chicken_icon.png',
-                            width: 25,
-                            height: 25,
-                          ) : Image
-                              .asset(
-                            'assets/images/chicken_icon.png',
-                            width: 25,
-                            height: 25,
-                          )
-                              .toAppIcon,
-                          addWidth(9),
-                          Text(
-                            model.value.data!.bestSellerData!.title!.toUpperCase().toString(),
-                            style: GoogleFonts.poppins(
-                              color: const Color(0xFF292323),
-                              fontSize: 14.5,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          )
-                        ],
-                      ).padded(
-                          givePadding:
-                          const EdgeInsets.only(left: 15)),
-                      SizedBox(
-                        height: 225,
-                        child: ListView.builder(
-                          primary: false,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 15),
-                          scrollDirection: Axis.horizontal,
-                          itemCount:
-                          model.value.data!.vSlider!.length,
-                          // padding: const EdgeInsets.fromLTRB(2, 2, 2, 2),
-                          itemBuilder: (context, index) {
-                            return Row(
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    Get.toNamed(SingleProductScreen.route, arguments: [
-                                      model.value.data!.vSlider![index].productId.toString(),
-                                      model.value.data!.vSlider![index].image.toString(),
-
-                                    ]);
-                                  },
-                                  child: Container(
-                                    width: 180,
-                                    height: 170,
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                        BorderRadius.circular(
-                                            10)),
-                                    child: ClipRRect(
-                                        borderRadius:
-                                        BorderRadius.circular(
-                                            10),
-                                        child: CachedNetworkImage(
-                                          imageUrl: model
-                                              .value
-                                              .data!
-                                              .vSlider![index]
-                                              .image
-                                              .toString(),
-                                          fit: BoxFit.cover,
-                                          errorWidget:
-                                              (_, __, ___) =>
-                                          const SizedBox(
-                                            width: 160,
-                                          ),
-                                        )),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 12,
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                      ),
-                      ...delicious(),
-                      InkWell(
-                        onTap: () {
-                          Get.toNamed(MenuScreen.route);
-                        },
-                        child: SizedBox(
-                          width: context.getDeviceSize.width,
-                          height: 180,
-                          child: Stack(
-                            children: [
-                              Positioned.fill(
-                                child: Column(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.end,
-                                  children: [
-                                    Container(
-                                      margin:
-                                      const EdgeInsets.fromLTRB(
-                                          3, 0, 6, 15),
-
-                                      child: Card(
-                                        elevation: 4,
-                                        child: Row(
+            onWillPop: () async {
+              repositories.hideLoader();
+              return true;
+            },
+            child: Container(
+              color: Colors.white,
+              child: Scaffold(
+                key: scaffoldKey,
+                drawer: const CustomDrawer(),
+                backgroundColor: Colors.white,
+                body: SafeArea(
+                  child: Obx(() {
+                    // if(menuItemsModel.data == null &&
+                    //     menuController.storeInfo.data == null){
+                    //   menuController.getAll();
+                    // }
+                    return status.value.isSuccess
+                        ? RefreshIndicator(
+                            onRefresh: () async {
+                              await homeData();
+                              await cartController.getData();
+                              await wishList.getWishListData();
+                              // if (menuController.forMenuScreen.isEmpty &&
+                              //     menuController.storeInfo.data == null) {
+                              await menuController.getAllAsync();
+                              // }
+                              manageSiteUrl();
+                              setState(() {});
+                            },
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    decoration: const BoxDecoration(
+                                        color: Colors.white,
+                                        image: DecorationImage(
+                                            image: AssetImage(AppAssets.dashboardNewBg), alignment: Alignment.topLeft)),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Expanded(
-                                              child: Padding(
-                                                padding:
-                                                const EdgeInsets
-                                                    .all(14.0),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment
-                                                      .start,
-                                                  children: [
-                                                    Text(
-                                                      model
-                                                          .value
-                                                          .data!
-                                                          .freeDeliverys![
-                                                      0]
-                                                          .freeDeliveryContent
-                                                          .toString()
-                                                          .toUpperCase(),
-                                                      style: GoogleFonts.poppins(
-                                                          color: const Color(
-                                                              0xffE02020),
-                                                          fontSize:
-                                                          20,
-                                                          fontWeight:
-                                                          FontWeight
-                                                              .bold),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 5,
-                                                    ),
-                                                    Text(
-                                                      model.value.data!.freeDeliverys![0].freeDeliveryContent
-                                                          .toString()
-                                                          .toUpperCase(),
-                                                      style: GoogleFonts
-                                                          .poppins(
-                                                        // color: Colors.red,
-                                                          fontSize:
-                                                          12,
-                                                          fontWeight: FontWeight
-                                                              .w400,
-                                                          color:
-                                                          const Color(0xff656565)),
-                                                    ),
-                                                  ],
+                                            IconButton(
+                                              onPressed: () {
+                                                scaffoldKey.currentState!.openDrawer();
+                                              },
+                                              icon: Padding(
+                                                padding: const EdgeInsets.only(left: 13, top: 8),
+                                                child: Image.asset(
+                                                  'assets/images/drawer_icon.png',
+                                                  width: 20,
+                                                  height: 20,
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(
-                                              width: context
-                                                  .getDeviceSize
-                                                  .width *
-                                                  .3,
-                                            )
+                                            if (cartController.model.value.data!.items!.isNotEmpty)
+                                              Padding(
+                                                padding: const EdgeInsets.only(right: 24.0, top: 8),
+                                                child: Obx(() {
+                                                  return InkWell(
+                                                    onTap: () {
+                                                      Get.toNamed(CartScreen.route);
+                                                    },
+                                                    child: (cartController.isDataLoading.value &&
+                                                            cartController.model.value.data != null &&
+                                                            cartController.model.value.data!.items!.isNotEmpty)
+                                                        ? Badge(
+                                                            badgeStyle: const BadgeStyle(badgeColor: Colors.black),
+                                                            badgeContent: Text(
+                                                              cartController.model.value.data!.items!
+                                                                  .map((e) => int.parse((e.quantity ?? 0).toString()))
+                                                                  .toList()
+                                                                  .sum
+                                                                  .toString(),
+                                                              style: GoogleFonts.poppins(color: Colors.white, fontSize: 10),
+                                                            ),
+                                                            child: Image.asset(
+                                                              'assets/images/cooking_icon.png',
+                                                              width: 26,
+                                                              height: 26,
+                                                            ))
+                                                        : Image.asset(
+                                                            'assets/images/cooking_icon.png',
+                                                            width: 26,
+                                                            height: 26,
+                                                          ),
+                                                  );
+                                                }),
+                                              )
+                                            else
+                                              SizedBox.shrink()
                                           ],
                                         ),
+                                        addHeight(10),
+                                        GestureDetector(
+                                          onTap: () async {
+                                            // log((DateTime.now().millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond).toString());
+                                            if (kDebugMode) {
+                                              log((await FirebaseMessaging.instance.getToken())!);
+                                            }
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(left: 5),
+                                            child: Text('What would you\nlike to eat?',
+                                                style: GoogleFonts.poppins(
+                                                  fontSize: 18,
+                                                  color: const Color(0xFF292323),
+                                                  fontWeight: FontWeight.w600,
+                                                )).padded(givePadding: const EdgeInsets.only(left: 15)),
+                                          ),
+                                        ),
+                                        addHeight(20),
+                                        menuItems(),
+                                        addHeight(40),
+                                        bannerSlider(),
+                                        addHeight(35),
+                                        ...yallaMenu()
+                                      ],
+                                    ),
+                                  ),
+                                  if (time.value != "00:00") timerAd(context),
+                                  addHeight(20),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      model.value.data!.bestSellerData!.icon == null
+                                          ? Image.network(
+                                              'assets/images/chicken_icon.png',
+                                              width: 25,
+                                              height: 25,
+                                            )
+                                          : Image.asset(
+                                              'assets/images/chicken_icon.png',
+                                              width: 25,
+                                              height: 25,
+                                            ).toAppIcon,
+                                      addWidth(9),
+                                      Text(
+                                        model.value.data!.bestSellerData!.title!.toUpperCase().toString(),
+                                        style: GoogleFonts.poppins(
+                                          color: const Color(0xFF292323),
+                                          fontSize: 14.5,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      )
+                                    ],
+                                  ).padded(givePadding: const EdgeInsets.only(left: 15)),
+                                  SizedBox(
+                                    height: 225,
+                                    child: ListView.builder(
+                                      primary: false,
+                                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: model.value.data!.vSlider!.length,
+                                      // padding: const EdgeInsets.fromLTRB(2, 2, 2, 2),
+                                      itemBuilder: (context, index) {
+                                        return Row(
+                                          children: [
+                                            InkWell(
+                                              onTap: () {
+                                                Get.toNamed(SingleProductScreen.route, arguments: [
+                                                  model.value.data!.vSlider![index].productId,
+                                                  model.value.data!.vSlider![index].image,
+                                                ]);
+                                              },
+                                              child: Container(
+                                                width: 180,
+                                                height: 170,
+                                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                                                child: ClipRRect(
+                                                    borderRadius: BorderRadius.circular(10),
+                                                    child: CachedNetworkImage(
+                                                      imageUrl: model.value.data!.vSlider![index].image.toString(),
+                                                      fit: BoxFit.cover,
+                                                      errorWidget: (_, __, ___) => const SizedBox(
+                                                        width: 160,
+                                                      ),
+                                                    )),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 12,
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  ...delicious(),
+                                  InkWell(
+                                    onTap: () {
+                                      Get.toNamed(MenuScreen.route);
+                                    },
+                                    child: SizedBox(
+                                      width: context.getDeviceSize.width,
+                                      height: 180,
+                                      child: Stack(
+                                        children: [
+                                          Positioned.fill(
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              children: [
+                                                Container(
+                                                  margin: const EdgeInsets.fromLTRB(3, 0, 6, 15),
+                                                  child: Card(
+                                                    elevation: 4,
+                                                    child: Row(
+                                                      children: [
+                                                        Expanded(
+                                                          child: Padding(
+                                                            padding: const EdgeInsets.all(14.0),
+                                                            child: Column(
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: [
+                                                                Text(
+                                                                  model.value.data!.freeDeliverys![0].freeDeliveryContent
+                                                                      .toString()
+                                                                      .toUpperCase(),
+                                                                  style: GoogleFonts.poppins(
+                                                                      color: const Color(0xffE02020),
+                                                                      fontSize: 20,
+                                                                      fontWeight: FontWeight.bold),
+                                                                ),
+                                                                const SizedBox(
+                                                                  height: 5,
+                                                                ),
+                                                                Text(
+                                                                  model.value.data!.freeDeliverys![0].freeDeliveryContent
+                                                                      .toString()
+                                                                      .toUpperCase(),
+                                                                  style: GoogleFonts.poppins(
+                                                                      // color: Colors.red,
+                                                                      fontSize: 12,
+                                                                      fontWeight: FontWeight.w400,
+                                                                      color: const Color(0xff656565)),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: context.getDeviceSize.width * .3,
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Positioned(
+                                            right: 0,
+                                            child: SizedBox(
+                                              height: 140,
+                                              child: CachedNetworkImage(
+                                                imageUrl: model.value.data!.freeDeliverys![0].freeDeliverys.toString(),
+                                                fit: BoxFit.contain,
+                                                errorWidget: (_, __, ___) => const SizedBox(),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                              Positioned(
-                                right: 0,
-                                child: SizedBox(
-                                  height: 140,
-                                  child: CachedNetworkImage(
-                                    imageUrl: model
-                                        .value
-                                        .data!
-                                        .freeDeliverys![0]
-                                        .freeDeliverys
-                                        .toString(),
-                                    fit: BoxFit.contain,
-                                    errorWidget: (_, __, ___) =>
-                                    const SizedBox(),
                                   ),
-                                ),
+                                  addHeight(20),
+                                  Obx(() {
+                                    if (wishList.refreshInt.value > 0) {}
+                                    return Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: favoriteList(context),
+                                    );
+                                  }),
+                                  appBottomLogo()
+                                ],
                               ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      addHeight(20),
-                      Obx(() {
-                        if (wishList.refreshInt.value > 0) {}
-                        return Column(
-                          crossAxisAlignment:
-                          CrossAxisAlignment.start,
-                          children: favoriteList(context),
-                        );
-                      }),
-                      appBottomLogo()
-                    ],
-                  ),
-                ),
-              )
-                  : InkWell(
-                  onTap: () async {
-                    if (noInternetRetry == false) {
-                      noInternetRetry = true;
-                      await homeData().catchError((e) {
-                        noInternetRetry = false;
-                      });
-                      await cartController.getData().catchError((e) {
-                        noInternetRetry = false;
-                      });
-                      manageSiteUrl();
-                      noInternetRetry = false;
-                    }
-                  },
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                            padding: const EdgeInsets.all(5)
-                                .copyWith(top: 40),
-                            child: buildShimmer(
-                              border: 15,
-                              width: AddSize.screenWidth * .35,
-                              height: 50,
-                            )),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                              children: List.generate(
-                                  9,
-                                      (index) =>
+                            ),
+                          )
+                        : InkWell(
+                            onTap: () async {
+                              if (noInternetRetry == false) {
+                                noInternetRetry = true;
+                                await homeData().catchError((e) {
+                                  noInternetRetry = false;
+                                });
+                                await cartController.getData().catchError((e) {
+                                  noInternetRetry = false;
+                                });
+                                manageSiteUrl();
+                                noInternetRetry = false;
+                              }
+                            },
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                      padding: const EdgeInsets.all(5).copyWith(top: 40),
+                                      child: buildShimmer(
+                                        border: 15,
+                                        width: AddSize.screenWidth * .35,
+                                        height: 50,
+                                      )),
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                        children: List.generate(
+                                            9,
+                                            (index) => Padding(
+                                                padding: const EdgeInsets.all(5).copyWith(top: 15),
+                                                child: buildShimmer(
+                                                  border: 15,
+                                                  width: 50,
+                                                  height: 60,
+                                                )))),
+                                  ),
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                            padding: const EdgeInsets.all(8).copyWith(top: 25),
+                                            child: buildShimmer(
+                                              border: 15,
+                                              width: AddSize.screenWidth * .75,
+                                              height: 175,
+                                            )),
+                                        Padding(
+                                            padding: const EdgeInsets.all(8).copyWith(top: 25),
+                                            child: buildShimmer(
+                                              border: 15,
+                                              width: AddSize.screenWidth * .75,
+                                              height: 175,
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                      padding: const EdgeInsets.all(8).copyWith(top: 25),
+                                      child: buildShimmer(
+                                        border: 5,
+                                        width: AddSize.screenWidth * .2,
+                                        height: 35,
+                                      )),
+                                  Row(
+                                    children: [
                                       Padding(
-                                          padding: const EdgeInsets.all(5)
-                                              .copyWith(top: 15),
+                                          padding: const EdgeInsets.all(8).copyWith(top: 25),
                                           child: buildShimmer(
-                                            border: 15,
-                                            width: 50,
-                                            height: 60,
-                                          )))),
-                        ),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              Padding(
-                                  padding: const EdgeInsets.all(8)
-                                      .copyWith(top: 25),
-                                  child: buildShimmer(
-                                    border: 15,
-                                    width: AddSize.screenWidth * .75,
-                                    height: 175,
-                                  )),
-                              Padding(
-                                  padding: const EdgeInsets.all(8)
-                                      .copyWith(top: 25),
-                                  child: buildShimmer(
-                                    border: 15,
-                                    width: AddSize.screenWidth * .75,
-                                    height: 175,
-                                  )),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                            padding: const EdgeInsets.all(8)
-                                .copyWith(top: 25),
-                            child: buildShimmer(
-                              border: 5,
-                              width: AddSize.screenWidth * .2,
-                              height: 35,
-                            )),
-                        Row(
-                          children: [
-                            Padding(
-                                padding: const EdgeInsets.all(8)
-                                    .copyWith(top: 25),
-                                child: buildShimmer(
-                                  border: 5,
-                                  width: AddSize.screenWidth * .28,
-                                  height: 120,
-                                )),
-                            Padding(
-                                padding: const EdgeInsets.all(8)
-                                    .copyWith(top: 25),
-                                child: buildShimmer(
-                                  border: 5,
-                                  width: AddSize.screenWidth * .28,
-                                  height: 120,
-                                )),
-                            Padding(
-                                padding: const EdgeInsets.all(8)
-                                    .copyWith(top: 25),
-                                child: buildShimmer(
-                                  border: 5,
-                                  width: AddSize.screenWidth * .28,
-                                  height: 120,
-                                )),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Padding(
-                                padding: const EdgeInsets.all(8)
-                                    .copyWith(top: 25),
-                                child: buildShimmer(
-                                  border: 5,
-                                  width: AddSize.screenWidth * .28,
-                                  height: 120,
-                                )),
-                            Padding(
-                                padding: const EdgeInsets.all(8)
-                                    .copyWith(top: 25),
-                                child: buildShimmer(
-                                  border: 5,
-                                  width: AddSize.screenWidth * .28,
-                                  height: 120,
-                                )),
-                            Padding(
-                                padding: const EdgeInsets.all(8)
-                                    .copyWith(top: 25),
-                                child: buildShimmer(
-                                  border: 5,
-                                  width: AddSize.screenWidth * .28,
-                                  height: 120,
-                                )),
-                          ],
-                        ),
-                      ],
+                                            border: 5,
+                                            width: AddSize.screenWidth * .28,
+                                            height: 120,
+                                          )),
+                                      Padding(
+                                          padding: const EdgeInsets.all(8).copyWith(top: 25),
+                                          child: buildShimmer(
+                                            border: 5,
+                                            width: AddSize.screenWidth * .28,
+                                            height: 120,
+                                          )),
+                                      Padding(
+                                          padding: const EdgeInsets.all(8).copyWith(top: 25),
+                                          child: buildShimmer(
+                                            border: 5,
+                                            width: AddSize.screenWidth * .28,
+                                            height: 120,
+                                          )),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Padding(
+                                          padding: const EdgeInsets.all(8).copyWith(top: 25),
+                                          child: buildShimmer(
+                                            border: 5,
+                                            width: AddSize.screenWidth * .28,
+                                            height: 120,
+                                          )),
+                                      Padding(
+                                          padding: const EdgeInsets.all(8).copyWith(top: 25),
+                                          child: buildShimmer(
+                                            border: 5,
+                                            width: AddSize.screenWidth * .28,
+                                            height: 120,
+                                          )),
+                                      Padding(
+                                          padding: const EdgeInsets.all(8).copyWith(top: 25),
+                                          child: buildShimmer(
+                                            border: 5,
+                                            width: AddSize.screenWidth * .28,
+                                            height: 120,
+                                          )),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ));
+                  }),
+                ),
+                bottomNavigationBar: cartBottomWidget(
+                    // onTap: () async {
+                    //   await homeData();
+                    //   await cartController.getData();
+                    //   if(siteUrl.isEmpty){
+                    //     await repositories.postApi(url: ApiUrls.siteUrl,mapData: {}).then((value) {
+                    //       ModelSiteUrl modelSiteUrl = ModelSiteUrl.fromJson(jsonDecode(value));
+                    //       if(modelSiteUrl.status!){
+                    //         siteUrl = modelSiteUrl.data!.siteUrl ?? "";
+                    //       }
+                    //     });
+                    //   }
+                    // }
                     ),
-                  ));
-            }),
-          ),
-          bottomNavigationBar: cartBottomWidget(
-            // onTap: () async {
-            //   await homeData();
-            //   await cartController.getData();
-            //   if(siteUrl.isEmpty){
-            //     await repositories.postApi(url: ApiUrls.siteUrl,mapData: {}).then((value) {
-            //       ModelSiteUrl modelSiteUrl = ModelSiteUrl.fromJson(jsonDecode(value));
-            //       if(modelSiteUrl.status!){
-            //         siteUrl = modelSiteUrl.data!.siteUrl ?? "";
-            //       }
-            //     });
-            //   }
-            // }
-          ),
-        ),
-      ),
-    );
+              ),
+            ),
+          );
   }
 
   bannerSlider() {
@@ -939,7 +813,9 @@ class MainHomeScreenState extends State<MainHomeScreen> {
     if (wishList.model.value.data == null) {
       wishList.getWishListData();
     }
-    return wishList.model.value.data != null
+    return
+      wishList.model.value.data! .isNotEmpty
+
         ? [
             addHeight(30),
             Row(
@@ -989,17 +865,14 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                         height: 142,
                                         width: 130,
                                         decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
+                                          borderRadius: BorderRadius.circular(10),
                                           color: Colors.white,
                                         ),
                                         child: Material(
                                           color: Colors.transparent,
                                           child: CachedNetworkImage(
-                                            imageUrl: popularProduct.imageUrl
-                                                .toString(),
-                                            errorWidget: (_, __, ___) =>
-                                                const SizedBox(
+                                            imageUrl: popularProduct.imageUrl.toString(),
+                                            errorWidget: (_, __, ___) => const SizedBox(
                                               height: 142,
                                               width: 130,
                                             ),
@@ -1008,11 +881,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                       ),
                                     ),
                                     Positioned(
-                                        left: 8,
-                                        top: 8,
-                                        child: buildPositioned(
-                                            popularProduct.id.toString(),
-                                            context))
+                                        left: 8, top: 8, child: buildPositioned(popularProduct.id.toString(), context))
                                   ],
                                 ),
                               ),
@@ -1033,10 +902,8 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       padding: const EdgeInsets.only(top: 10, bottom: 10, left: 35, right: 5),
       margin: const EdgeInsets.symmetric(horizontal: 14).copyWith(top: 20),
       decoration: BoxDecoration(
-        image: DecorationImage(
-            image: NetworkImage(
-                model.value.data!.timeBannerAd![0].adsUrl.toString()),
-            fit: BoxFit.contain),
+        image:
+            DecorationImage(image: NetworkImage(model.value.data!.timeBannerAd![0].adsUrl.toString()), fit: BoxFit.contain),
       ),
       height: 100,
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -1046,11 +913,8 @@ class MainHomeScreenState extends State<MainHomeScreen> {
               ? Row(
                   children: [
                     Container(
-                      decoration: BoxDecoration(
-                          color: AppTheme.primaryColor,
-                          borderRadius: BorderRadius.circular(125)),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 3, horizontal: 22),
+                      decoration: BoxDecoration(color: AppTheme.primaryColor, borderRadius: BorderRadius.circular(125)),
+                      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 22),
                       child: Obx(() {
                         return Text(
                           time.value,
@@ -1068,27 +932,25 @@ class MainHomeScreenState extends State<MainHomeScreen> {
         ),
         Expanded(
           flex: 3,
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  model.value.data!.timeBannerAd![0].adsTitle.toString(),
-                  style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                    color: Colors.black,
-                  ),
-                ),
-                Text(
-                  model.value.data!.timeBannerAd![0].adsSubtitle.toString(),
-                  style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 13,
-                    color: const Color(0xff656565),
-                  ),
-                )
-              ]),
+          child:
+              Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(
+              model.value.data!.timeBannerAd![0].adsTitle.toString(),
+              style: GoogleFonts.poppins(
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+                color: Colors.black,
+              ),
+            ),
+            Text(
+              model.value.data!.timeBannerAd![0].adsSubtitle.toString(),
+              style: GoogleFonts.poppins(
+                fontWeight: FontWeight.w400,
+                fontSize: 13,
+                color: const Color(0xff656565),
+              ),
+            )
+          ]),
         )
       ]),
     );
@@ -1100,19 +962,20 @@ class MainHomeScreenState extends State<MainHomeScreen> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          model.value.data!.yallaData!.icon == null?
-         Image.network(
-           model.value.data!.yallaData!.icon.toString(),
-           width: 25,
-            height: 25,
-          ):    Image.asset(
-            'assets/images/chicken_icon.png',
-            width: 25,
-            height: 25,
-          ).toAppIcon,
+          model.value.data!.yallaData!.icon == null
+              ? Image.network(
+                  model.value.data!.yallaData!.icon.toString(),
+                  width: 25,
+                  height: 25,
+                )
+              : Image.asset(
+                  'assets/images/chicken_icon.png',
+                  width: 25,
+                  height: 25,
+                ).toAppIcon,
           addWidth(9),
           Text(
-           model.value.data!.yallaData!.title!.toUpperCase().toString(),
+            model.value.data!.yallaData!.title!.toUpperCase().toString(),
             style: GoogleFonts.poppins(
               color: const Color(0xFF292323),
               fontSize: 14.5,
@@ -1127,23 +990,17 @@ class MainHomeScreenState extends State<MainHomeScreen> {
         physics: const NeverScrollableScrollPhysics(),
         padding: const EdgeInsets.symmetric(horizontal: 15),
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 150,
-            crossAxisSpacing: 6,
-            mainAxisSpacing: 6,
-            childAspectRatio: 1),
+            maxCrossAxisExtent: 150, crossAxisSpacing: 6, mainAxisSpacing: 6, childAspectRatio: 1),
         itemCount: menuController.yalCategories.entries.length,
         itemBuilder: (context, index) {
-          final shortcut =
-              menuController.yalCategories.entries.toList()[index].value;
+          final shortcut = menuController.yalCategories.entries.toList()[index].value;
           return GestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () {
-              Get.toNamed(MenuScreen.route,
-                  arguments: shortcut.slug.toString());
+              Get.toNamed(MenuScreen.route, arguments: shortcut.slug.toString());
             },
             child: Container(
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(10)),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
               child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: CachedNetworkImage(
@@ -1174,12 +1031,10 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                       children: [
                         InkWell(
                           onTap: () {
-                            Get.toNamed(MenuScreen.route,
-                                arguments: e.value.slug.toString());
+                            Get.toNamed(MenuScreen.route, arguments: e.value.slug.toString());
                           },
                           child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10)),
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
                             margin: const EdgeInsets.all(0),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(7),
@@ -1273,19 +1128,20 @@ class MainHomeScreenState extends State<MainHomeScreen> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          model.value.data!.deliciousData!.icon == null ?
-          Image.network(
-            'assets/images/chicken_icon.png',
-            width: 25,
-            height: 25,
-          ):  Image.asset(
-            'assets/images/chicken_icon.png',
-            width: 25,
-            height: 25,
-          ).toAppIcon,
+          model.value.data!.deliciousData!.icon == null
+              ? Image.network(
+                  'assets/images/chicken_icon.png',
+                  width: 25,
+                  height: 25,
+                )
+              : Image.asset(
+                  'assets/images/chicken_icon.png',
+                  width: 25,
+                  height: 25,
+                ).toAppIcon,
           addWidth(6),
           Text(
-          model.value.data!.deliciousData!.title!.toUpperCase().toString(),
+            model.value.data!.deliciousData!.title!.toUpperCase().toString(),
             style: GoogleFonts.poppins(
               color: const Color(0xFF292323),
               fontSize: 14.5,
@@ -1299,8 +1155,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
         height: 150,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount:
-              model.value.data!.categoryProducts!.products!.length,
+          itemCount: model.value.data!.categoryProducts!.products!.length,
           itemBuilder: (context, index) {
             return Row(
               children: [
@@ -1311,24 +1166,13 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8.0),
                       color: Colors.white,
-                      boxShadow: const [
-                        BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 1,
-                            offset: Offset(1, 1))
-                      ]),
+                      boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 1, offset: Offset(1, 1))]),
                   child: InkWell(
                     onTap: () {
                       Get.toNamed(SingleProductScreen.route, arguments: [
-                        model.value.data!.categoryProducts!
-                            .products![index].id
-                            .toString(),
-                        model.value.data!.categoryProducts!
-                            .products![index].imageUrl
-                            .toString(),
-                        model.value.data!.categoryProducts!
-                            .products![index].name
-                            .toString()
+                        model.value.data!.categoryProducts!.products![index].id.toString(),
+                        model.value.data!.categoryProducts!.products![index].imageUrl.toString(),
+                        model.value.data!.categoryProducts!.products![index].name.toString()
                       ]);
                     },
                     child: Column(
@@ -1342,9 +1186,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                             Material(
                               color: Colors.transparent,
                               child: CachedNetworkImage(
-                                imageUrl: model.value.data!.categoryProducts!
-                                   .products![index].imageUrl
-                                    .toString(),
+                                imageUrl: model.value.data!.categoryProducts!.products![index].imageUrl.toString(),
                                 width: 100,
                                 height: 100,
                                 errorWidget: (_, __, ___) => const SizedBox(
@@ -1364,37 +1206,22 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                   addHeight(13),
                                   Obx(() {
                                     if (cartController.refreshInt.value > 0) {
-                                      cartController.price = model
-                                          .value
-                                          .data!
-                                          .categoryProducts!
-
-                                          .products![index]
-                                          .currencySymbol
-                                          .toString();
+                                      cartController.price =
+                                          model.value.data!.categoryProducts!.products![index].currencySymbol.toString();
                                     }
                                     return Row(
                                       children: [
-                                        if (cartController.productsMap[model
-                                                .value
-                                                .data!
-                                                .categoryProducts!
-
-                                                .products![index]
-                                                .id
-                                                .toString()] !=
+                                        if (cartController.productsMap[
+                                                model.value.data!.categoryProducts!.products![index].id.toString()] !=
                                             null)
                                           Text(
                                             "${cartController.productsMap[model.value.data!.categoryProducts!.products![index].id.toString()]}X",
                                             style: GoogleFonts.poppins(
-                                                color: const Color(0xFFE02020),
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w600),
+                                                color: const Color(0xFFE02020), fontSize: 15, fontWeight: FontWeight.w600),
                                           ),
                                         Expanded(
                                           child: Text(
-                                            model.value.data!.categoryProducts!.products![index].name
-                                                .toString(),
+                                            model.value.data!.categoryProducts!.products![index].name.toString(),
                                             overflow: TextOverflow.ellipsis,
                                             maxLines: 1,
                                             softWrap: false,
@@ -1410,9 +1237,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                   }),
                                   addHeight(4),
                                   Text(
-                                    model.value.data!.categoryProducts!
-                                        .products![index].shortDescription
-                                        .toString(),
+                                    model.value.data!.categoryProducts!.products![index].shortDescription.toString(),
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 2,
                                     softWrap: false,
@@ -1432,54 +1257,27 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                       )),
                                   addHeight(10),
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       formatPrice2(
-                                        model
-                                                .value
-                                                .data!
-                                                .categoryProducts!
-
-                                                .products![index]
-                                                .regularPrice ??
-                                            '',
-                                        model
-                                                .value
-                                                .data!
-                                                .categoryProducts!
-
-                                                .products![index]
-                                                .currencySymbol ??
-                                            '',
+                                        model.value.data!.categoryProducts!.products![index].regularPrice ?? '',
+                                        model.value.data!.categoryProducts!.products![index].currencySymbol ?? '',
                                         GoogleFonts.poppins(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 13,
-                                            color: const Color(0xFF444444)),
+                                            fontWeight: FontWeight.w500, fontSize: 13, color: const Color(0xFF444444)),
                                       ),
                                       addWidth(20),
                                       Padding(
-                                        padding: const EdgeInsets.only(
-                                            right: 10, bottom: 10),
+                                        padding: const EdgeInsets.only(right: 10, bottom: 10),
                                         child: InkWell(
                                           onTap: () {
-                                            addToCart(model
-                                                .value
-                                                .data!
-                                                .categoryProducts!
-
-                                                .products![index]
-                                                .id
-                                                .toString());
+                                            addToCart(model.value.data!.categoryProducts!.products![index].id.toString());
                                             cartBottomWidget();
                                           },
                                           child: Container(
                                             height: 25,
                                             width: 100,
                                             decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(6),
-                                                color: const Color(0xFFE02020)),
+                                                borderRadius: BorderRadius.circular(6), color: const Color(0xFFE02020)),
                                             child: Center(
                                               child: Text(
                                                 'ADD TO CART',
@@ -1521,19 +1319,14 @@ Future addToWishlist(id, context) async {
   final wishList = Get.put(WishlistController());
   Map<String, dynamic> map = {};
   map['product_id'] = id;
-  await Repositories()
-      .postApi(url: ApiUrls.addToWishlist, mapData: map, context: context)
-      .then((value) {
-    ModelResponseCommon modelAddToWishlist =
-        ModelResponseCommon.fromJson(jsonDecode(value));
+  await Repositories().postApi(url: ApiUrls.addToWishlist, mapData: map, context: context).then((value) {
+    ModelResponseCommon modelAddToWishlist = ModelResponseCommon.fromJson(jsonDecode(value));
     if (modelAddToWishlist.message.toString().contains("added")) {
       wishList.getWishListData();
       wishList.favProductsList.add(id.toString());
     } else {
-      wishList.favProductsList
-          .removeWhere((element) => element.toString() == id.toString());
-      wishList.model.value.data!
-          .removeWhere((element) => element.id.toString() == id.toString());
+      wishList.favProductsList.removeWhere((element) => element.toString() == id.toString());
+      wishList.model.value.data!.removeWhere((element) => element.id.toString() == id.toString());
     }
     if (modelAddToWishlist.status!) {
       showToast(modelAddToWishlist.message.toString().split("'").first);

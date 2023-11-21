@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:collection/collection.dart';
 import 'package:dinelah/ui/screens/bottom_nav_bar.dart';
 import 'package:dinelah/utils/price_format.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../controller/new_controllers/cart_controller.dart';
 import '../../../models/new_models/create_order_model.dart';
 
 class ThankYouPage extends StatefulWidget {
@@ -16,7 +18,11 @@ class ThankYouPage extends StatefulWidget {
 }
 
 class _ThankYouPageState extends State<ThankYouPage> {
+  // final cartController = Get.put(CartController());
   ModelCreateOrderResponse model = ModelCreateOrderResponse();
+  final cartController = Get.put(CartController());
+  // int total = cartController.model.value.data!.items!.map((e) => double.tryParse(e.totalPrice.toString() != "0" ? e.totalPrice.toString() : (int.parse(e.product!.price.toString()) * int.parse(e.quantity.toString())).toString()) ?? 0).toList().sum.toInt();
+
   @override
   void initState() {
     super.initState();
@@ -83,7 +89,7 @@ class _ThankYouPageState extends State<ThankYouPage> {
                         width: 80,
                       ),
                       Expanded(
-                        child: Text("Total: ",
+                        child: Text("Basket Total: ",
                             style: GoogleFonts.poppins(
                                 color: const Color(0xFF686A81),
                                 fontSize: 18,
@@ -94,8 +100,7 @@ class _ThankYouPageState extends State<ThankYouPage> {
                       ),
                       Expanded(
                         child: formatPrice2(
-                            model.total,
-                            model.data!.currencySymbol,
+                            model.total, model.data!.currencySymbol,
                             GoogleFonts.poppins(
                                 color: const Color(0xFF686A81),
                                 fontSize: 18,
@@ -128,6 +133,35 @@ class _ThankYouPageState extends State<ThankYouPage> {
                                 fontWeight: FontWeight.w400)),
                       ),
                     ],
+                  ),
+                  Row(
+
+                    children: [
+                      const SizedBox(
+                        width: 80,
+                      ),
+                      Expanded(
+                        child: Text(
+                          'Total Amount',
+                            style: GoogleFonts.poppins(
+                                color: const Color(0xFF686A81),
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400)
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: formatPrice2(
+                            model.data!.total.toString(),
+                            model.data!.currencySymbol ?? '',
+                          GoogleFonts.poppins(
+                              color: const Color(0xFF686A81),
+                              fontSize: 18,
+                              fontWeight: FontWeight.w400),
+                        ),
+                      )],
                   ),
                   Row(
                     children: [
