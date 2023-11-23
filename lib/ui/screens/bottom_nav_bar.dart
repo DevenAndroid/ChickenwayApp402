@@ -317,7 +317,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
     }
     referenceTime = DateTime.parse("2022-09-10 00:00:00.000000").add(Duration(seconds: seconds.abs()));
     fiveMinute = seconds;
-    log(time.value);
+    log('hghntgggggggh////////////////${time.value}');
     var logTime1 = DateFormat("mm:ss");
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (fiveMinute > 0) {
@@ -470,7 +470,11 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                       ],
                                     ),
                                   ),
-                                  if (time.value != "00:00") timerAd(context),
+                                  if(time.value == "00:00")
+                                    timerAd(context),
+
+
+
                                   addHeight(20),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
@@ -617,6 +621,113 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                     ),
                                   ),
                                   addHeight(20),
+
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                        'assets/images/chicken_icon.png',
+                                        width: 25,
+                                        height: 25,
+                                      ).toAppIcon,
+                                      addWidth(9),
+                                      Text(
+                                        'SHORTCUTS',
+                                        style: GoogleFonts.poppins(
+                                          color: const Color(0xFF292323),
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      )
+                                    ],
+                                  ).padded(
+                                      givePadding:
+                                      const EdgeInsets.only(left: 15)),
+                                  addHeight(6),
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      children: [
+                                        ...model.value.data!.serviceSection!
+                                            .map(
+                                              (service) => GestureDetector(
+                                            onTap: () {
+                                              if (service.serviceUrl !=
+                                                  null) {
+                                                Get.toNamed(
+                                                    service.serviceUrl!);
+                                                // launchUrlToWeb(
+                                                //     service.service_url);
+                                              }
+                                            },
+                                            child: Column(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                  const EdgeInsets.all(
+                                                      5.0)
+                                                      .copyWith(
+                                                      left: 15,
+                                                      right: 0),
+                                                  child: Container(
+                                                    height: 80,
+                                                    width: 80,
+                                                    decoration:
+                                                    BoxDecoration(
+                                                      borderRadius:
+                                                      BorderRadius
+                                                          .circular(10),
+                                                      color: const Color(
+                                                          0xFFFEF4D9),
+                                                    ),
+                                                    margin: const EdgeInsets
+                                                        .all(5),
+                                                    child: CachedNetworkImage(imageUrl:
+                                                    service.serviceImages
+                                                        .toString(),
+                                                      height: 43,
+                                                      width: 54,
+                                                      errorWidget: (_, __,
+                                                          ___) =>
+                                                      const SizedBox(
+                                                        height: 43,
+                                                        width: 54,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Center(
+                                                  child: Text(
+                                                    service.serviceTitle
+                                                        .toString()
+                                                        .replaceAll(
+                                                        " ", "\n"),
+                                                    style:
+                                                    GoogleFonts.poppins(
+                                                      fontWeight:
+                                                      FontWeight.w600,
+                                                      fontSize: 12.5,
+                                                      color: const Color(
+                                                          0xFF292323),
+                                                    ),
+                                                    textAlign:
+                                                    TextAlign.center,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                            .toList()
+                                      ],
+                                    ),
+                                  ),
                                   Obx(() {
                                     if (wishList.refreshInt.value > 0) {}
                                     return Column(
@@ -903,13 +1014,13 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       margin: const EdgeInsets.symmetric(horizontal: 14).copyWith(top: 20),
       decoration: BoxDecoration(
         image:
-            DecorationImage(image: NetworkImage(model.value.data!.timeBannerAd![0].adsUrl.toString()), fit: BoxFit.contain),
+            DecorationImage(image: NetworkImage('https://chickenway.app//wp-content//uploads//2023//04//Group-782.png'), fit: BoxFit.contain),
       ),
       height: 100,
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Expanded(
           flex: 2,
-          child: time.value != "00:00"
+          child: time.value == "00:00"
               ? Row(
                   children: [
                     Container(
@@ -933,7 +1044,8 @@ class MainHomeScreenState extends State<MainHomeScreen> {
         Expanded(
           flex: 3,
           child:
-              Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [
+
+          Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(
               model.value.data!.timeBannerAd![0].adsTitle.toString(),
               style: GoogleFonts.poppins(

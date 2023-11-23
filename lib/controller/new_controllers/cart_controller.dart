@@ -105,6 +105,7 @@ class CartController extends GetxController {
     deliveryAddress = UserAddress().obs;
     allowNavigation = false;
     specialRequest.clear();
+    crispyPlus.clear();
     couponCode.clear();
     getData(allowClear: true);
     updateUi();

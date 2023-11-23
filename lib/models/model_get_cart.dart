@@ -392,6 +392,7 @@ class CustomOptions {
   String? tmcpCheckbox11;
   String? tmcpCheckbox12;
   String? tmcpCheckbox13;
+  String? crispyPlusTextBox;
   String? tmcpCheckbox14;
 
   CustomOptions(
@@ -400,6 +401,7 @@ class CustomOptions {
         this.tmcpCheckbox11,
         this.tmcpCheckbox12,
         this.tmcpCheckbox13,
+        this. crispyPlusTextBox,
         this.tmcpCheckbox14});
 
   CustomOptions.fromJson(Map<String, dynamic> json) {
@@ -408,6 +410,7 @@ class CustomOptions {
     tmcpCheckbox11 = json['tmcp_checkbox_1_1'];
     tmcpCheckbox12 = json['tmcp_checkbox_1_2'];
     tmcpCheckbox13 = json['tmcp_checkbox_1_3'];
+    crispyPlusTextBox = json['crispy_plus_text_box'];
     tmcpCheckbox14 = json['tmcp_checkbox_1_4'];
   }
 
@@ -418,6 +421,7 @@ class CustomOptions {
     data['tmcp_checkbox_1_1'] = tmcpCheckbox11;
     data['tmcp_checkbox_1_2'] = tmcpCheckbox12;
     data['tmcp_checkbox_1_3'] = tmcpCheckbox13;
+    data['crispy_plus_text_box'] = crispyPlusTextBox;
     data['tmcp_checkbox_1_4'] = tmcpCheckbox14;
     return data;
   }

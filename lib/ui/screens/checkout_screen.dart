@@ -129,6 +129,7 @@ class _CheckoutCScreenState extends State<CheckoutCScreen> {
         deliveryLocation.administrativeArea!;
     map["country_code"] = deliveryLocation.isoCountryCode;
     map["sp_request"] = cartController.specialRequest.text.trim();
+    map["crispy_plus_text_box"] = cartController.crispyPlus.text.trim();
     map["row_location"] = deliveryLocation.toJson().toString();
 
     cartController.repositories
@@ -151,6 +152,7 @@ class _CheckoutCScreenState extends State<CheckoutCScreen> {
             .toInt();
         cartController.couponCode.clear();
         cartController.specialRequest.clear();
+        cartController.crispyPlus.clear();
         cartController.model.value.data!.items = [];
         cartController.getData();
 

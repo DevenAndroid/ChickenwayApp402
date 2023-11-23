@@ -985,12 +985,14 @@ class Slide {
 }
 
 class TimeBannerAd {
+  String? addScreen;
   String? adsUrl;
   String? adsTitle;
   String? adsSubtitle;
   DateTime? offerDuration;
 
   TimeBannerAd({
+    this.addScreen,
     this.adsUrl,
     this.adsTitle,
     this.adsSubtitle,
@@ -998,6 +1000,7 @@ class TimeBannerAd {
   });
 
   factory TimeBannerAd.fromJson(Map<String, dynamic> json) => TimeBannerAd(
+    addScreen : json['add_screen'],
     adsUrl: json["ads_url"],
     adsTitle: json["ads_title"],
     adsSubtitle: json["ads_subtitle"],
@@ -1005,6 +1008,7 @@ class TimeBannerAd {
   );
 
   Map<String, dynamic> toJson() => {
+    "add_screen":addScreen,
     "ads_url": adsUrl,
     "ads_title": adsTitle,
     "ads_subtitle": adsSubtitle,

@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lottie/lottie.dart' as lottie;
+import '../../controller/new_controllers/cart_controller.dart';
 import '../../controller/orders_controller.dart';
 import '../../models/model_single_order.dart';
 import '../../repositories/new_common_repo/repository.dart';
@@ -35,6 +36,7 @@ class _OrderDetailsState extends State<OrderDetails> {
   GoogleMapController? mapController;
   Placemark place = Placemark();
 
+  final  cartController = Get.put(CartController());
   Future _getAddressFromLatLng(LatLng latLong) async {
     await placemarkFromCoordinates(latLong.latitude, latLong.longitude)
         .then((List<Placemark> placemarks) {
@@ -96,6 +98,7 @@ class _OrderDetailsState extends State<OrderDetails> {
   Future singleOrder() async {
     Map<String, dynamic> map = {};
     map['order_id'] = orderId;
+
     await repositories
         .postApi(url: ApiUrls.singleOrder, mapData: map)
         .then((value) async {
@@ -366,6 +369,11 @@ class _OrderDetailsState extends State<OrderDetails> {
                                   const SizedBox(
                                     height: 10,
                                   ),
+
+                                   // Text('Special Request${model.value.data!.orderData!.ordernote.toString()}'),
+                                  const SizedBox(height: 5,),
+                                  Text('Crispy plus:${cartController.crispyPlus.text}'),
+
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -406,6 +414,8 @@ class _OrderDetailsState extends State<OrderDetails> {
                                                 Row(
                                                   children: [
                                                     Text(
+
+
                                                         '${model.value.data!.orderData!.lineItems![index].quantity} x ',
                                                         style:
                                                             GoogleFonts.poppins(

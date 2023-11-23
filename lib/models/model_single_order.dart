@@ -439,6 +439,7 @@ class AddressData {
 class OrderData {
   dynamic id;
   dynamic status;
+  dynamic ordernote;
   dynamic dateCreated;
   dynamic shippingTotal;
   // ignore: non_constant_identifier_names
@@ -454,6 +455,7 @@ class OrderData {
   OrderData(
       {this.id,
       this.status,
+        this.ordernote,
       this.dateCreated,
       this.shippingTotal,
       this.totalTax,
@@ -469,6 +471,7 @@ class OrderData {
   OrderData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     status = json['status'];
+    ordernote = json['order_note'];
     dateCreated = json['date_created'];
     shippingTotal = json['shipping_total'];
     totalTax = json['total_tax'];
@@ -490,6 +493,7 @@ class OrderData {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['status'] = status;
+    data['order_note'] = ordernote;
     data['date_created'] = dateCreated;
     data['shipoing_tota'] = shipoing_tota;
     data['shipping_total'] = shippingTotal;

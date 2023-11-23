@@ -22,6 +22,7 @@ import 'menu_screen.dart';
 
 class SingleProductScreen extends StatefulWidget {
   static const String route = "/SingleProductScreen";
+
   const SingleProductScreen({Key? key}) : super(key: key);
 
   @override
@@ -90,13 +91,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
     map["product_id"] = productId;
     map["quantity"] = cartItemNumbers;
 
-
-    Map<String, dynamic> optionValues = {
-
-
-
-
-    };
+    Map<String, dynamic> optionValues = {};
 
     Map<String, dynamic> optionPrice = {};
 
@@ -114,7 +109,6 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
 
       for (var i = 0; i < radioOptions.length; i++) {
         optionValues["tmcp_radio_1_$i"] = radioOptions[i];
-        // optionValues["crispy_plus_text_box"] = crispyPlus.text;
         optionPrice["radio_price"] = radioPrice.sum;
       }
 
@@ -122,6 +116,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
       if (model.value.productOption != null && model.value.productOption!.isNotEmpty) {
         for (var i = 0; i < model.value.selected1.length; i++) {
           optionValues["tmcp_checkbox_1_$i"] = model.value.selected1[i].toString().split("--").first;
+
           optionPrice["$i"] = model.value.selected1[i].toString().split("--").last.split("==========").first;
         }
       }
@@ -233,7 +228,6 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                                   prefixIcon: Image.asset('assets/images/special.png'),
                                   hintText: 'write your special request here'),
                             ),
-
                           ],
                         ),
                       ),
@@ -856,15 +850,16 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                         Expanded(
                           child: Text(
                             optionTitles[index],
-                            style:
-                                GoogleFonts.poppins(color: const Color(0xFF333333), fontSize: 14, fontWeight: FontWeight.w400),
+                            style: GoogleFonts.poppins(
+                                color: const Color(0xFF333333), fontSize: 14, fontWeight: FontWeight.w400),
                           ),
                         ),
                         if (optionPrice[index].isNotEmpty && optionPrice[index] != '0')
                           formatPrice2(
                               optionPrice[index].isNotEmpty ? optionPrice[index] : "0",
                               model.value.data!.first.currencySymbol ?? '',
-                              GoogleFonts.poppins(color: const Color(0xFF333333), fontSize: 14, fontWeight: FontWeight.w400)),
+                              GoogleFonts.poppins(
+                                  color: const Color(0xFF333333), fontSize: 14, fontWeight: FontWeight.w400)),
                         Theme(
                           data: ThemeData(
                               primarySwatch: Colors.red, primaryColor: darkRedColor, unselectedWidgetColor: darkRedColor),
@@ -911,15 +906,12 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                       style: GoogleFonts.poppins(color: Colors.red, fontSize: 15, fontWeight: FontWeight.w500),
                     ),
                   )
-
               ],
             ),
           ),
           addHeight(10),
-
         ],
       ),
-
     );
   }
 
