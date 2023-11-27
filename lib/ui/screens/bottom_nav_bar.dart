@@ -305,8 +305,10 @@ class MainHomeScreenState extends State<MainHomeScreen> {
     if (timer != null) {
       timer!.cancel();
     }
-    int seconds = ((givenTime.millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond) -
-        DateTime.now().millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond);
+    int seconds =
+    ((givenTime.millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond) -
+        DateTime.now().millisecondsSinceEpoch ~/
+            Duration.millisecondsPerSecond);
     // DateTime.now().millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond
     // referenceTime = DateTime.parse("2022-09-10 00:00:00.000000").add(Duration(seconds: timeInSeconds));
 
@@ -315,16 +317,18 @@ class MainHomeScreenState extends State<MainHomeScreen> {
     if (kDebugMode) {
       print("Time...........       $seconds");
     }
-    referenceTime = DateTime.parse("2022-09-10 00:00:00.000000").add(Duration(seconds: seconds.abs()));
+    referenceTime = DateTime.parse("2022-09-10 00:00:00.000000")
+        .add(Duration(seconds: seconds.abs()));
     fiveMinute = seconds;
-    log('hghntgggggggh////////////////${time.value}');
+    log(time.value);
     var logTime1 = DateFormat("mm:ss");
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (fiveMinute > 0) {
         fiveMinute--;
         hours = fiveMinute ~/ (60 * 60);
         referenceTime = referenceTime.subtract(const Duration(seconds: 1));
-        time.value = "${hours == 0 ? "00" : hours < 10 ? "0$hours" : hours}:${logTime1.format(referenceTime)}";
+        time.value =
+        "${hours == 0 ? "00" : hours < 10 ? "0$hours" : hours}:${logTime1.format(referenceTime)}";
       } else {
         timer.cancel();
         fiveMinute = 0;
@@ -405,7 +409,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                                 ),
                                               ),
                                             ),
-                                            if (cartController.model.value.data!.items!.isNotEmpty)
+
                                               Padding(
                                                 padding: const EdgeInsets.only(right: 24.0, top: 8),
                                                 child: Obx(() {
@@ -414,8 +418,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                                       Get.toNamed(CartScreen.route);
                                                     },
                                                     child: (cartController.isDataLoading.value &&
-                                                            cartController.model.value.data != null &&
-                                                            cartController.model.value.data!.items!.isNotEmpty)
+                                                            cartController.model.value.data != null )
                                                         ? Badge(
                                                             badgeStyle: const BadgeStyle(badgeColor: Colors.black),
                                                             badgeContent: Text(
@@ -439,8 +442,6 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                                   );
                                                 }),
                                               )
-                                            else
-                                              SizedBox.shrink()
                                           ],
                                         ),
                                         addHeight(10),
@@ -1012,7 +1013,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
     return Container(
       padding: const EdgeInsets.only(top: 10, bottom: 10, left: 35, right: 5),
       margin: const EdgeInsets.symmetric(horizontal: 14).copyWith(top: 20),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         image:
             DecorationImage(image: NetworkImage('https://chickenway.app//wp-content//uploads//2023//04//Group-782.png'), fit: BoxFit.contain),
       ),

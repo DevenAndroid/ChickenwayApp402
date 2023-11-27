@@ -107,21 +107,15 @@ class Data {
       this.orderData});
 
   Data.fromJson(Map<String, dynamic> json) {
-    commentData = json['comment_data'] != null
-        ? CommentData.fromJson(json['comment_data'])
-        : null;
+    commentData = json['comment_data'] != null ? CommentData.fromJson(json['comment_data']) : null;
     id = json['id'];
     parentId = json['parent_id'];
     status = json['status'];
     currency = json['currency'];
     version = json['version'];
     pricesIncludeTax = json['prices_include_tax'];
-    dateCreated = json['date_created'] != null
-        ? DateCreated.fromJson(json['date_created'])
-        : null;
-    dateModified = json['date_modified'] != null
-        ? DateCreated.fromJson(json['date_modified'])
-        : null;
+    dateCreated = json['date_created'] != null ? DateCreated.fromJson(json['date_created']) : null;
+    dateModified = json['date_modified'] != null ? DateCreated.fromJson(json['date_modified']) : null;
     discountTotal = json['discount_total'];
     subtotal = json['subtotal'];
     discountTax = json['discount_tax'];
@@ -132,10 +126,8 @@ class Data {
     totalTax = json['total_tax'];
     customerId = json['customer_id'];
     orderKey = json['order_key'];
-    billing =
-        json['billing'] != null ? Billing.fromJson(json['billing']) : null;
-    shipping =
-        json['shipping'] != null ? Shipping.fromJson(json['shipping']) : null;
+    billing = json['billing'] != null ? Billing.fromJson(json['billing']) : null;
+    shipping = json['shipping'] != null ? Shipping.fromJson(json['shipping']) : null;
     paymentMethod = json['payment_method'];
     paymentMethodTitle = json['payment_method_title'];
     transactionId = json['transaction_id'];
@@ -144,9 +136,7 @@ class Data {
     createdVia = json['created_via'];
     customerNote = json['customer_note'];
     dateCompleted = json['date_completed'];
-    datePaid = json['date_paid'] != null
-        ? DateCreated.fromJson(json['date_paid'])
-        : null;
+    datePaid = json['date_paid'] != null ? DateCreated.fromJson(json['date_paid']) : null;
     cartHash = json['cart_hash'];
     orderStockReduced = json['order_stock_reduced'];
     downloadPermissionsGranted = json['download_permissions_granted'];
@@ -168,9 +158,7 @@ class Data {
     } else {
       addressData = [];
     }
-    orderData = json['order_data'] != null
-        ? OrderData.fromJson(json['order_data'])
-        : null;
+    orderData = json['order_data'] != null ? OrderData.fromJson(json['order_data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -401,15 +389,7 @@ class AddressData {
   dynamic lat;
   dynamic long;
 
-  AddressData(
-      {this.homeData,
-      this.building,
-      this.floor,
-      this.address,
-      this.email,
-      this.phoneNumber,
-      this.lat,
-      this.long});
+  AddressData({this.homeData, this.building, this.floor, this.address, this.email, this.phoneNumber, this.lat, this.long});
 
   AddressData.fromJson(Map<String, dynamic> json) {
     homeData = json['home_data'];
@@ -440,6 +420,7 @@ class OrderData {
   dynamic id;
   dynamic status;
   dynamic ordernote;
+  dynamic crispyplustextbox;
   dynamic dateCreated;
   dynamic shippingTotal;
   // ignore: non_constant_identifier_names
@@ -455,7 +436,8 @@ class OrderData {
   OrderData(
       {this.id,
       this.status,
-        this.ordernote,
+      this.ordernote,
+      this.crispyplustextbox,
       this.dateCreated,
       this.shippingTotal,
       this.totalTax,
@@ -472,6 +454,7 @@ class OrderData {
     id = json['id'];
     status = json['status'];
     ordernote = json['order_note'];
+    crispyplustextbox = json['crispy_plus_text_box'];
     dateCreated = json['date_created'];
     shippingTotal = json['shipping_total'];
     totalTax = json['total_tax'];
@@ -494,6 +477,7 @@ class OrderData {
     data['id'] = id;
     data['status'] = status;
     data['order_note'] = ordernote;
+    data['crispy_plus_text_box'] = crispyplustextbox;
     data['date_created'] = dateCreated;
     data['shipoing_tota'] = shipoing_tota;
     data['shipping_total'] = shippingTotal;
@@ -519,14 +503,7 @@ class LineItems {
   dynamic total;
   dynamic currencySymbol;
 
-  LineItems(
-      {this.id,
-      this.name,
-      this.productId,
-      this.variationId,
-      this.quantity,
-      this.total,
-      this.currencySymbol});
+  LineItems({this.id, this.name, this.productId, this.variationId, this.quantity, this.total, this.currencySymbol});
 
   LineItems.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -557,8 +534,7 @@ class CommentData {
   String? commentDate;
   String? rating;
 
-  CommentData(
-      {this.commentAuthor, this.commentContent, this.commentDate, this.rating});
+  CommentData({this.commentAuthor, this.commentContent, this.commentDate, this.rating});
 
   CommentData.fromJson(Map<String, dynamic> json) {
     commentAuthor = json['comment_author'];

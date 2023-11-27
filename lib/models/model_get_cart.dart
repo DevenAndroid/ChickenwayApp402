@@ -392,7 +392,7 @@ class CustomOptions {
   String? tmcpCheckbox11;
   String? tmcpCheckbox12;
   String? tmcpCheckbox13;
-  String? crispyPlusTextBox;
+  dynamic crispyPlusTextBox;
   String? tmcpCheckbox14;
 
   CustomOptions(

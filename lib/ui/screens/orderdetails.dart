@@ -370,10 +370,21 @@ class _OrderDetailsState extends State<OrderDetails> {
                                     height: 10,
                                   ),
 
-                                   // Text('Special Request${model.value.data!.orderData!.ordernote.toString()}'),
-                                  const SizedBox(height: 5,),
-                                  Text('Crispy plus:${cartController.crispyPlus.text}'),
+                                  if( model.value.data!.orderData!.ordernote != "")
+                                  Text('Special Request : ${model.value.data!.orderData!.ordernote}', style: GoogleFonts.poppins(
+                                    color: const Color(0xFF333333),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),),
+                                  const SizedBox(height: 10,),
 
+                                  // if(model.value.data!.orderData!.crispyplustextbox !="" )
+                                  Text('crispy plus : ${model.value.data!.orderData!.crispyplustextbox.toString()}', style: GoogleFonts.poppins(
+                                    color: const Color(0xFF333333),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),),
+                                  SizedBox(height: 10,),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -470,84 +481,85 @@ class _OrderDetailsState extends State<OrderDetails> {
                                             const SizedBox(
                                               height: 5,
                                             ),
-                                            Row(  mainAxisAlignment:
-                                            MainAxisAlignment
-                                                .spaceBetween,
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
 
-                                                Text("Delivery Fees: ",
-                                                    style:
-                                                    GoogleFonts.poppins(
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                      FontWeight.w500,
-                                                    )),
-
-                                                SizedBox(
-                                                  width: 120,
-                                                  child: formatPrice2(
-                                                      model.value.data!.shippingTotal,
-                                                      model
-                                                          .value
-                                                          .data!
-                                                          .orderData!
-                                                          .lineItems![index]
-                                                          .currencySymbol,
-                                                    GoogleFonts.poppins(
-                                                        color: const Color(
-                                                            0xFF333333),
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                        FontWeight.w500),),
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              height: 5,
-                                            ),
-                                            Row(  mainAxisAlignment:
-                                            MainAxisAlignment
-                                                .spaceBetween,
-                                              mainAxisSize: MainAxisSize.max,
-
-                                              children: [
-
-                                                Text(
-                                                    'Total Amount',
-                                                    style:
-                                                    GoogleFonts.poppins(
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                      FontWeight.w500,
-                                                    )
-                                                ),
-
-                                                SizedBox(
-                                                  width: 120,
-                                                  child: formatPrice2(
-                                                    model.value.data!.total.toString(),
-                                                    model
-                                                        .value
-                                                        .data!
-                                                        .orderData!
-                                                        .lineItems![index]
-                                                        .currencySymbol??"",
-                                                      GoogleFonts.poppins(
-                                                          color: const Color(
-                                                              0xFF333333),
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                          FontWeight.w500)
-                                                  ),
-                                                )],
-                                            ),
-                                            const SizedBox(
-                                              height: 5,
-                                            ),
                                           ],
                                         );
                                       }),
+                                  Row(  mainAxisAlignment:
+                                  MainAxisAlignment
+                                      .spaceBetween,
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+
+                                      Text("Delivery Fees: ",
+                                          style:
+                                          GoogleFonts.poppins(
+                                            fontSize: 14,
+                                            fontWeight:
+                                            FontWeight.w500,
+                                          )),
+
+                                      SizedBox(
+                                        width: 120,
+                                        child: formatPrice2(
+                                            model.value.data!.shippingTotal,
+                                            model
+                                                .value
+                                                .data!
+                                                .orderData!
+                                                .lineItems![0]
+                                                .currencySymbol,
+                                          GoogleFonts.poppins(
+                                              color: const Color(
+                                                  0xFF333333),
+                                              fontSize: 14,
+                                              fontWeight:
+                                              FontWeight.w500),),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Row(  mainAxisAlignment:
+                                  MainAxisAlignment
+                                      .spaceBetween,
+                                    mainAxisSize: MainAxisSize.max,
+
+                                    children: [
+
+                                      Text(
+                                          'Total Amount',
+                                          style:
+                                          GoogleFonts.poppins(
+                                            fontSize: 14,
+                                            fontWeight:
+                                            FontWeight.w500,
+                                          )
+                                      ),
+
+                                      SizedBox(
+                                        width: 120,
+                                        child: formatPrice2(
+                                          model.value.data!.total.toString(),
+                                          model
+                                              .value
+                                              .data!
+                                              .orderData!
+                                              .lineItems![0]
+                                              .currencySymbol??"",
+                                            GoogleFonts.poppins(
+                                                color: const Color(
+                                                    0xFF333333),
+                                                fontSize: 14,
+                                                fontWeight:
+                                                FontWeight.w500)
+                                        ),
+                                      )],
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,

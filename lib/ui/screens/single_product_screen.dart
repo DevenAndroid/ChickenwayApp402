@@ -109,6 +109,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
 
       for (var i = 0; i < radioOptions.length; i++) {
         optionValues["tmcp_radio_1_$i"] = radioOptions[i];
+        optionValues["crispy_plus_text_box"] = crispyPlus.text.trim();
         optionPrice["radio_price"] = radioPrice.sum;
       }
 
@@ -116,6 +117,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
       if (model.value.productOption != null && model.value.productOption!.isNotEmpty) {
         for (var i = 0; i < model.value.selected1.length; i++) {
           optionValues["tmcp_checkbox_1_$i"] = model.value.selected1[i].toString().split("--").first;
+          optionValues["crispy_plus_text_box"] = crispyPlus.text.trim();
 
           optionPrice["$i"] = model.value.selected1[i].toString().split("--").last.split("==========").first;
         }
@@ -153,6 +155,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
       }
       getProductDetails();
     }
+    // print(crispyPlus.text.toString());
   }
 
   @override
@@ -220,7 +223,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                               thickness: 1,
                             ),
                             TextField(
-                              controller: cartController.crispyPlus,
+                              controller: crispyPlus,
                               decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintStyle: GoogleFonts.poppins(
@@ -329,9 +332,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                           Padding(
                               padding: const EdgeInsets.only(right: 8.0),
                               child: formatPrice2(
-                                  (((double.tryParse((model.value.data!.first.price ?? "0").toString()) ?? 0) +
-                                                  (model.value.productOption!.isNotEmpty
-                                                      ? (model.value.selected1
+                                  (((double.tryParse((model.value.data!.first.price ?? "0").toString()) ?? 0) + (model.value.productOption!.isNotEmpty ? (model.value.selected1
                                                               .map((e) =>
                                                                   double.tryParse(e
                                                                       .toString()

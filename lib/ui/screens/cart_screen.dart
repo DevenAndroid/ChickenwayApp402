@@ -783,7 +783,8 @@ buildHero(Size size, {String? deliveryFee, int? shippingAmount}) {
                   style: GoogleFonts.poppins(color: const Color(0xFF555555), fontSize: 14, fontWeight: FontWeight.w500),
                 ),
                 Text(
-                  formattedDeliveryFee!, // Use the formatted delivery fee
+                  formattedDeliveryFee!,
+                  // Use the formatted delivery fee
                   style: GoogleFonts.poppins(color: const Color(0xFF555555), fontSize: 14, fontWeight: FontWeight.w500),
                 ),
               ],

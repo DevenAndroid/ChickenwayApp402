@@ -495,7 +495,7 @@ class _MenuScreenState extends State<MenuScreen> {
         },
       ),
       actions: [
-        if (cartController.model.value.data!.items!.isNotEmpty)
+
           Padding(
             padding: const EdgeInsets.only(right: 24.0, top: 8),
             child: Obx(() {
@@ -529,8 +529,7 @@ class _MenuScreenState extends State<MenuScreen> {
               );
             }),
           )
-        else
-          SizedBox.shrink()
+
       ],
     );
   }
