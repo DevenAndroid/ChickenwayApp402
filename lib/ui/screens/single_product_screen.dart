@@ -155,6 +155,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
       }
       getProductDetails();
     }
+    print("zzzzzzzzzzzzzzzzzzzzzzz.......       ${crispyPlus.text}");
     // print(crispyPlus.text.toString());
   }
 

@@ -134,35 +134,35 @@ class _ThankYouPageState extends State<ThankYouPage> {
                       ),
                     ],
                   ),
-                  Row(
-
-                    children: [
-                      const SizedBox(
-                        width: 80,
-                      ),
-                      Expanded(
-                        child: Text(
-                          'Total Amount',
-                            style: GoogleFonts.poppins(
-                                color: const Color(0xFF686A81),
-                                fontSize: 18,
-                                fontWeight: FontWeight.w400)
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                        child: formatPrice2(
-                            model.data!.total.toString(),
-                            model.data!.currencySymbol ?? '',
-                          GoogleFonts.poppins(
-                              color: const Color(0xFF686A81),
-                              fontSize: 18,
-                              fontWeight: FontWeight.w400),
-                        ),
-                      )],
-                  ),
+                  // Row(
+                  //
+                  //   children: [
+                  //     const SizedBox(
+                  //       width: 80,
+                  //     ),
+                  //     Expanded(
+                  //       child: Text(
+                  //         'Total Amount',
+                  //           style: GoogleFonts.poppins(
+                  //               color: const Color(0xFF686A81),
+                  //               fontSize: 18,
+                  //               fontWeight: FontWeight.w400)
+                  //       ),
+                  //     ),
+                  //     const SizedBox(
+                  //       width: 10,
+                  //     ),
+                  //     Expanded(
+                  //       child: formatPrice2(
+                  //           model.data!.total.toString(),
+                  //           model.data!.currencySymbol ?? '',
+                  //         GoogleFonts.poppins(
+                  //             color: const Color(0xFF686A81),
+                  //             fontSize: 18,
+                  //             fontWeight: FontWeight.w400),
+                  //       ),
+                  //     )],
+                  // ),
                   Row(
                     children: [
                       const SizedBox(

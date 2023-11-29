@@ -93,8 +93,9 @@ class _YourOrderScreenState extends State<YourOrderScreen> {
                                     height: 10,
                                   ),
                                   Text(
+                                    order.lineItems != null && order.lineItems!.isNotEmpty ?
                                     order.lineItems![0].name
-                                        .toString(),
+                                        .toString() : "",
                                     style: GoogleFonts.poppins(
                                         color: const Color(0xFF333333),
                                         fontSize: 16,

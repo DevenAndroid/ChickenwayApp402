@@ -502,13 +502,24 @@ class _OrderDetailsState extends State<OrderDetails> {
                                       SizedBox(
                                         width: 120,
                                         child: formatPrice2(
+
                                             model.value.data!.shippingTotal,
-                                            model
+                                          model
+                                              .value
+                                              .data!
+                                              .orderData!
+                                              .lineItems != null &&
+                                              model
+                                                  .value
+                                                  .data!
+                                                  .orderData!
+                                                  .lineItems!.isNotEmpty ?
+                                          model
                                                 .value
                                                 .data!
                                                 .orderData!
                                                 .lineItems![0]
-                                                .currencySymbol,
+                                                .currencySymbol : "",
                                           GoogleFonts.poppins(
                                               color: const Color(
                                                   0xFF333333),
@@ -542,12 +553,17 @@ class _OrderDetailsState extends State<OrderDetails> {
                                         width: 120,
                                         child: formatPrice2(
                                           model.value.data!.total.toString(),
-                                          model
+                                            model
+                                                .value
+                                                .data!
+                                                .orderData!
+                                                .lineItems!.isNotEmpty ?
+                                            model
                                               .value
                                               .data!
                                               .orderData!
                                               .lineItems![0]
-                                              .currencySymbol??"",
+                                              .currencySymbol??"" : "",
                                             GoogleFonts.poppins(
                                                 color: const Color(
                                                     0xFF333333),

@@ -1,7 +1,7 @@
 class ModelWishList {
   bool? status;
   String? message;
-  List<Data>? data;
+  List<Data>? data = [];
 
   ModelWishList({this.status, this.message, this.data});
 
@@ -14,6 +14,7 @@ class ModelWishList {
         data!.add(Data.fromJson(v));
       });
     }
+    data ??= [];
   }
 
   Map<String, dynamic> toJson() {

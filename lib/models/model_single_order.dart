@@ -431,7 +431,7 @@ class OrderData {
   dynamic total;
   dynamic currencySymbol;
   dynamic paymentMethodTitle;
-  List<LineItems>? lineItems;
+  List<LineItems>? lineItems = [];
 
   OrderData(
       {this.id,
@@ -470,6 +470,7 @@ class OrderData {
         lineItems!.add(LineItems.fromJson(v));
       });
     }
+    lineItems ??= [];
   }
 
   Map<String, dynamic> toJson() {

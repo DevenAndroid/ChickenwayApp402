@@ -11,6 +11,10 @@ String homeModelToJson(HomeModel data) => json.encode(data.toJson());
 class HomeModel {
   int? totlaPopularProducts;
   bool? status;
+
+
+
+
   String? message;
   Data? data;
 
