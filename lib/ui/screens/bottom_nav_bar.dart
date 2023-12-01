@@ -1013,9 +1013,11 @@ class MainHomeScreenState extends State<MainHomeScreen> {
     return Container(
       padding: const EdgeInsets.only(top: 10, bottom: 10, left: 35, right: 5),
       margin: const EdgeInsets.symmetric(horizontal: 14).copyWith(top: 20),
-      decoration: const BoxDecoration(
-        image:
-            DecorationImage(image: NetworkImage('https://chickenway.app//wp-content//uploads//2023//04//Group-782.png'), fit: BoxFit.contain),
+      decoration: BoxDecoration(
+        image: DecorationImage(
+            image: NetworkImage(
+                model.value.data!.timeBannerAd![0].adsUrl.toString()),
+            fit: BoxFit.contain),
       ),
       height: 100,
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [

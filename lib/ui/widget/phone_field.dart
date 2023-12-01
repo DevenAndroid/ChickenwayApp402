@@ -346,7 +346,7 @@ class CustomIntlPhoneFieldState extends State<CustomIntlPhoneField> {
             _selectedCountry = country;
             widget.onCountryChanged?.call(country);
             setState(() {});
-          },
+          }, languageCode: '',
         ),
       ),
     );

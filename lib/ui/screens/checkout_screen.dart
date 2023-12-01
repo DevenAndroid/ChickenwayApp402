@@ -469,13 +469,29 @@ class _CheckoutCScreenState extends State<CheckoutCScreen> {
                           color: Colors.white,
                           shape: BoxShape.rectangle,
                           boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 1, offset: Offset(1, 1))]),
-                      child: CommonButton(
-                        buttonHeight: 6.7,
-                        btnColor: const Color(0xffE02020),
-                        text: 'we are currently closed please comeback tomorrow',
-                        onTap: () {},
-                        buttonWidth: 0,
-                      ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                // padding: EdgeInsets.only(left: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: const Color(0xFFE02020),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'we are currently closed please comeback tomorrow',
+                      style: GoogleFonts.poppins(
+                          color: const Color(0xFFFFFFFF), fontSize: 13, fontWeight: FontWeight.w600),
+                    ),
+                  )),
+            ),
+                      // child: CommonButton(
+                      //   buttonHeight: 6.7,
+                      //   btnColor: const Color(0xffE02020),
+                      //   text: 'we are currently closed please comeback tomorrow',
+                      //   onTap: () {},
+                      //   buttonWidth: 0,
+                      // ),
                     )
               : const SizedBox();
         }));
