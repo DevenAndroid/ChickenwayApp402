@@ -209,14 +209,14 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       if (model.value.data != null) {
         DateTime? time11;
         try {
-          time11 = DateFormat("yyyy-MM-dd").parse(model.value.data!.timeBannerAd![0].offerDuration.toString());
+          // time11 = DateFormat("yyyy-MM-dd").parse(model.value.data!.timeBannerAd![0].offerDuration.toString());
           if (kDebugMode) {
             print("Time...........       $time11");
           }
         } catch (e) {
           return;
         }
-        setTimer(givenTime: time11);
+        // setTimer(givenTime: time11);
       }
       if (model.value.status!) {
         status.value = RxStatus.success();
@@ -294,7 +294,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
 
   bool noInternetRetry = false;
 
-  RxString time = "00:00".obs;
+  RxString  time = "00:00".obs;
   var logTime = "2022-09-10 00:05:00.000000";
   Timer? timer;
   int fiveMinute = 0;
@@ -471,7 +471,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                       ],
                                     ),
                                   ),
-                                  if(time.value == "00:00")
+                                  if(time.value == "00:00"&&  model.value.data!.timeBannerAd![0].addScreen == "Activate")
                                     timerAd(context),
 
 
@@ -1021,7 +1021,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Expanded(
           flex: 2,
-          child: time.value == "00:00"
+          child: time.value != "00:00"
               ? Row(
                   children: [
                     Container(

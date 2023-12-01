@@ -1008,7 +1008,7 @@ class TimeBannerAd {
     adsUrl: json["ads_url"],
     adsTitle: json["ads_title"],
     adsSubtitle: json["ads_subtitle"],
-    offerDuration: json["offer_duration"] == null ? null : DateTime.parse(json["offer_duration"]),
+    offerDuration: json["offer_duration"] == null ?null: json["offer_duration"] == ""?  null : DateTime.parse(json["offer_duration"]),
   );
 
   Map<String, dynamic> toJson() => {

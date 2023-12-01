@@ -396,8 +396,6 @@ class CartScreenState extends State<CartScreen> {
               const SizedBox(
                 width: 20,
               ),
-              if (modelSwitchOff.value.data?.switchOffStore != null)
-                if (modelSwitchOff.value.data!.switchOffStore != 'hide')
                 Expanded(
                   child: CommonButton(
                     buttonHeight: 6.7,
@@ -420,17 +418,7 @@ class CartScreenState extends State<CartScreen> {
                     buttonWidth: 0,
                   ),
                 )
-              else
 
-                 CommonButton(
-                        buttonHeight: 6.7,
-                        btnColor: const Color(0xffE02020),
-                        text: 'Closed',
-                        onTap: () {
-                          FlutterError("we are currently closed please comeback tomorrow");
-                        },
-                        buttonWidth: 0,
-                      )
 
             ],
           ),
