@@ -22,13 +22,10 @@ class _ThankYouPageState extends State<ThankYouPage> {
   ModelCreateOrderResponse model = ModelCreateOrderResponse();
   final cartController = Get.put(CartController());
   // int total = cartController.model.value.data!.items!.map((e) => double.tryParse(e.totalPrice.toString() != "0" ? e.totalPrice.toString() : (int.parse(e.product!.price.toString()) * int.parse(e.quantity.toString())).toString()) ?? 0).toList().sum.toInt();
-
-  @override
   void initState() {
     super.initState();
     model = Get.arguments;
   }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -154,8 +151,9 @@ class _ThankYouPageState extends State<ThankYouPage> {
                       ),
                       Expanded(
                         child: formatPrice2(
-                            model.data!.total.toString(),
-                            model.data!.currencySymbol ?? '',
+                          '${double.parse(model.total.toString()) + double.parse(model.data!.shippingTotal.toString())} ',
+                            // model.data!.total.toString(),
+                             model.data!.currencySymbol ?? '',
                           GoogleFonts.poppins(
                               color: const Color(0xFF686A81),
                               fontSize: 18,

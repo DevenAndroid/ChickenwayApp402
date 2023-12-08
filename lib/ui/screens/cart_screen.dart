@@ -693,10 +693,7 @@ buildHero(Size size, {String? deliveryFee, int? shippingAmount}) {
   int total = cartController.model.value.data!.items!
       .map((e) => double.tryParse(e.totalPrice.toString() != "0" ? e.totalPrice.toString() : (int.parse(e.product!.price.toString()) * int.parse(e.quantity.toString())).toString()) ?? 0).toList().sum.toInt();
 
-  final cleanedDeliveryFee = deliveryFee?.replaceAll(RegExp(r'[^0-9.]'), '');
-  final formattedDeliveryFee = cleanedDeliveryFee != null
-      ? NumberFormat.decimalPattern().format(double.parse(cleanedDeliveryFee))
-      : null;
+
 
   return Material(
     color: Colors.white,
@@ -771,9 +768,11 @@ buildHero(Size size, {String? deliveryFee, int? shippingAmount}) {
                   style: GoogleFonts.poppins(color: const Color(0xFF555555), fontSize: 14, fontWeight: FontWeight.w500),
                 ),
                 Text(
-                  formattedDeliveryFee!,
-                  // Use the formatted delivery fee
-                  style: GoogleFonts.poppins(color: const Color(0xFF555555), fontSize: 14, fontWeight: FontWeight.w500),
+                  deliveryFee,
+                  style: GoogleFonts.poppins(
+                      color: const Color(0xFF555555),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500),
                 ),
               ],
             ),
