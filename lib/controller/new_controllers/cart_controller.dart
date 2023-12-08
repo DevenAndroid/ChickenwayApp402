@@ -49,21 +49,26 @@ class CartController extends GetxController {
     Map<String, dynamic> map = {};
     if(couponCode.text.trim().isNotEmpty) {
       map["coupon_code"] = couponCode.text.trim();
+      // int? temp = productsMap[element.product!.id.toString()];
+      // temp = temp! + (int.tryParse(element.quantity.toString()) ?? 1);
+      // productsMap[element.product!.id!.toString()]= temp;
     }
     await repositories.postApi(url: ApiUrls.getCartUrl,mapData: map,context: context).then((value){
       model.value = ModelGetCartData.fromJson(jsonDecode(value));
       productsMap.clear();
       for (var element in model.value.data!.items!) {
         if(productsMap[element.product!.id.toString()] == null){
-          productsMap[element.product!.id.toString()] = int.tryParse(element.quantity.toString()) ?? 1;
+          productsMap[element.product!.id.toString()] = int .tryParse(element.quantity.toString())??1;
         }
         else {
-          int? temp = productsMap[element.product!.id.toString()];
-          temp = temp! + (int.tryParse(element.quantity.toString()) ?? 1);
-          productsMap[element.product!.id.toString()] = temp;
+         int? temp =productsMap[element.product!.id.toString()];
+         temp = temp! + (int.tryParse(element.quantity.toString())??1);
+         productsMap[element.product!.id.toString()]=temp;
+
         }
       }
       isDataLoading.value = true;
+
       updateUi();
     });
   }

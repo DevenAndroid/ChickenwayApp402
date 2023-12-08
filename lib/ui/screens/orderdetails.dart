@@ -378,7 +378,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                   ),),
                                   const SizedBox(height: 10,),
 
-                                  // if(model.value.data!.orderData!.crispyplustextbox !="" )
+                                   if(model.value.data!.orderData!.crispyplustextbox !="" )
                                   Text('crispy plus : ${model.value.data!.orderData!.crispyplustextbox.toString()}', style: GoogleFonts.poppins(
                                     color: const Color(0xFF333333),
                                     fontSize: 14,

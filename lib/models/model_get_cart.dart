@@ -68,7 +68,7 @@ class Cartmeta {
   String? subtotalTax;
   String? shippingTotal;
   String? shippingTax;
-  // List<Null>? shippingTaxes;
+
   String? discountTotal;
   String? discountTax;
   String? cartContentsTotal;
