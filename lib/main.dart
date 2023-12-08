@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dinelah/res/size_config.dart';
 import 'package:dinelah/res/theme/theme.dart';
 import 'package:dinelah/routers/my_router.dart';
@@ -10,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 String initialCountryCode = "";
+
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -24,12 +27,11 @@ Future<void> main() async {
 
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
 
-  FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-      alert: true, badge: true, sound: true);
+  FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
-//Remove this method to stop OneSignal Debugging
+  //Remove this method to stop OneSignal Debugging
 //
 //
 //
@@ -48,7 +50,6 @@ Future<void> main() async {
 //     badge: true,
 //     carPlay: false,
 //     criticalAlert: false,
-
 
 //     provisional: false,
 //     sound: true,
@@ -69,56 +70,44 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     initPlatformState();
-
-
   }
-  Future<void>initPlatformState()async{
 
+  static const String oneSignalAppId = "84319630-f6ed-490f-ac1a-99a868a02a2f";
+
+  Future<void> initPlatformState() async {
     OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
 
-    OneSignal.Debug.setAlertLevel(OSLogLevel.none);
-    OneSignal.initialize("84319630-f6ed-490f-ac1a-99a868a02a2f");
-    OneSignal.Notifications.addClickListener((event) {
-      print('NOTIFICATION CLICK LISTENER CALLED WITH EVENT: $event');
-      this.setState(() {
 
-      });
+    OneSignal.Debug.setAlertLevel(OSLogLevel.none);
+    OneSignal.initialize(oneSignalAppId);
+    OneSignal.Notifications.addClickListener((event) {
+      log('NOTIFICATION CLICK LISTENER CALLED WITH EVENT: $event');
+     setState(() {});
     });
 
     OneSignal.Notifications.addForegroundWillDisplayListener((event) {
-      print(
-          'NOTIFICATION WILL DISPLAY LISTENER CALLED WITH: ${event.notification.jsonRepresentation()}');
-
-      /// Display Notification, preventDefault to not display
+      log('NOTIFICATION WILL DISPLAY LISTENER CALLED WITH: ${event.notification.jsonRepresentation()}');
       event.preventDefault();
-
-      /// Do async work
-
-      /// notification.display() to display after preventing default
       event.notification.display();
 
-      this.setState(() {
-
-      });
+      setState(() {});
     });
-
   }
+
   var theme = ThemeData(
     useMaterial3: true,
     scaffoldBackgroundColor: const Color(0xffF5F5F5),
-    cardTheme:
-        const CardTheme(surfaceTintColor: Colors.white, color: Colors.white),
+    cardTheme: const CardTheme(surfaceTintColor: Colors.white, color: Colors.white),
     primaryColor: AppTheme.primaryColor,
-    dialogTheme: const DialogTheme(
-        backgroundColor: Colors.white, surfaceTintColor: Colors.white),
+    dialogTheme: const DialogTheme(backgroundColor: Colors.white, surfaceTintColor: Colors.white),
     primarySwatch: Colors.red,
   );
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {

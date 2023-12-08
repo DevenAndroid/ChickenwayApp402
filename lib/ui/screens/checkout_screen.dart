@@ -161,7 +161,7 @@ class _CheckoutCScreenState extends State<CheckoutCScreen> {
         cartController.model.value.data!.items = [];
         cartController.getData();
 
-        Get.offAll(() => const ThankYouPage(), arguments: model);
+        Get.offAll(() =>  const ThankYouPage(), arguments: model);
       }
     });
   }

@@ -106,7 +106,6 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       builder: (BuildContext context) {
         return SizedBox(
           height: 500,
-
           child: Dialog(
             child: SingleChildScrollView(
               child: Padding(
@@ -114,30 +113,30 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                     horizontal: AddSize.padding16,
                     vertical: AddSize.padding16,
                   ),
-                  child: Column(     crossAxisAlignment: CrossAxisAlignment.end,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                       Column(
+                      Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           InkWell(
-                            onTap: (){
+                            onTap: () {
                               Get.back();
                             },
                             child: const Icon(
                               Icons.close,
                               color: Colors.red,
-
                             ),
                           ),
-
-
                         ],
                       ),
-                      Column( crossAxisAlignment: CrossAxisAlignment.start,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(modelPopUp.value.data!.title.toString(),style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
-
+                          Text(
+                            modelPopUp.value.data!.title.toString(),
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: AddSize.size10),
                           Image(
@@ -288,13 +287,12 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       manageSiteUrl();
       homeData();
       cartController.resetAll();
-
     });
   }
 
   bool noInternetRetry = false;
 
-  RxString  time = "00:00".obs;
+  RxString time = "00:00".obs;
   var logTime = "2022-09-10 00:05:00.000000";
   Timer? timer;
   int fiveMinute = 0;
@@ -305,10 +303,8 @@ class MainHomeScreenState extends State<MainHomeScreen> {
     if (timer != null) {
       timer!.cancel();
     }
-    int seconds =
-    ((givenTime.millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond) -
-        DateTime.now().millisecondsSinceEpoch ~/
-            Duration.millisecondsPerSecond);
+    int seconds = ((givenTime.millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond) -
+        DateTime.now().millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond);
     // DateTime.now().millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond
     // referenceTime = DateTime.parse("2022-09-10 00:00:00.000000").add(Duration(seconds: timeInSeconds));
 
@@ -317,8 +313,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
     if (kDebugMode) {
       print("Time...........       $seconds");
     }
-    referenceTime = DateTime.parse("2022-09-10 00:00:00.000000")
-        .add(Duration(seconds: seconds.abs()));
+    referenceTime = DateTime.parse("2022-09-10 00:00:00.000000").add(Duration(seconds: seconds.abs()));
     fiveMinute = seconds;
     log(time.value);
     var logTime1 = DateFormat("mm:ss");
@@ -327,8 +322,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
         fiveMinute--;
         hours = fiveMinute ~/ (60 * 60);
         referenceTime = referenceTime.subtract(const Duration(seconds: 1));
-        time.value =
-        "${hours == 0 ? "00" : hours < 10 ? "0$hours" : hours}:${logTime1.format(referenceTime)}";
+        time.value = "${hours == 0 ? "00" : hours < 10 ? "0$hours" : hours}:${logTime1.format(referenceTime)}";
       } else {
         timer.cancel();
         fiveMinute = 0;
@@ -409,39 +403,38 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                                 ),
                                               ),
                                             ),
-
-                                              Padding(
-                                                padding: const EdgeInsets.only(right: 24.0, top: 8),
-                                                child: Obx(() {
-                                                  return InkWell(
-                                                    onTap: () {
-                                                      Get.toNamed(CartScreen.route);
-                                                    },
-                                                    child: (cartController.isDataLoading.value &&
-                                                            cartController.model.value.data != null )
-                                                        ? Badge(
-                                                            badgeStyle: const BadgeStyle(badgeColor: Colors.black),
-                                                            badgeContent: Text(
-                                                              cartController.model.value.data!.items!
-                                                                  .map((e) => int.parse((e.quantity ?? 0).toString()))
-                                                                  .toList()
-                                                                  .sum
-                                                                  .toString(),
-                                                              style: GoogleFonts.poppins(color: Colors.white, fontSize: 10),
-                                                            ),
-                                                            child: Image.asset(
-                                                              'assets/images/cooking_icon.png',
-                                                              width: 26,
-                                                              height: 26,
-                                                            ))
-                                                        : Image.asset(
+                                            Padding(
+                                              padding: const EdgeInsets.only(right: 24.0, top: 8),
+                                              child: Obx(() {
+                                                return InkWell(
+                                                  onTap: () {
+                                                    Get.toNamed(CartScreen.route);
+                                                  },
+                                                  child: (cartController.isDataLoading.value &&
+                                                          cartController.model.value.data != null)
+                                                      ? Badge(
+                                                          badgeStyle: const BadgeStyle(badgeColor: Colors.black),
+                                                          badgeContent: Text(
+                                                            cartController.model.value.data!.items!
+                                                                .map((e) => int.parse((e.quantity ?? 0).toString()))
+                                                                .toList()
+                                                                .sum
+                                                                .toString(),
+                                                            style: GoogleFonts.poppins(color: Colors.white, fontSize: 10),
+                                                          ),
+                                                          child: Image.asset(
                                                             'assets/images/cooking_icon.png',
                                                             width: 26,
                                                             height: 26,
-                                                          ),
-                                                  );
-                                                }),
-                                              )
+                                                          ))
+                                                      : Image.asset(
+                                                          'assets/images/cooking_icon.png',
+                                                          width: 26,
+                                                          height: 26,
+                                                        ),
+                                                );
+                                              }),
+                                            )
                                           ],
                                         ),
                                         addHeight(10),
@@ -471,11 +464,8 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                       ],
                                     ),
                                   ),
-                                  if(time.value == "00:00"&&  model.value.data!.timeBannerAd![0].addScreen == "Activate")
+                                  if (time.value == "00:00" && model.value.data!.timeBannerAd![0].addScreen == "Activate")
                                     timerAd(context),
-
-
-
                                   addHeight(20),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
@@ -622,11 +612,9 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                     ),
                                   ),
                                   addHeight(20),
-
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       Image.asset(
                                         'assets/images/chicken_icon.png',
@@ -643,9 +631,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                         ),
                                       )
                                     ],
-                                  ).padded(
-                                      givePadding:
-                                      const EdgeInsets.only(left: 15)),
+                                  ).padded(givePadding: const EdgeInsets.only(left: 15)),
                                   addHeight(6),
                                   SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
@@ -654,77 +640,53 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                         ...model.value.data!.serviceSection!
                                             .map(
                                               (service) => GestureDetector(
-                                            onTap: () {
-                                              if (service.serviceUrl !=
-                                                  null) {
-                                                Get.toNamed(
-                                                    service.serviceUrl!);
-                                                // launchUrlToWeb(
-                                                //     service.service_url);
-                                              }
-                                            },
-                                            child: Column(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                  const EdgeInsets.all(
-                                                      5.0)
-                                                      .copyWith(
-                                                      left: 15,
-                                                      right: 0),
-                                                  child: Container(
-                                                    height: 80,
-                                                    width: 80,
-                                                    decoration:
-                                                    BoxDecoration(
-                                                      borderRadius:
-                                                      BorderRadius
-                                                          .circular(10),
-                                                      color: const Color(
-                                                          0xFFFEF4D9),
-                                                    ),
-                                                    margin: const EdgeInsets
-                                                        .all(5),
-                                                    child: CachedNetworkImage(imageUrl:
-                                                    service.serviceImages
-                                                        .toString(),
-                                                      height: 43,
-                                                      width: 54,
-                                                      errorWidget: (_, __,
-                                                          ___) =>
-                                                      const SizedBox(
-                                                        height: 43,
-                                                        width: 54,
+                                                onTap: () {
+                                                  if (service.serviceUrl != null) {
+                                                    Get.toNamed(service.serviceUrl!);
+                                                    // launchUrlToWeb(
+                                                    //     service.service_url);
+                                                  }
+                                                },
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                  children: [
+                                                    Padding(
+                                                      padding: const EdgeInsets.all(5.0).copyWith(left: 15, right: 0),
+                                                      child: Container(
+                                                        height: 80,
+                                                        width: 80,
+                                                        decoration: BoxDecoration(
+                                                          borderRadius: BorderRadius.circular(10),
+                                                          color: const Color(0xFFFEF4D9),
+                                                        ),
+                                                        margin: const EdgeInsets.all(5),
+                                                        child: CachedNetworkImage(
+                                                          imageUrl: service.serviceImages.toString(),
+                                                          height: 43,
+                                                          width: 54,
+                                                          errorWidget: (_, __, ___) => const SizedBox(
+                                                            height: 43,
+                                                            width: 54,
+                                                          ),
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ),
-                                                Center(
-                                                  child: Text(
-                                                    service.serviceTitle
-                                                        .toString()
-                                                        .replaceAll(
-                                                        " ", "\n"),
-                                                    style:
-                                                    GoogleFonts.poppins(
-                                                      fontWeight:
-                                                      FontWeight.w600,
-                                                      fontSize: 12.5,
-                                                      color: const Color(
-                                                          0xFF292323),
+                                                    Center(
+                                                      child: Text(
+                                                        service.serviceTitle.toString().replaceAll(" ", "\n"),
+                                                        style: GoogleFonts.poppins(
+                                                          fontWeight: FontWeight.w600,
+                                                          fontSize: 12.5,
+                                                          color: const Color(0xFF292323),
+                                                        ),
+                                                        textAlign: TextAlign.center,
+                                                      ),
                                                     ),
-                                                    textAlign:
-                                                    TextAlign.center,
-                                                  ),
+                                                  ],
                                                 ),
-                                              ],
-                                            ),
-                                          ),
-                                        )
+                                              ),
+                                            )
                                             .toList()
                                       ],
                                     ),
@@ -925,9 +887,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
     if (wishList.model.value.data == null) {
       wishList.getWishListData();
     }
-    return
-      wishList.model.value.data! .isNotEmpty
-
+    return wishList.model.value.data!.isNotEmpty
         ? [
             addHeight(30),
             Row(
@@ -1014,10 +974,8 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       padding: const EdgeInsets.only(top: 10, bottom: 10, left: 35, right: 5),
       margin: const EdgeInsets.symmetric(horizontal: 14).copyWith(top: 20),
       decoration: BoxDecoration(
-        image: DecorationImage(
-            image: NetworkImage(
-                model.value.data!.timeBannerAd![0].adsUrl.toString()),
-            fit: BoxFit.contain),
+        image:
+            DecorationImage(image: NetworkImage(model.value.data!.timeBannerAd![0].adsUrl.toString()), fit: BoxFit.contain),
       ),
       height: 100,
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -1047,8 +1005,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
         Expanded(
           flex: 3,
           child:
-
-          Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(
               model.value.data!.timeBannerAd![0].adsTitle.toString(),
               style: GoogleFonts.poppins(
@@ -1535,6 +1492,7 @@ appBottomLogo() {
               child: CachedNetworkImage(
                 progressIndicatorBuilder: (context, url, progress) => Center(
                   child: CircularProgressIndicator(
+                    color: Colors.black,
                     value: progress.progress,
                   ),
                 ),

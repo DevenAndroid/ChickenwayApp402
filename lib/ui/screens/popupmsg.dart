@@ -27,6 +27,7 @@ class _PopUPScreenState extends State<PopUPScreen> {
       Get.back();
       Get.back();
       addressController.getAddresses();
+      addressController.getAddresses();
     });
   }
 

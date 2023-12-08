@@ -45,6 +45,9 @@ class CartScreen extends StatefulWidget {
 class CartScreenState extends State<CartScreen> {
   final CartController cartController = Get.put(CartController());
   final Repositories repositories = Repositories();
+  final double subtotal = 100.0;
+  final double shipping = 10.0;
+
 
   final addressController = Get.put(AddressController());
 
@@ -690,13 +693,17 @@ cartBottomWidget({onTap}) {
 
 buildHero(Size size, {String? deliveryFee, int? shippingAmount}) {
   final cartController = Get.put(CartController());
-  int total = cartController.model.value.data!.items!
-      .map((e) => double.tryParse(e.totalPrice.toString() != "0" ? e.totalPrice.toString() : (int.parse(e.product!.price.toString()) * int.parse(e.quantity.toString())).toString()) ?? 0).toList().sum.toInt();
 
-  final cleanedDeliveryFee = deliveryFee?.replaceAll(RegExp(r'[^0-9.]'), '');
-  final formattedDeliveryFee = cleanedDeliveryFee != null
-      ? NumberFormat.decimalPattern().format(double.parse(cleanedDeliveryFee))
-      : null;
+  int total = cartController.model.value.data!.items!
+      .map((e) => double.tryParse(e.totalPrice.toString() != "0" ?
+  e.totalPrice.toString() :
+  (int.parse(e.product!.price.toString()) * int.parse(e.quantity.toString())).toString()) ??
+      0).toList().sum.toInt();
+
+   // final cleanedDeliveryFee = deliveryFee?.replaceAll(RegExp(r'[^0-9.]'), '');
+   // final formattedDeliveryFee = cleanedDeliveryFee != null
+   //     ? NumberFormat.decimalPattern().format(double.parse(cleanedDeliveryFee))
+   //     : null;
 
   return Material(
     color: Colors.white,
@@ -771,7 +778,8 @@ buildHero(Size size, {String? deliveryFee, int? shippingAmount}) {
                   style: GoogleFonts.poppins(color: const Color(0xFF555555), fontSize: 14, fontWeight: FontWeight.w500),
                 ),
                 Text(
-                  formattedDeliveryFee!,
+                  deliveryFee,
+                  // formattedDeliveryFee!,
                   // Use the formatted delivery fee
                   style: GoogleFonts.poppins(color: const Color(0xFF555555), fontSize: 14, fontWeight: FontWeight.w500),
                 ),
