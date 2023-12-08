@@ -616,18 +616,24 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
-                                      Image.asset(
+                                      model.value.data!.deliciousData!.icon == null
+                                          ? Image.network(
+                                        'assets/images/chicken_icon.png',
+                                        width: 25,
+                                        height: 25,
+                                      )
+                                          : Image.asset(
                                         'assets/images/chicken_icon.png',
                                         width: 25,
                                         height: 25,
                                       ).toAppIcon,
                                       addWidth(9),
                                       Text(
-                                        'SHORTCUTS',
+                                        model.value.data!.shortcutsData!.title!.toUpperCase().toString(),
                                         style: GoogleFonts.poppins(
                                           color: const Color(0xFF292323),
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
+                                          fontSize: 14.5,
+                                          fontWeight: FontWeight.w700,
                                         ),
                                       )
                                     ],
