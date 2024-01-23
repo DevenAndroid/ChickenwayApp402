@@ -169,6 +169,9 @@ class _ThankYouPageState extends State<ThankYouPage> {
                       Expanded(
                         child: Text("Payment Method: ",
                             style: GoogleFonts.poppins(
+
+
+
                                 color: const Color(0xFF686A81),
                                 fontSize: 18,
                                 fontWeight: FontWeight.w400)),
