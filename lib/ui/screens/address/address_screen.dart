@@ -28,8 +28,8 @@ class _AddressScreennState extends State<AddressScreenn> {
   @override
   void initState() {
     super.initState();
-    getShippingList();
-    addressController.getAddresses();
+    // getShippingList();
+    // addressController.getAddresses();
   }
 
   @override
@@ -43,15 +43,16 @@ class _AddressScreennState extends State<AddressScreenn> {
             padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
             child: InkWell(
               onTap: () {
-                addressController.mobile = "";
-                addressController.countryCode = "";
-                addressController.cameraPosition =
-                    CameraPosition(target: const LatLng(0, 0).checkLatLong);
-                addressController.id = "";
-                addressController.userId = "";
-                addressController.place = Placemark();
-                addressController.selectedShippingMethod = null;
-                Get.toNamed(ChooseAddress.route);
+                Get.offAndToNamed(AddAddress.route);
+                // addressController.mobile = "";
+                // addressController.countryCode = "";
+                // addressController.cameraPosition =
+                //     CameraPosition(target: const LatLng(0, 0).checkLatLong);
+                // addressController.id = "";
+                // addressController.userId = "";
+                // addressController.place = Placemark();
+                // addressController.selectedShippingMethod = null;
+                // Get.toNamed(ChooseAddress.route);
               },
               child: Padding(
                 padding: const EdgeInsets.all(10),

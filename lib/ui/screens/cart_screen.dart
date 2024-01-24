@@ -92,20 +92,20 @@ class CartScreenState extends State<CartScreen> {
 
   LatLng currentLatLong = const LatLng(0, 0);
 
-  Future<void> _getCurrentPosition() async {
-    await Permission.locationWhenInUse.request();
-    final hasPermission = await _handleLocationPermission();
-    if (!hasPermission) return;
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high).then((Position position) async {
-      currentLatLong = LatLng(position.latitude, position.longitude).checkLatLong;
-      _getAddressFromLatLng(currentLatLong);
-      if (mounted) {
-        setState(() {});
-      }
-    }).catchError((e) {
-      debugPrint(e.toString());
-    });
-  }
+  // Future<void> _getCurrentPosition() async {
+  //   await Permission.locationWhenInUse.request();
+  //   final hasPermission = await _handleLocationPermission();
+  //   if (!hasPermission) return;
+  //   await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high).then((Position position) async {
+  //     currentLatLong = LatLng(position.latitude, position.longitude).checkLatLong;
+  //     _getAddressFromLatLng(currentLatLong);
+  //     if (mounted) {
+  //       setState(() {});
+  //     }
+  //   }).catchError((e) {
+  //     debugPrint(e.toString());
+  //   });
+  // }
 
   String address = "";
 
@@ -165,7 +165,7 @@ class CartScreenState extends State<CartScreen> {
   @override
   void initState() {
     super.initState();
-    _getCurrentPosition();
+    // _getCurrentPosition();
     cartController.getData();
     addressController.getAddresses();
     switchUser();
@@ -194,7 +194,7 @@ class CartScreenState extends State<CartScreen> {
         &&statusSwitchOff.value.isSuccess
                 ? RefreshIndicator(
                     onRefresh: () async {
-                      _getCurrentPosition();
+                      // _getCurrentPosition();
                       await cartController.getData();
                     },
                     child: SingleChildScrollView(

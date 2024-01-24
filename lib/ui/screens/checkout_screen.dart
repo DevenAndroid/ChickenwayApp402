@@ -237,47 +237,47 @@ class _CheckoutCScreenState extends State<CheckoutCScreen> {
                 child: Padding(
                   padding: const EdgeInsets.all(10),
                   child: Column(children: [
-                    Container(
-                      height: MediaQuery.of(context).size.height * .25,
-                      width: MediaQuery.of(context).size.width,
-                      padding: const EdgeInsets.all(0),
-                      decoration: const BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.rectangle,
-                          boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 1, offset: Offset(1, 1))]),
-                      child: GoogleMap(
-                        mapType: MapType.normal,
-                        onTap: (v) {
-                          selectAddressForOrder = true;
-                          Get.toNamed(AddressScreenn.route, arguments: "sdddsad");
-                        },
-                        initialCameraPosition: _kGooglePlex,
-                        markers: markers,
-                        onMapCreated: (GoogleMapController controller) {
-                          mapController = controller;
-                          _controller.complete(controller);
-                          if (loaded == false) {
-                            loaded = true;
-                            if (cartController.deliveryAddress.value.home != null) {
-                              LatLng ll = LatLng(double.parse(cartController.deliveryAddress.value.lat ?? "33.888630"),
-                                      double.parse(cartController.deliveryAddress.value.longitute ?? "35.495480"))
-                                  .checkLatLong;
-                              mapController!
-                                  .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: ll, zoom: 15)));
-                              _getAddressFromLatLng(ll);
-                            }
-                          }
-                          if (mounted) {
-                            setState(() {});
-                          }
-                        },
-                      ),
-                    ),
+                    // Container(
+                    //   height: MediaQuery.of(context).size.height * .25,
+                    //   width: MediaQuery.of(context).size.width,
+                    //   padding: const EdgeInsets.all(0),
+                    //   decoration: const BoxDecoration(
+                    //       color: Colors.white,
+                    //       shape: BoxShape.rectangle,
+                    //       boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 1, offset: Offset(1, 1))]),
+                    //   child: GoogleMap(
+                    //     mapType: MapType.normal,
+                    //     onTap: (v) {
+                    //       selectAddressForOrder = true;
+                    //       Get.toNamed(AddressScreenn.route, arguments: "sdddsad");
+                    //     },
+                    //     initialCameraPosition: _kGooglePlex,
+                    //     markers: markers,
+                    //     onMapCreated: (GoogleMapController controller) {
+                    //       mapController = controller;
+                    //       _controller.complete(controller);
+                    //       if (loaded == false) {
+                    //         loaded = true;
+                    //         if (cartController.deliveryAddress.value.home != null) {
+                    //           LatLng ll = LatLng(double.parse(cartController.deliveryAddress.value.lat ?? "33.888630"),
+                    //                   double.parse(cartController.deliveryAddress.value.longitute ?? "35.495480"))
+                    //               .checkLatLong;
+                    //           mapController!
+                    //               .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: ll, zoom: 15)));
+                    //           _getAddressFromLatLng(ll);
+                    //         }
+                    //       }
+                    //       if (mounted) {
+                    //         setState(() {});
+                    //       }
+                    //     },
+                    //   ),
+                    // ),
                     Container(
                       padding: const EdgeInsets.all(10),
                       decoration: const BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                           boxShadow: [
                             BoxShadow(color: Colors.black26, blurRadius: 1, offset: Offset(.5, .5)),
                           ]),
@@ -421,7 +421,7 @@ class _CheckoutCScreenState extends State<CheckoutCScreen> {
         }),
         bottomNavigationBar: Obx(() {
           return statusSwitchOff.value.isSuccess
-              ? modelSwitchOff.value.data!.switchOffStore == 'Show'
+              ? modelSwitchOff.value.data!.switchOffOn != 'On/Off'
                   ? Container(
                       height: 76,
                       width: size.width,
@@ -479,7 +479,7 @@ class _CheckoutCScreenState extends State<CheckoutCScreen> {
                   ),
                   child: Center(
                     child: Text(
-                      'we are currently closed please comeback tomorrow',
+                        modelSwitchOff.value.data!.switchTitle.toString(),
                       style: GoogleFonts.poppins(
                           color: const Color(0xFFFFFFFF), fontSize: 13, fontWeight: FontWeight.w600),
                     ),

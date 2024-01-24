@@ -23,17 +23,20 @@ class ModelSwitchOff {
 }
 
 class Data {
-  String? switchOffStore;
+  String? switchOffOn;
+  String? switchTitle;
 
-  Data({this.switchOffStore});
+  Data({this.switchOffOn, this.switchTitle});
 
   Data.fromJson(Map<String, dynamic> json) {
-    switchOffStore = json['switch_off_store'];
+    switchOffOn = json['switch_off_on'];
+    switchTitle = json['switch_title'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['switch_off_store'] = this.switchOffStore;
+    data['switch_off_on'] = this.switchOffOn;
+    data['switch_title'] = this.switchTitle;
     return data;
   }
 }

@@ -153,135 +153,135 @@ class _AddAddressState extends State<AddAddress> {
           child: Padding(
             padding: const EdgeInsets.all(12.0),
             child: Column(children: [
-              Container(
-                height: MediaQuery.of(context).size.height * .3,
-                width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.all(0),
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.rectangle,
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 1,
-                          offset: Offset(1, 1))
-                    ]),
-                child: GoogleMap(
-                  mapType: MapType.normal,
-                  initialCameraPosition: _kGooglePlex,
-                  markers: markers,
-                  onMapCreated: (GoogleMapController controller) {
-                    mapController = controller;
-                    _controller.complete(controller);
-                    mapController!
-                        .animateCamera(CameraUpdate.newCameraPosition(
-                            addressController.cameraPosition))
-                        .then((value) {
-                      _onAddMarkerButtonPressed(
-                          addressController.cameraPosition.target,
-                          "Selected Location");
-                    });
-                  },
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(10),
-                        bottomRight: Radius.circular(10)),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 1,
-                          offset: Offset(1, 1))
-                    ]),
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                color: const Color(0xffEAEAEA),
-                              ),
-                              shape: BoxShape.circle),
-                          child: const Icon(
-                            Icons.location_on,
-                            color: Color(0xFFE02020),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 15,
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: Text(
-                              '${addressController.place.subLocality} ${addressController.place.subAdministrativeArea} ${addressController.place.postalCode}',
-                              style: GoogleFonts.poppins(
-                                  color: const Color(0xFF333333),
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: InkWell(
-                            onTap: () {
-                              if (Get.arguments != null) {
-                                Get.offNamed(ChooseAddress.route,
-                                    arguments: Get.arguments);
-                              } else {
-                                Get.back();
-                              }
-                            },
-                            child: Text(
-                              'Change',
-                              style: GoogleFonts.poppins(
-                                  color: const Color(0xFFE02020),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 50, right: 10),
-                      child: Text(
-                        'Add Your Location on map, so our drivers can easily deliver your orders',
-                        style: GoogleFonts.poppins(
-                            color: const Color(0xFF666666),
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10),
-                child: Text(
-                  "Give this address a label so you can easily choose between them (e.g. Parent’s Home)",
-                  style: GoogleFonts.poppins(
-                      color: Colors.grey.shade700,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14,
-                      height: 1.2),
-                ),
-              ),
+              // Container(
+              //   height: MediaQuery.of(context).size.height * .3,
+              //   width: MediaQuery.of(context).size.width,
+              //   padding: const EdgeInsets.all(0),
+              //   decoration: const BoxDecoration(
+              //       color: Colors.white,
+              //       shape: BoxShape.rectangle,
+              //       boxShadow: [
+              //         BoxShadow(
+              //             color: Colors.black26,
+              //             blurRadius: 1,
+              //             offset: Offset(1, 1))
+              //       ]),
+              //   child: GoogleMap(
+              //     mapType: MapType.normal,
+              //     initialCameraPosition: _kGooglePlex,
+              //     markers: markers,
+              //     onMapCreated: (GoogleMapController controller) {
+              //       mapController = controller;
+              //       _controller.complete(controller);
+              //       mapController!
+              //           .animateCamera(CameraUpdate.newCameraPosition(
+              //               addressController.cameraPosition))
+              //           .then((value) {
+              //         _onAddMarkerButtonPressed(
+              //             addressController.cameraPosition.target,
+              //             "Selected Location");
+              //       });
+              //     },
+              //   ),
+              // ),
+              // Container(
+              //   padding: const EdgeInsets.all(10),
+              //   decoration: const BoxDecoration(
+              //       color: Colors.white,
+              //       borderRadius: BorderRadius.only(
+              //           bottomLeft: Radius.circular(10),
+              //           bottomRight: Radius.circular(10)),
+              //       boxShadow: [
+              //         BoxShadow(
+              //             color: Colors.black26,
+              //             blurRadius: 1,
+              //             offset: Offset(1, 1))
+              //       ]),
+              //   child: Column(
+              //     children: [
+              //       const SizedBox(
+              //         height: 8,
+              //       ),
+              //       Row(
+              //         mainAxisAlignment: MainAxisAlignment.start,
+              //         crossAxisAlignment: CrossAxisAlignment.start,
+              //         children: [
+              //           Container(
+              //             padding: const EdgeInsets.all(6),
+              //             decoration: BoxDecoration(
+              //                 border: Border.all(
+              //                   color: const Color(0xffEAEAEA),
+              //                 ),
+              //                 shape: BoxShape.circle),
+              //             child: const Icon(
+              //               Icons.location_on,
+              //               color: Color(0xFFE02020),
+              //             ),
+              //           ),
+              //           const SizedBox(
+              //             width: 15,
+              //           ),
+              //           Expanded(
+              //             child: Padding(
+              //               padding: const EdgeInsets.only(top: 8.0),
+              //               child: Text(
+              //                 '${addressController.place.subLocality} ${addressController.place.subAdministrativeArea} ${addressController.place.postalCode}',
+              //                 style: GoogleFonts.poppins(
+              //                     color: const Color(0xFF333333),
+              //                     fontSize: 17,
+              //                     fontWeight: FontWeight.w600),
+              //               ),
+              //             ),
+              //           ),
+              //           Padding(
+              //             padding: const EdgeInsets.only(top: 8.0),
+              //             child: InkWell(
+              //               onTap: () {
+              //                 if (Get.arguments != null) {
+              //                   Get.offNamed(ChooseAddress.route,
+              //                       arguments: Get.arguments);
+              //                 } else {
+              //                   Get.back();
+              //                 }
+              //               },
+              //               child: Text(
+              //                 'Change',
+              //                 style: GoogleFonts.poppins(
+              //                     color: const Color(0xFFE02020),
+              //                     fontSize: 14,
+              //                     fontWeight: FontWeight.w600),
+              //               ),
+              //             ),
+              //           )
+              //         ],
+              //       ),
+              //       Padding(
+              //         padding: const EdgeInsets.only(left: 50, right: 10),
+              //         child: Text(
+              //           'Add Your Location on map, so our drivers can easily deliver your orders',
+              //           style: GoogleFonts.poppins(
+              //               color: const Color(0xFF666666),
+              //               fontSize: 15,
+              //               fontWeight: FontWeight.w500),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              // const SizedBox(
+              //   height: 16,
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 10, right: 10),
+              //   child: Text(
+              //     "Give this address a label so you can easily choose between them (e.g. Parent’s Home)",
+              //     style: GoogleFonts.poppins(
+              //         color: Colors.grey.shade700,
+              //         fontWeight: FontWeight.w400,
+              //         fontSize: 14,
+              //         height: 1.2),
+              //   ),
+              // ),
               addHeight(14),
               TextFormField(
                 controller: home,
