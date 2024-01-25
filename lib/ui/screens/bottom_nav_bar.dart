@@ -556,13 +556,24 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                     children: [
                                       model.value.data!.bestSellerData!.icon !=
                                               ""
-                                          ? Image.network(
-                                              model.value.data!.bestSellerData!
-                                                  .icon
-                                                  .toString(),
-                                              width: 25,
-                                              height: 25,
-                                            )
+                                          ?  CachedNetworkImage(
+                                          width: 25,
+                                          height: 25,
+                                          imageUrl: model.value.data!
+                                              .bestSellerData!.icon
+                                              .toString(),
+                                          errorWidget: (_, __, ___) =>
+                                              Image.asset(
+                                                'assets/images/chicken_icon.png',
+                                                width: 25,
+                                                height: 25,
+                                              ),
+                                          placeholder: (_, __) =>
+                                              Image.asset(
+                                                'assets/images/chicken_icon.png',
+                                                width: 25,
+                                                height: 25,
+                                              ))
                                           : Image.asset(
                                               'assets/images/chicken_icon.png',
                                               width: 25,
@@ -578,7 +589,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                           fontSize: 14.5,
                                           fontWeight: FontWeight.w700,
                                         ),
-                                      )
+                                      ),
                                     ],
                                   ).padded(
                                       givePadding:
@@ -767,13 +778,25 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                     children: [
                                       model.value.data!.shortcutsData!.icon !=
                                               ""
-                                          ? Image.network(
-                                              model.value.data!.shortcutsData!
-                                                  .icon
-                                                  .toString(),
+                                          ? CachedNetworkImage(
                                               width: 25,
                                               height: 25,
-                                            )
+                                              imageUrl: model.value.data!
+                                                  .shortcutsData!.icon
+                                                  .toString(),
+                                              errorWidget: (_, __, ___) =>
+                                                  Image.asset(
+                                                    'assets/images/chicken_icon.png',
+                                                    width: 25,
+                                                    height: 25,
+                                                  ),
+                                              placeholder: (_, __) =>
+                                                  Image.asset(
+                                                    'assets/images/chicken_icon.png',
+                                                    width: 25,
+                                                    height: 25,
+                                                  ))
+
                                           : Image.asset(
                                               'assets/images/chicken_icon.png',
                                               width: 25,
@@ -1249,11 +1272,24 @@ class MainHomeScreenState extends State<MainHomeScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           model.value.data!.yallaData!.icon != ""
-              ? Image.network(
-                  model.value.data!.yallaData!.icon.toString(),
-                  width: 25,
-                  height: 25,
-                )
+              ?  CachedNetworkImage(
+              width: 25,
+              height: 25,
+              imageUrl: model.value.data!
+                  .yallaData!.icon
+                  .toString(),
+              errorWidget: (_, __, ___) =>
+                  Image.asset(
+                    'assets/images/chicken_icon.png',
+                    width: 25,
+                    height: 25,
+                  ),
+              placeholder: (_, __) =>
+                  Image.asset(
+                    'assets/images/chicken_icon.png',
+                    width: 25,
+                    height: 25,
+                  ))
               : Image.asset(
                   'assets/images/chicken_icon.png',
                   width: 25,
@@ -1423,11 +1459,24 @@ class MainHomeScreenState extends State<MainHomeScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           model.value.data!.deliciousData!.icon != ""
-              ? Image.network(
-            model.value.data!.deliciousData!.icon.toString(),
-                  width: 25,
-                  height: 25,
-                )
+                 ?  CachedNetworkImage(
+      width: 25,
+          height: 25,
+          imageUrl: model.value.data!
+              .deliciousData!.icon
+              .toString(),
+          errorWidget: (_, __, ___) =>
+              Image.asset(
+                'assets/images/chicken_icon.png',
+                width: 25,
+                height: 25,
+              ),
+          placeholder: (_, __) =>
+              Image.asset(
+                'assets/images/chicken_icon.png',
+                width: 25,
+                height: 25,
+              ))
               : Image.asset(
                   'assets/images/chicken_icon.png',
                   width: 25,

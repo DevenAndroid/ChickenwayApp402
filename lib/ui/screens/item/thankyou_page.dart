@@ -59,7 +59,7 @@ class _ThankYouPageState extends State<ThankYouPage> {
                       Row(
                         children: [
                           const SizedBox(
-                            width: 70,
+                            width: 80,
                           ),
                           Expanded(
                             child: Text("Order Id: ",
@@ -69,7 +69,7 @@ class _ThankYouPageState extends State<ThankYouPage> {
                                     fontWeight: FontWeight.w400)),
                           ),
                           const SizedBox(
-                            width: 30,
+                            width: 10,
                           ),
                           Expanded(
                             child: Text(model.orderId.toString(),
@@ -83,7 +83,7 @@ class _ThankYouPageState extends State<ThankYouPage> {
                       Row(
                         children: [
                           const SizedBox(
-                            width: 70,
+                            width: 80,
                           ),
                           Expanded(
                             child: Text("Basket Total: ",
@@ -93,7 +93,7 @@ class _ThankYouPageState extends State<ThankYouPage> {
                                     fontWeight: FontWeight.w400)),
                           ),
                           const SizedBox(
-                            width: 30,
+                            width: 10,
                           ),
                           Expanded(
                             child: formatPrice2(
@@ -108,7 +108,7 @@ class _ThankYouPageState extends State<ThankYouPage> {
                       Row(
                         children: [
                           const SizedBox(
-                            width: 70,
+                            width: 80,
                           ),
                           Expanded(
                             child: Text("Delivery Fees: ",
@@ -118,7 +118,7 @@ class _ThankYouPageState extends State<ThankYouPage> {
                                     fontWeight: FontWeight.w400)),
                           ),
                           const SizedBox(
-                            width: 30,
+                            width: 10,
                           ),
                           Expanded(
                             child: formatPrice2(
@@ -135,7 +135,7 @@ class _ThankYouPageState extends State<ThankYouPage> {
 
                         children: [
                           const SizedBox(
-                            width: 70,
+                            width: 80,
                           ),
                           Expanded(
                             child: Text(
@@ -147,7 +147,7 @@ class _ThankYouPageState extends State<ThankYouPage> {
                             ),
                           ),
                           const SizedBox(
-                            width: 30,
+                            width: 10,
                           ),
                           Expanded(
                             child: formatPrice2(
@@ -164,18 +164,23 @@ class _ThankYouPageState extends State<ThankYouPage> {
                       Row(
                         children: [
                           const SizedBox(
-                            width: 70,
+                            width: 80,
                           ),
-                          Text("Payment Method: ",
-                              style: GoogleFonts.poppins(
+                          Expanded(
+                            child: FittedBox(
+                              child: Text("Payment Method: ",
+                                  style: GoogleFonts.poppins(
 
 
 
-                                  color: const Color(0xFF686A81),
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w400)),
-                          SizedBox(width: 10,),
-
+                                      color: const Color(0xFF686A81),
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w400)),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
                           Expanded(
                             child: Text(model.data!.paymentMethod.toString(),
                                 style: GoogleFonts.poppins(

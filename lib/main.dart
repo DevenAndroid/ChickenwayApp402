@@ -26,11 +26,14 @@ Future<void> main() async {
   await Firebase.initializeApp();
 
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
-
   FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown
+  ]);
   //Remove this method to stop OneSignal Debugging
 //
 //
@@ -119,6 +122,7 @@ class _MyAppState extends State<MyApp> {
           debugShowCheckedModeBanner: false,
           getPages: MyRouter.route,
           theme: theme,
+
         );
       });
     });
