@@ -25,6 +25,7 @@ class Repositories {
     try {
       await ClientInformation.fetch().then((value) {
         deviceId = value.deviceId.toString();
+        log('Device Id ${deviceId}');
       });
     } on PlatformException {
       log('Failed to get client information');
@@ -49,6 +50,8 @@ class Repositories {
           jsonDecode(preferences.getString("user_details")!));
       if (mapData != null) {
         mapData['cookie'] = model.data!.cookie!;
+        log( "User Id ${model.data!.user!.id!.toString()}");
+
       } else {
         mapData = {};
         mapData['cookie'] = model.data!.cookie!;

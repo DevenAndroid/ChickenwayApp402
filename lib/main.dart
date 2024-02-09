@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:dinelah/res/size_config.dart';
 import 'package:dinelah/res/theme/theme.dart';
 import 'package:dinelah/routers/my_router.dart';
+import 'package:dinelah/ui/screens/notification_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -27,6 +28,7 @@ Future<void> main() async {
 
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
   FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
+  NotificationService().initializeNotification();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;

@@ -37,6 +37,7 @@ dependencies:
   flutter_launch: ^0.3.0
   geocoding:
   geolocator:
+  flutter_local_notifications: ^16.3.2
   permission_handler:
   flutter_google_places_hoc081098:
   google_api_headers:

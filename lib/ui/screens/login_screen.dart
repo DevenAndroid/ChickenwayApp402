@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:dinelah/controller/new_controllers/cart_controller.dart';
 import 'package:dinelah/models/model_login.dart';
 import 'package:dinelah/models/model_response_common.dart';
@@ -36,11 +37,14 @@ class _LoginScreenState extends State<LoginScreen> {
   String countryCode = "";
   final Repositories repositories = Repositories();
 
+
+
   loginUser() async {
     Map<String, dynamic> map = {};
     map["country_code"] = countryCode;
     map["phone"] = phoneNumber.text.trim();
-
+    // map["phone"] = repositories.assignDeviceToken();
+  log("fcm token is  ${await FirebaseMessaging.instance.getToken()}");
     repositories
         .postApi(url: ApiUrls.loginUrl, context: context, mapData: map)
         .then((value) {
@@ -63,6 +67,8 @@ class _LoginScreenState extends State<LoginScreen> {
     map["phone"] = phoneNumber.text;
     map["otp"] = otp;
     map["fcm_token"] = await FirebaseMessaging.instance.getToken();
+
+    log(map.toString());
     repositories
         .postApi(
       url: ApiUrls.verifySignIn,

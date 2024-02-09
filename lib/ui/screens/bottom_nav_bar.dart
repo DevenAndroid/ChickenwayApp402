@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:client_information/client_information.dart';
 import 'package:dinelah/controller/wishlist_controller.dart';
 import 'package:dinelah/controller/new_controllers/cart_controller.dart';
 import 'package:dinelah/helper/new_helper.dart';
@@ -31,6 +32,7 @@ import '../../helper/helper.dart';
 import '../../models/chicken/model_home.dart';
 import '../../models/model_popup_data.dart';
 import '../../models/model_shipping_methods.dart';
+import '../../models/notificaton_onclick_model.dart';
 import '../../repositories/new_common_repo/repository.dart';
 import '../../res/app_assets.dart';
 import '../../res/theme/theme.dart';
@@ -41,6 +43,8 @@ import '../widget/drawer.dart';
 import 'cart_screen.dart';
 import 'package:collection/collection.dart';
 import 'checkout_screen.dart';
+import 'notification_service.dart';
+import 'orderdetails.dart';
 import 'single_product_screen.dart';
 import 'menu_screen.dart';
 
@@ -59,6 +63,7 @@ Future manageSiteUrl() async {
 
 bool showSplashScreen = false;
 bool shouldShowCartIcon = true;
+String fcm = "";
 
 // Future<bool> isFirstTime() async {
 //   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -177,6 +182,116 @@ class MainHomeScreenState extends State<MainHomeScreen> {
     );
   }
 
+  makingPhoneCall(web) async {
+    var url = Uri.parse(web);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  // manageNotification() {
+  //   print("functionnnnn callll");
+  //   NotificationService().initializeNotification();
+  //   FirebaseMessaging.onMessageOpenedApp.listen((event) {
+  //     print('Notification issss  ${event.notification!.title.toString()}');
+  //     print('Notification issss data ${event.data}');
+  //     print('Notification issss  ${event.data['payload']['screen_type']}');
+  //
+  //     // if(event.data['screen_type'] == 'chat'){
+  //     //   Get.toNamed(OrderDetails.route, arguments: [event.data['order_id'].toString()]);
+  //     // }
+  //      if(event.data['screen_type'] == 'post_or_product_update'){
+  //        if(event.data['is_another'] == true){
+  //          makingPhoneCall(event.data['p_link'].toString());
+  //        }
+  //        else{
+  //          makingPhoneCall(event.data['p_link'].toString());
+  //        }
+  //       // Get.toNamed(SingleProductScreen.route, arguments: [event.data['order_id'].toString()]);
+  //     }
+  //     else if(event.data['screen_type'] == 'chat'){
+  //       Get.toNamed(OrderDetails.route, arguments: [event.data['order_id'].toString()]);
+  //     }
+  //     // switch (event.data) {
+  //     //   case 'Following':
+  //     //     Get.toNamed(MyRouters.allUserProfileScreen, arguments: [event.data['post_id'].toString()]);
+  //     //     break;
+  //     //   case 'Tag':
+  //     //     bottomController.updateIndexValue(0);
+  //     //     break;
+  //     //   case 'Recommendation':
+  //     //   case 'Like':
+  //     //     getRecommendationController.idForReco = event.data['post_id'].toString();
+  //     //     getRecommendationController.idForAskReco = event.data['post_id'].toString();
+  //     //     getRecommendationController.settingModalBottomSheet(context);
+  //     //     break;
+  //     //   case 'Comment':
+  //     //     if (event.data['post_type'] == 'askrecommandation') {
+  //     //       getCommentController.id = event.data['post_id'].toString();
+  //     //       getCommentController.type = 'askrecommandation';
+  //     //       getRecommendationController.commentBottomSheet(context);
+  //     //     } else if (event.data['post_type'] == 'recommandation') {
+  //     //       getRecommendationController.getComments(event.data['post_id'].toString(), context);
+  //     //       getRecommendationController.postId = event.data['post_id'].toString();
+  //     //       getRecommendationController.commentBottomSheetReco(context);
+  //     //     }
+  //     //     break;
+  //     // }
+  //   });
+  // }
+
+
+  manageNotification() {
+    print("functionnnnn callll");
+    NotificationService().initializeNotification();
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      print('Notification issss  ${event.notification!.title.toString()}');
+      print('Notification issss dataedereere ${ event.data['payload']}');
+       print('Notificatio data ${event.data}');
+      NotificationOnClickModel groupModal = NotificationOnClickModel.fromJson(jsonDecode(event.data["payload"]));
+
+      if(groupModal.screenType== 'chat'){
+        Get.toNamed(OrderDetails.route, arguments: [groupModal.orderId.toString()]);
+      } else if(groupModal.screenType== 'post_or_product_update'){
+          if (groupModal.isAnother == true) {
+                  makingPhoneCall(groupModal.pLink.toString());
+            }else{
+              if(groupModal.isProduct == true ) {
+                Get.toNamed(SingleProductScreen.route, arguments: [groupModal.pId.toString()]);
+              }else{
+                makingPhoneCall(groupModal.pLink.toString());
+              }
+          }
+      }else {
+      }        print('something went wrong');
+
+      // dynamic payload = event.data['payload'];
+      // if (payload != null && payload is Map && payload.containsKey('screen_type')) {
+      //   String screenType = payload['screen_type'];
+      //
+      //   if (screenType == 'post_or_product_update') {
+      //     if (payload['is_another'] == true) {
+      //       makingPhoneCall(payload['p_link'].toString());
+      //     } else {
+      //       makingPhoneCall(payload['p_link'].toString());
+      //     }
+      //   }
+      //   else if (screenType == 'chat') {
+      //     Get.toNamed(OrderDetails.route, arguments: [payload['order_id'].toString()]);
+      //   }
+      // }
+      // else {
+      //   // Handle the case when 'payload' or 'screen_type' is not present
+      //   print('Payload or screen_type not found in the notification data');
+      //   print('Payload or s${payload.toString()}');
+      // }
+    }
+    );
+  }
+
+
   checkFirstAppLaunch() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     if (sharedPreferences.getString("initial_dialog") == null) {
@@ -257,7 +372,6 @@ class MainHomeScreenState extends State<MainHomeScreen> {
   }
 
   Rx<ModelResponseCommon> modelAddToCart = ModelResponseCommon().obs;
-
   addToCart(id) {
     Map<String, dynamic> map = {};
     map['quantity'] = '1';
@@ -302,6 +416,25 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       }
     });
   }
+// GET FCM AND DRVICE ID BEFORE LOGIN
+  String deviceId = "";
+  getFcmBeforLogin() async {
+    var fcmToekn = await FirebaseMessaging.instance.getToken();
+    await ClientInformation.fetch().then((value) {
+      deviceId = value.deviceId.toString();
+      log('Device Id BEFORE ${deviceId}');
+    });
+    log("DATTTTTTAAAA");
+    Map<String, dynamic> map = {};
+    map['device_id'] = deviceId;
+    map['fcm_token'] = fcmToekn!;
+    log("Data ${map.toString()}");
+    repositories
+        .postApi(url: ("https://chickenway.app/statging/wp-json/api/woocustomer/update_user_fcm_data"), mapData: map, context: context)
+        .then((value) {
+          log("Data before login ${map.toString()}");
+    });
+  }
 
   manageSplash() {
     if (showSplashScreen == true) {
@@ -313,10 +446,18 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       });
     }
   }
+  getFcm() async {
+    fcm = (await FirebaseMessaging.instance.getToken())!;
+    log(" FCM IS ${fcm}");
+  }
 
   @override
   void initState() {
     super.initState();
+    getFcmBeforLogin();
+    // getFcm();
+    manageNotification();
+
     manageSplash();
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       popup();
@@ -1265,7 +1406,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
     );
   }
 
-  List<Widget> yallaMenu() {
+  List<Widget>                                                                                                                                                                                                                                                                                                                       yallaMenu() {
     return [
       Row(
         mainAxisAlignment: MainAxisAlignment.start,
