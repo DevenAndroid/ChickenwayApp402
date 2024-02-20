@@ -11,6 +11,7 @@ import 'package:dinelah/helper/new_helper.dart';
 import 'package:dinelah/models/model_response_common.dart';
 import 'package:dinelah/models/new_models/model_site_url.dart';
 import 'package:dinelah/splash_screen.dart';
+import 'package:dinelah/ui/screens/timer_widget.dart';
 import 'package:dinelah/utils/dimensions.dart';
 import 'package:dinelah/utils/price_format.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -21,6 +22,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -76,6 +78,11 @@ String fcm = "";
 //   return isFirstTime;
 // }
 
+
+DateTime reverseTime(DateTime date) {
+  return DateTime(date.year, date.month, date.day, 23 - date.hour, 59 - date.minute, 59 - date.second);
+}
+
 ModelShippingMethodsList shippingMethodsList = ModelShippingMethodsList();
 
 class MainHomeScreen extends StatefulWidget {
@@ -110,6 +117,17 @@ class MainHomeScreenState extends State<MainHomeScreen> {
   Rx<ModelPopUp> modelPopUp = ModelPopUp().obs;
   Rx<RxStatus> statusOfPopUp = RxStatus.empty().obs;
   final Repositories repositories = Repositories();
+
+  Duration difference = Duration();
+
+  // void calculateDifference() {
+  //   DateTime now = DateTime.now();
+  //   DateTime tomorrow = DateTime(now.year, now.month, now.day + 1);
+  //   difference = tomorrow.difference(now);
+  //   log("THIS IS DIFFRENCE"+difference.toString());
+  //
+  //   setState(() {});
+  // }
 
   void _showPopup() {
     showDialog(
@@ -147,7 +165,8 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                             modelPopUp.value.data!.img.toString()),
                       ),
                       Positioned(
-                        right: 30,
+                        right:
+                        10,
                         top: 10,
                         child: GestureDetector(
                           onTap: (){
@@ -243,9 +262,16 @@ class MainHomeScreenState extends State<MainHomeScreen> {
   // }
 
 
-  manageNotification() {
+  manageNotification() async {
+
     print("functionnnnn callll");
     NotificationService().initializeNotification();
+    // await Permission.notification.isDenied.then((value) {
+    //   if (value) {
+    //     print("Permissions");
+    //     Permission.notification.request();
+    //   }
+    // });
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
       print('Notification issss  ${event.notification!.title.toString()}');
       print('Notification issss dataedereere ${ event.data['payload']}');
@@ -353,7 +379,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       if (model.value.data != null) {
         DateTime? time11;
         try {
-          // time11 = DateFormat("yyyy-MM-dd").parse(model.value.data!.timeBannerAd![0].offerDuration.toString());
+           // time11 = DateFormat("yyyy-MM-dd").parse(model.value.data!.timeBannerAd![4].offerDuration.toString());
           if (kDebugMode) {
             print("Time...........       $time11");
           }
@@ -456,7 +482,9 @@ class MainHomeScreenState extends State<MainHomeScreen> {
     super.initState();
     getFcmBeforLogin();
     // getFcm();
+    setTimer(givenTime: DateTime.now() );
     manageNotification();
+    // calculateDifference();
 
     manageSplash();
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
@@ -469,7 +497,6 @@ class MainHomeScreenState extends State<MainHomeScreen> {
   }
 
   bool noInternetRetry = false;
-
   RxString time = "00:00".obs;
   var logTime = "2022-09-10 00:05:00.000000";
   Timer? timer;
@@ -482,18 +509,18 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       timer!.cancel();
     }
     int seconds =
-        ((givenTime.millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond) -
-            DateTime.now().millisecondsSinceEpoch ~/
-                Duration.millisecondsPerSecond);
-    // DateTime.now().millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond
-    // referenceTime = DateTime.parse("2022-09-10 00:00:00.000000").add(Duration(seconds: timeInSeconds));
+    ((givenTime.millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond) -
+        DateTime.now().millisecondsSinceEpoch ~/
+            Duration.millisecondsPerSecond);
+     // DateTime.now().millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond;
+     // referenceTime = DateTime.parse("2022-09-10 00:00:00.000000").add(Duration(seconds: timeInSeconds));
 
     int hours = seconds ~/ (60 * 60);
 
     if (kDebugMode) {
       print("Time...........       $seconds");
     }
-    referenceTime = DateTime.parse("2022-09-10 00:00:00.000000")
+    referenceTime = DateTime.parse("2024-02-17 00:00:00.000000")
         .add(Duration(seconds: seconds.abs()));
     fiveMinute = seconds;
     log(time.value);
@@ -504,7 +531,8 @@ class MainHomeScreenState extends State<MainHomeScreen> {
         hours = fiveMinute ~/ (60 * 60);
         referenceTime = referenceTime.subtract(const Duration(seconds: 1));
         time.value =
-            "${hours == 0 ? "00" : hours < 10 ? "0$hours" : hours}:${logTime1.format(referenceTime)}";
+        "${hours == 0 ? "00" : hours < 10 ? "0$hours" : hours}:${logTime1.format(referenceTime)}";
+        log("TIME ISSSS" +time.value);
       } else {
         timer.cancel();
         fiveMinute = 0;
@@ -513,7 +541,6 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       }
     });
   }
-
   @override
   void dispose() {
     if (timer != null) {
@@ -524,6 +551,8 @@ class MainHomeScreenState extends State<MainHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+
     return showSplashScreen
         ? const SplashScreen()
         : WillPopScope(
@@ -675,7 +704,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                                             left: 15)),
                                           ),
                                         ),
-                                        addHeight(20),
+                                        addHeight(10),
                                         menuItems(),
                                         addHeight(40),
                                         bannerSlider(),
@@ -698,6 +727,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                       model.value.data!.bestSellerData!.icon !=
                                               ""
                                           ?  CachedNetworkImage(
+                                        
                                           width: 25,
                                           height: 25,
                                           imageUrl: model.value.data!
@@ -740,7 +770,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                     child: ListView.builder(
                                       primary: false,
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 15),
+                                          horizontal: 15,),
                                       scrollDirection: Axis.horizontal,
                                       itemCount:
                                           model.value.data!.vSlider!.length,
@@ -766,16 +796,16 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                                     ]);
                                               },
                                               child: Container(
-                                                width: 180,
-                                                height: 170,
+                                                width: 165,
+                                                height: 210,
                                                 decoration: BoxDecoration(
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             10)),
                                                 child: ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
+                                                  
+                                                  borderRadius: BorderRadius.circular(10),
+
                                                     child: CachedNetworkImage(
                                                       imageUrl: model
                                                           .value
@@ -959,21 +989,33 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                       givePadding:
                                           const EdgeInsets.only(left: 15)),
                                   addHeight(6),
+
                                   SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
                                     child: Row(
                                       children: [
+                                        //moka 4
                                         ...model.value.data!.serviceSection!
                                             .map(
                                               (service) => GestureDetector(
                                                 onTap: () {
-                                                  if (service.serviceUrl !=
-                                                      null) {
-                                                    Get.offAllNamed(
-                                                        service.serviceUrl!);
-                                                    launchUrlToWeb(
-                                                        service.serviceUrl);
+
+                                                  if (service.isProduct == true) {
+                                                    Get.toNamed(
+                                                        SingleProductScreen
+                                                            .route, arguments: [
+                                                      service.pId.toString()
+                                                    ]);
+                                                  }else {
+                                                      Get.toNamed(MenuScreen.route, arguments: [service.casteSlug.toString()]);
+
                                                   }
+                                                  // if (service.isProduct !=
+                                                  //     null) {
+                                                  //   Get.offAllNamed(
+                                                  //       service.serviceUrl!);
+                                                  //
+                                                  // }
                                                 },
                                                 child: Column(
                                                   mainAxisAlignment:
@@ -1019,10 +1061,12 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                                     ),
                                                     Center(
                                                       child: Text(
+
                                                         service.serviceTitle
                                                             .toString()
                                                             .replaceAll(
-                                                                " ", "\n"),
+                                                                " ", " "),
+                                                        // maxLines: 2,
                                                         style:
                                                             GoogleFonts.poppins(
                                                           fontWeight:
@@ -1339,74 +1383,84 @@ class MainHomeScreenState extends State<MainHomeScreen> {
           ]
         : [];
   }
+  Widget timerAd(BuildContext context) {
 
-  Container timerAd(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 10, bottom: 10, left: 35, right: 5),
-      margin: const EdgeInsets.symmetric(horizontal: 14).copyWith(top: 20),
-      decoration: BoxDecoration(
-        image: DecorationImage(
-            image: NetworkImage(
-                model.value.data!.timeBannerAd![0].adsUrl.toString()),
-            fit: BoxFit.contain),
-      ),
-      height: 100,
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Expanded(
-          flex: 2,
-          child: time.value != "00:00"
-              ? Row(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          color: AppTheme.primaryColor,
-                          borderRadius: BorderRadius.circular(125)),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 3, horizontal: 22),
-                      child: Obx(() {
-                        return Text(
-                          time.value,
-                          style: GoogleFonts.poppins(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 13,
-                            color: Colors.white,
-                          ),
-                        );
-                      }),
-                    ),
-                  ],
-                )
-              : const SizedBox(),
-        ),
-        Expanded(
-          flex: 3,
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  model.value.data!.timeBannerAd![0].adsTitle.toString(),
-                  style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                    color: Colors.black,
-                  ),
-                ),
-                Text(
-                  model.value.data!.timeBannerAd![0].adsSubtitle.toString(),
-                  style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 13,
-                    color: const Color(0xff656565),
-                  ),
-                )
-              ]),
-        )
-      ]),
+    String apiTimeString = model.value.data!.timeBannerAd![0].offerDuration.toString();
+    print(apiTimeString);
+
+    return TimerWidgetScreen(
+      time: apiTimeString,
+      adsUrl: model.value.data!.timeBannerAd![0].adsUrl.toString(),
+      timeBannerAd: model.value.data!.timeBannerAd![0]  ,
     );
   }
 
-  List<Widget>                                                                                                                                                                                                                                                                                                                       yallaMenu() {
+  // Container timerAd(BuildContext context) {
+  //   return Container(
+  //     padding: const EdgeInsets.only(top: 10, bottom: 10, left: 35, right: 5),
+  //     margin: const EdgeInsets.symmetric(horizontal: 14).copyWith(top: 20),
+  //     decoration: BoxDecoration(
+  //       image: DecorationImage(
+  //           image: NetworkImage(
+  //               model.value.data!.timeBannerAd![0].adsUrl.toString()),
+  //           fit: BoxFit.contain),
+  //     ),
+  //     height: 100,
+  //     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+  //       Expanded(
+  //         flex: 2,
+  //         child: time.value != "00:00"
+  //             ? Row(
+  //                 children: [
+  //                   Container(
+  //                     decoration: BoxDecoration(
+  //                         color: AppTheme.primaryColor,
+  //                         borderRadius: BorderRadius.circular(125)),
+  //                     padding: const EdgeInsets.symmetric(
+  //                         vertical: 3, horizontal: 22),
+  //                     child: Obx(() {
+  //                       return Text(
+  //                         time.value,
+  //                         style: GoogleFonts.poppins(
+  //                           fontWeight: FontWeight.w500,
+  //                           fontSize: 13,
+  //                           color: Colors.white,
+  //                         ),
+  //                       );
+  //                     }),
+  //                   ),
+  //                 ],
+  //               )
+  //             : const SizedBox(),
+  //       ),
+  //       Expanded(
+  //         flex: 3,
+  //         child: Column(
+  //             mainAxisAlignment: MainAxisAlignment.center,
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               Text(
+  //                 model.value.data!.timeBannerAd![0].adsTitle.toString(),
+  //                 style: GoogleFonts.poppins(
+  //                   fontWeight: FontWeight.w600,
+  //                   fontSize: 16,
+  //                   color: Colors.black,
+  //                 ),
+  //               ),
+  //               Text(
+  //                 model.value.data!.timeBannerAd![0].adsSubtitle.toString(),
+  //                 style: GoogleFonts.poppins(
+  //                   fontWeight: FontWeight.w400,
+  //                   fontSize: 13,
+  //                   color: const Color(0xff656565),
+  //                 ),
+  //               )
+  //             ]),
+  //       )
+  //     ]),
+  //   );
+  // }
+  List<Widget> yallaMenu() {
     return [
       Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -1808,8 +1862,9 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                             cartBottomWidget();
                                           },
                                           child: Container(
+                                            padding: const EdgeInsets.symmetric(horizontal: 10),
                                             height: 25,
-                                            width: 100,
+                                            // width: 100,
                                             decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(6),

@@ -26,202 +26,255 @@ class _ThankYouPageState extends State<ThankYouPage> {
     super.initState();
     model = Get.arguments;
   }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
         body: SingleChildScrollView(
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: size.height * .2,
-                ),
-                Center(
-                    child: InkWell(
-                        onTap: () {
-                          log(jsonEncode(model));
-                        },
-                        child: Image.asset(
-                          'assets/images/thankyou.png',
-                        ))),
-                Center(
-                    child: Text('Thank You!',
-                        style: GoogleFonts.poppins(
-                            color: const Color(0xFF0F2F62),
-                            fontSize: 49,
-                            fontWeight: FontWeight.w600))),
-                Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: size.height * .2,
+            ),
+            Center(
+                child: InkWell(
+                    onTap: () {
+                      log(jsonEncode(model));
+                    },
+                    child: Image.asset(
+                      'assets/images/thankyou.png',
+                    ))),
+            Center(
+                child: Text('Thank You!',
+                    style: GoogleFonts.poppins(
+                        color: const Color(0xFF0F2F62),
+                        fontSize: 49,
+                        fontWeight: FontWeight.w600))),
+            Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
                     children: [
-                      Row(
-                        children: [
-                          const SizedBox(
-                            width: 80,
-                          ),
-                          Expanded(
-                            child: Text("Order Id: ",
-                                style: GoogleFonts.poppins(
-                                    color: const Color(0xFF686A81),
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w400)),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                            child: Text(model.orderId.toString(),
-                                style: GoogleFonts.poppins(
-                                    color: const Color(0xFF686A81),
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w400)),
-                          ),
-                        ],
+                      const SizedBox(
+                        width: 80,
                       ),
-                      Row(
-                        children: [
-                          const SizedBox(
-                            width: 80,
-                          ),
-                          Expanded(
-                            child: Text("Basket Total: ",
-                                style: GoogleFonts.poppins(
-                                    color: const Color(0xFF686A81),
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w400)),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                            child: formatPrice2(
-                                model.total, model.data!.currencySymbol,
-                                GoogleFonts.poppins(
-                                    color: const Color(0xFF686A81),
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w400)),
-                          ),
-                        ],
+                      Expanded(
+                        child: Text("Order Id: ",
+                            style: GoogleFonts.poppins(
+                                color: const Color(0xFF686A81),
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400)),
                       ),
-                      Row(
-                        children: [
-                          const SizedBox(
-                            width: 80,
-                          ),
-                          Expanded(
-                            child: Text("Delivery Fees: ",
-                                style: GoogleFonts.poppins(
-                                    color: const Color(0xFF686A81),
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w400)),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                            child: formatPrice2(
-                                model.data!.shippingTotal,
-                                model.data!.currencySymbol,
-                                GoogleFonts.poppins(
-                                    color: const Color(0xFF686A81),
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w400)),
-                          ),
-                        ],
+                      const SizedBox(
+                        width: 10,
                       ),
-                      Row(
-
-                        children: [
-                          const SizedBox(
-                            width: 80,
-                          ),
-                          Expanded(
-                            child: Text(
-                                'Total Amount',
-                                style: GoogleFonts.poppins(
-                                    color: const Color(0xFF686A81),
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w400)
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                            child: formatPrice2(
-                              '${double.parse(model.total.toString()) + double.parse(model.data!.shippingTotal.toString())} ',
-                              // model.data!.total.toString(),
-                              model.data!.currencySymbol ?? '',
-                              GoogleFonts.poppins(
+                      Expanded(
+                        child: Text(model.orderId.toString(),
+                            style: GoogleFonts.poppins(
+                                color: const Color(0xFF686A81),
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400)),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      const SizedBox(
+                        width: 80,
+                      ),
+                      Expanded(
+                        child: Text("Basket Total: ",
+                            style: GoogleFonts.poppins(
+                                color: const Color(0xFF686A81),
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400)),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: formatPrice2(
+                            model.total,
+                            model.data!.currencySymbol,
+                            GoogleFonts.poppins(
+                                color: const Color(0xFF686A81),
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400)),
+                      ),
+                    ],
+                  ),
+                  // if (cartController
+                  //     .model.value.data!.couponCode!.isNotEmpty) ...[
+                  //   const SizedBox(
+                  //     height: 8,
+                  //   ),
+                  //   Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     mainAxisSize: MainAxisSize.max,
+                  //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //     children: [
+                  //       Text(
+                  //         'Applied Coupon Code discount',
+                  //         style: GoogleFonts.poppins(
+                  //             color: Colors.red,
+                  //             fontSize: 12,
+                  //             fontWeight: FontWeight.w500),
+                  //       ),
+                  //       formatPrice2(
+                  //           model.data!.discountTax.toString(),
+                  //           model.data!.currencySymbol ?? '',
+                  //           GoogleFonts.poppins(
+                  //               color: Colors.red,
+                  //               fontSize: 12,
+                  //               fontWeight: FontWeight.w500),
+                  //           textAlign: TextAlign.end),
+                  //     ],
+                  //   ),
+                  // ],
+                  model.data!.discountTotal!.toString().isNotEmpty?
+                  Row(
+                    children: [
+                      const SizedBox(
+                        width: 80,
+                      ),
+                      Expanded(
+                        child: FittedBox(
+                          child: Text("Coupon Discount: ",
+                              style: GoogleFonts.poppins(
                                   color: const Color(0xFF686A81),
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          )],
-                      ),
-                      Row(
-                        children: [
-                          const SizedBox(
-                            width: 80,
-                          ),
-                          Expanded(
-                            child: FittedBox(
-                              child: Text("Payment Method: ",
-                                  style: GoogleFonts.poppins(
-
-
-
-                                      color: const Color(0xFF686A81),
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w400)),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                            child: Text(model.data!.paymentMethod.toString(),
-                                style: GoogleFonts.poppins(
-                                    color: const Color(0xFF686A81),
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w400)),
-                          ),
-                        ],
-                      ),
-                    ]),
-                SizedBox(
-                  height: size.height * .10,
-                ),
-                InkWell(
-                  onTap: () {
-                    Get.offAll(const MainHomeScreen());
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: 50,
-                      width: size.width,
-                      decoration: const BoxDecoration(
-                        color: Color(0xffE50019),
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(17),
-                        child: Text(
-                          'Go To Home',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(
-                              color: Colors.white, fontWeight: FontWeight.w500),
+                                  fontSize: 19,
+                                  fontWeight: FontWeight.w400)),
                         ),
                       ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+
+                      Expanded(
+                        child: formatPrice2(
+                            model.data!.discountTotal ,
+                            model.data!.currencySymbol,
+                            GoogleFonts.poppins(
+                                color: const Color(0xFF686A81),
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400)),
+                      ),
+                    ],
+                  ):SizedBox(),
+                  Row(
+                    children: [
+                      const SizedBox(
+                        width: 80,
+                      ),
+                      Expanded(
+                        child: Text("Delivery Fees: ",
+                            style: GoogleFonts.poppins(
+                                color: const Color(0xFF686A81),
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400)),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: formatPrice2(
+                            model.data!.shippingTotal,
+                            model.data!.currencySymbol,
+                            GoogleFonts.poppins(
+                                color: const Color(0xFF686A81),
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400)),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      const SizedBox(
+                        width: 80,
+                      ),
+                      Expanded(
+                        child: Text('Total Amount',
+                            style: GoogleFonts.poppins(
+                                color: const Color(0xFF686A81),
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400)),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: formatPrice2(
+                          '${double.parse(model.total.toString()) + double.parse(model.data!.shippingTotal.toString())- double.parse(model.data!.discountTotal.toString())} ',
+                          // model.data!.total.toString(),
+                          model.data!.currencySymbol ?? '',
+                          GoogleFonts.poppins(
+                              color: const Color(0xFF686A81),
+                              fontSize: 18,
+                              fontWeight: FontWeight.w400),
+                        ),
+                      )
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      const SizedBox(
+                        width: 80,
+                      ),
+                      Expanded(
+                        child: FittedBox(
+                          child: Text("Payment Method: ",
+                              style: GoogleFonts.poppins(
+                                  color: const Color(0xFF686A81),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w400)),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: Text(model.data!.paymentMethod.toString(),
+                            style: GoogleFonts.poppins(
+                                color: const Color(0xFF686A81),
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400)),
+                      ),
+                    ],
+                  ),
+                ]),
+            SizedBox(
+              height: size.height * .10,
+            ),
+            InkWell(
+              onTap: () {
+                Get.offAll(const MainHomeScreen());
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  height: 50,
+                  width: size.width,
+                  decoration: const BoxDecoration(
+                    color: Color(0xffE50019),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(17),
+                    child: Text(
+                      'Go To Home',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.poppins(
+                          color: Colors.white, fontWeight: FontWeight.w500),
                     ),
                   ),
                 ),
-              ]),
-        ));
+              ),
+            ),
+          ]),
+    ));
   }
 }
-
-

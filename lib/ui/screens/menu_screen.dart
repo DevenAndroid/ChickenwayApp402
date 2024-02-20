@@ -947,7 +947,7 @@ class _MenuScreenState extends State<MenuScreen> {
                         children: [
                           for (int i = 0; i < 6; i++)
                             Padding(
-                              padding: const EdgeInsets.all(7.0),
+                              padding: const EdgeInsets.all(6.0),
                               child: Container(
                                 width: size.width * .46,
                                 padding: const EdgeInsets.all(10),
@@ -972,11 +972,13 @@ class _MenuScreenState extends State<MenuScreen> {
                                             fontSize: 11,
                                             fontWeight: FontWeight.w600),
                                       ),
-                                    )
+                                    ),
+                                    // SizedBox(height:  3,)
                                   ],
                                 ),
                               ),
                             ),
+                          //SizedBox(height:  3,)
                         ],
                       ),
                     ),

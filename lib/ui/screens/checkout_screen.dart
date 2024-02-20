@@ -113,7 +113,7 @@ class _CheckoutCScreenState extends State<CheckoutCScreen> {
             url: ApiUrls.applyCouponCode, mapData: {"coupon_code": cartController.couponCode.text.trim()}, context: context)
         .then((value) {
       ModelResponseCommon modelResponseCommon = ModelResponseCommon.fromJson(jsonDecode(value));
-      showToast(modelResponseCommon.message.toString());
+      // showToast(modelResponseCommon.message.toString());
       if (modelResponseCommon.status.toString() == "true") {
         createOrder();
       }
@@ -135,8 +135,7 @@ class _CheckoutCScreenState extends State<CheckoutCScreen> {
     if (cartController.model.value.data!.couponCode!.isNotEmpty) {
       map["coupon_code"] = cartController.couponCode.text.trim();
     }
-    map["city"] =
-        cartController.selectedShippingMethod!.zoneName ?? deliveryLocation.locality ?? deliveryLocation.administrativeArea!;
+    map["city"] = cartController.selectedShippingMethod!.zoneName ?? deliveryLocation.locality ?? deliveryLocation.administrativeArea!;
     map["country_code"] = deliveryLocation.isoCountryCode;
     map["sp_request"] = cartController.specialRequest.text.trim();
     map["crispy_plus_text_box"] = cartController.crispyPlus.text.trim();
@@ -146,8 +145,7 @@ class _CheckoutCScreenState extends State<CheckoutCScreen> {
       ModelCreateOrderResponse model = ModelCreateOrderResponse.fromJson(jsonDecode(value));
       showToast(model.message.toString());
       if (model.status.toString() == "Success") {
-        model.total = cartController.model.value.data!.items!
-            .map((e) =>
+        model.total = cartController.model.value.data!.items!.map((e) =>
                 double.tryParse(e.totalPrice.toString() != "0"
                     ? e.totalPrice.toString()
                     : (int.parse(e.product!.price.toString()) * int.parse(e.quantity.toString())).toString()) ??

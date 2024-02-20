@@ -11,6 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 String initialCountryCode = "";
 
@@ -26,9 +27,15 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
+
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
   FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
   NotificationService().initializeNotification();
+  await Permission.notification.isDenied.then((value) {
+    if (value) {
+      Permission.notification.request();
+    }
+  });
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -79,7 +86,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    initPlatformState();
+   // initPlatformState();
   }
 
   static const String oneSignalAppId = "84319630-f6ed-490f-ac1a-99a868a02a2f";
@@ -88,7 +95,7 @@ class _MyAppState extends State<MyApp> {
     OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
 
 
-    OneSignal.Debug.setAlertLevel(OSLogLevel.none);
+    // OneSignal.Debug.setAlertLevel(OSLogLevel.none);
     OneSignal.initialize(oneSignalAppId);
     OneSignal.Notifications.addClickListener((event) {
       log('NOTIFICATION CLICK LISTENER CALLED WITH EVENT: $event');

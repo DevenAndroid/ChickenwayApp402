@@ -909,27 +909,43 @@ class RadioOptionsDefaultValueClass {
 }
 
 class ServiceSection {
-  String? serviceTitle;
-  String? serviceImages;
-  String? serviceUrl;
+  dynamic serviceTitle;
+  dynamic serviceImages;
+  dynamic serviceUrl;
+  dynamic pId;
+  dynamic isProduct;
+  dynamic casteSlug;
+  dynamic isCategory;
 
-  ServiceSection({
-    this.serviceTitle,
-    this.serviceImages,
-    this.serviceUrl,
-  });
+  ServiceSection(
+      {this.serviceTitle,
+      this.serviceImages,
+      this.serviceUrl,
+      this.pId,
+      this.casteSlug,
+      this.isCategory,
+      this.isProduct});
 
   factory ServiceSection.fromJson(Map<String, dynamic> json) => ServiceSection(
-    serviceTitle: json["service_title"],
-    serviceImages: json["service_images"],
-    serviceUrl: json["service_url"],
+      serviceTitle: json["service_title"],
+      serviceImages: json["service_images"],
+      serviceUrl: json["service_url"],
+      pId: json['p_id'],
+      isProduct: json['is_product'],
+      casteSlug: json['cate_slug'],
+      isCategory: json['is_category']
   );
 
-  Map<String, dynamic> toJson() => {
-    "service_title": serviceTitle,
-    "service_images": serviceImages,
-    "service_url": serviceUrl,
-  };
+  Map<String, dynamic> toJson() =>
+      {
+        "service_title": serviceTitle,
+        "service_images": serviceImages,
+        "service_url": serviceUrl,
+        "p_id": pId,
+        "is_product": isProduct,
+        "cate_slug": casteSlug,
+        "is_category": isCategory,
+      };
 }
 
 class SliderClass {
@@ -993,7 +1009,7 @@ class TimeBannerAd {
   String? adsUrl;
   String? adsTitle;
   String? adsSubtitle;
-  DateTime? offerDuration;
+  dynamic offerDuration;
 
   TimeBannerAd({
     this.addScreen,

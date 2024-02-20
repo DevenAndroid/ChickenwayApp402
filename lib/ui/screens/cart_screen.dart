@@ -44,6 +44,7 @@ class CartScreen extends StatefulWidget {
 
 class CartScreenState extends State<CartScreen> {
   final CartController cartController = Get.put(CartController());
+  final TextEditingController couponCode = TextEditingController();
   final Repositories repositories = Repositories();
   final double subtotal = 100.0;
   final double shipping = 10.0;
@@ -162,6 +163,23 @@ class CartScreenState extends State<CartScreen> {
   Rx<ModelSwitchOff> modelSwitchOff = ModelSwitchOff().obs;
   Rx<RxStatus> statusSwitchOff = RxStatus.empty().obs;
 
+  applyCouponCode() {
+    cartController.repositories
+        .postApi(
+        url: ApiUrls.applyCouponCode, mapData: {"coupon_code": couponCode.text.trim()}, context: context)
+        .then((value) {
+      ModelResponseCommon modelResponseCommon = ModelResponseCommon.fromJson(jsonDecode(value));
+      // showToast(modelResponseCommon.message.toString());
+      if (modelResponseCommon.status.toString() == "true") {
+        showToast(modelResponseCommon.message);
+        couponCode.clear();
+        cartController.getData(context: context);
+      }
+      else{
+        showToast(modelResponseCommon.message);
+      }
+    });
+  }
   @override
   void initState() {
     super.initState();
@@ -307,10 +325,10 @@ class CartScreenState extends State<CartScreen> {
                                       height: 16,
                                     ),
                                     TextFormField(
-                                      controller: cartController.couponCode,
-                                      onChanged: (value) {
-                                        currentCoupon.value = value;
-                                      },
+                                      controller: couponCode,
+                                      // onChanged: (value) {
+                                      //   currentCoupon.value = value;
+                                      // },
                                       decoration: InputDecoration(
                                           enabled: true,
                                           contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
@@ -328,30 +346,30 @@ class CartScreenState extends State<CartScreen> {
                                             padding: const EdgeInsets.symmetric(horizontal: 10),
                                             child: TextButton(
                                               onPressed: () {
-                                                if (cartController.couponCode.text.trim().isNotEmpty) {
-                                                  cartController.getData(context: context).then((value) {
-                                                    if (cartController.model.value.data!.couponCode!.isNotEmpty) {
-                                                      showToast("Coupon Code Applied");
-                                                      appliedCoupon.value = cartController.couponCode.text.trim();
-                                                    }
-                                                  });
-                                                } else {
-                                                  showToast("Please enter coupon code");
-                                                }
+                                                applyCouponCode();
+                                                // if (cartController.couponCode.text.trim().isNotEmpty) {
+                                                //   cartController.getData(context: context).then((value) {
+                                                //     if (cartController.model.value.data!.couponCode!.isNotEmpty) {
+                                                //       showToast("Coupon Code Applied");
+                                                //       appliedCoupon.value = cartController.couponCode.text.trim();
+                                                //     }
+                                                //   });
+                                                // } else {
+                                                //   showToast("Please enter coupon code");
+                                                // }
                                               },
-                                              child: Obx(() {
-                                                return Text(
-                                                  currentCoupon.value != appliedCoupon.value
-                                                      ? "Apply"
-                                                      : cartController.model.value.data!.couponCode!.isNotEmpty
-                                                          ? " Applied"
-                                                          : "Apply",
-                                                  style: GoogleFonts.poppins(
-                                                    color: AppTheme.primaryColor,
-                                                    fontSize: 15,
-                                                  ),
-                                                );
-                                              }),
+                                              child: Text(
+                                                "Apply",
+                                                // currentCoupon.value != appliedCoupon.value
+                                                //     ? "Apply"
+                                                //     : cartController.model.value.data!.couponCode!.isNotEmpty
+                                                //         ? " Applied"
+                                                //         : "Apply",
+                                                style: GoogleFonts.poppins(
+                                                  color: AppTheme.primaryColor,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
                                             ),
                                           )),
                                     ),
@@ -365,6 +383,7 @@ class CartScreenState extends State<CartScreen> {
                             height: 15,
                           ),
                           buildHero(size),
+
                           appBottomLogo()
                         ],
                       ),
@@ -745,26 +764,30 @@ buildHero(Size size, {String? deliveryFee, int? shippingAmount}) {
                   textAlign: TextAlign.end),
             ],
           ),
-          if (cartController.model.value.data!.couponCode!.isNotEmpty) ...[
-            const SizedBox(
-              height: 8,
-            ),
+          const SizedBox(
+            height: 8,
+          ),
+          if (cartController.model.value.data!.cartmeta!.discountTotal!.isNotEmpty) ...[
+            // const SizedBox(
+            //   height: 8,
+            // ),
+            cartController.model.value.data!.cartmeta!.discountTotal != "0" ?
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Applied Coupon Code discount',
+                  'Applied Coupon Code discounts',
                   style: GoogleFonts.poppins(color: Colors.red, fontSize: 12, fontWeight: FontWeight.w500),
                 ),
                 formatPrice2(
-                    cartController.model.value.data!.couponCode!.first.discount,
+                    cartController.model.value.data!.cartmeta!.discountTotal,
                     cartController.model.value.data!.cartmeta!.currencySymbol ?? '',
                     GoogleFonts.poppins(color: Colors.red, fontSize: 12, fontWeight: FontWeight.w500),
                     textAlign: TextAlign.end),
               ],
-            ),
+            ):SizedBox(),
           ],
           const SizedBox(
             height: 8,
@@ -786,7 +809,7 @@ buildHero(Size size, {String? deliveryFee, int? shippingAmount}) {
               ],
             ),
           const SizedBox(
-            height: 24,
+            height: 8,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -798,12 +821,15 @@ buildHero(Size size, {String? deliveryFee, int? shippingAmount}) {
                 style: GoogleFonts.poppins(color: const Color(0xFF555555), fontSize: 15, fontWeight: FontWeight.w600),
               ),
               formatPrice2(
-                  (total -
-                      (cartController.model.value.data!.couponCode!.isNotEmpty
-                          ? (int.tryParse(cartController.model.value.data!.couponCode!.first.discount.toString()) ?? 0)
-                          : 0) +
-                      (shippingAmount ?? 0))
-                      .toString(),
+              cartController.selectedShippingMethod != null ?
+                  int.parse(cartController.model.value.data!.cartmeta!.total.toString()) + int.parse( cartController.selectedShippingMethod!.shippingAmount!.toString()) :
+              cartController.model.value.data!.cartmeta!.total.toString(),
+                  // (total -
+                  //     (cartController.model.value.data!.couponCode!.isNotEmpty
+                  //         ? (int.tryParse(cartController.model.value.data!.couponCode!.first.discount.toString()) ?? 0)
+                  //         : 0) +
+                  //     (shippingAmount ?? 0))
+                  //     .toString(),
                   cartController.model.value.data!.cartmeta!.currencySymbol ?? '',
                   GoogleFonts.poppins(color: const Color(0xFF555555), fontSize: 16, fontWeight: FontWeight.w600),
                   textAlign: TextAlign.end),

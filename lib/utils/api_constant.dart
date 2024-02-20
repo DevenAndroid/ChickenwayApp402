@@ -39,7 +39,7 @@ class ApiUrls {
   static const String updateCartUrl = "${apiBaseUrl}woocustomer/update_cart";
   static const String splashScreenUrl = "${apiBaseUrl}woohomepage/splash_screen";
 
-  static const String homePage = "${apiBaseUrl}woohomepage/get_home_data";
+  static const String homePage = "https://chickenway.app/statging/wp-json/api/woohomepage/get_home_data";
 
   static const String addToCart = "${apiBaseUrl}woocustomer/update_cart";
   static const String aboutUs =

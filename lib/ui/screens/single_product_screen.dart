@@ -210,7 +210,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Crispy Plus ',
+                            Text('Add Your Note',
                                 style: GoogleFonts.poppins(
                                   fontSize: 14.0,
                                   fontWeight: FontWeight.w600,
@@ -229,7 +229,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                                   hintStyle: GoogleFonts.poppins(
                                       color: const Color(0xff999999), fontWeight: FontWeight.w400, fontSize: 10),
                                   prefixIcon: Image.asset('assets/images/special.png'),
-                                  hintText: 'write your special request here'),
+                                  hintText: 'Write your special request here'),
                             ),
                           ],
                         ),

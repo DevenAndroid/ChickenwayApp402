@@ -102,8 +102,8 @@ class _AddAddressState extends State<AddAddress> {
       addressController.countryCode = userAddress.countryCode.toString();
       mobileController.text = userAddress.phoneNo.toString();
       addressController.mobile = userAddress.phoneNo.toString();
-      LatLng ll = LatLng(double.parse((userAddress.lat ?? "0").toString()),
-              double.parse((userAddress.longitute ?? "0").toString()))
+      LatLng ll = LatLng(double.tryParse((userAddress.lat ?? "0").toString())!,
+              double.tryParse((userAddress.longitute ?? "0").toString())!)
           .checkLatLong;
       addressController.cameraPosition = CameraPosition(target: ll, zoom: 14);
       if (shippingMethodsList.data != null) {

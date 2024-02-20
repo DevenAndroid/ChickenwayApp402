@@ -540,6 +540,50 @@ class _OrderDetailsState extends State<OrderDetails> {
                                     children: [
 
                                       Text(
+                                          'Coupon Discount',
+                                          style:
+                                          GoogleFonts.poppins(
+                                            fontSize: 14,
+                                            fontWeight:
+                                            FontWeight.w500,
+                                          )
+                                      ),
+
+                                      SizedBox(
+                                        width: 120,
+                                        child: formatPrice2(
+                                            model.value.data!.discountTotal.toString(),
+                                            model
+                                                .value
+                                                .data!
+                                                .orderData!
+                                                .lineItems!.isNotEmpty ?
+                                            model
+                                                .value
+                                                .data!
+                                                .orderData!
+                                                .lineItems![0]
+                                                .currencySymbol??"" : "",
+                                            GoogleFonts.poppins(
+                                                color: const Color(
+                                                    0xFF333333),
+                                                fontSize: 14,
+                                                fontWeight:
+                                                FontWeight.w500)
+                                        ),
+                                      )],
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Row(  mainAxisAlignment:
+                                  MainAxisAlignment
+                                      .spaceBetween,
+                                    mainAxisSize: MainAxisSize.max,
+
+                                    children: [
+
+                                      Text(
                                           'Total Amount',
                                           style:
                                           GoogleFonts.poppins(
