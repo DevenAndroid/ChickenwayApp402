@@ -314,31 +314,67 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       //   print('Payload or screen_type not found in the notification data');
       //   print('Payload or s${payload.toString()}');
       // }
-    }
-    );
-
-    FirebaseMessaging.onMessage.listen((event) {
-      print('Notification issss  ${event.notification!.title.toString()}');
-      print('Notification issss dataedereere ${ event.data['payload']}');
-      print('Notificatio data ${event.data}');
-      NotificationOnClickModel groupModal = NotificationOnClickModel.fromJson(jsonDecode(event.data["payload"]));
-
-      if(groupModal.screenType== 'chat'){
-        Get.toNamed(OrderDetails.route, arguments: [groupModal.orderId.toString()]);
-      } else if(groupModal.screenType== 'post_or_product_update'){
-        if (groupModal.isAnother == true) {
-          makingPhoneCall(groupModal.pLink.toString());
-        }else{
-          if(groupModal.isProduct == true ) {
-            Get.toNamed(SingleProductScreen.route, arguments: [groupModal.pId.toString()]);
-          }else{
-            makingPhoneCall(groupModal.pLink.toString());
-          }
-        }
-      }else {
-      }        print('something went wrong');
-
     });
+
+    // FirebaseMessaging.onMessage.listen((event) {
+    //   print('Notification issss  ${event.notification!.title.toString()}');
+    //   print('Notification issss dataedereere ${ event.data['payload']}');
+    //   print('Notificatio data ${event.data}');
+    //   NotificationOnClickModel groupModal = NotificationOnClickModel.fromJson(jsonDecode(event.data["payload"]));
+    //
+    //   if(groupModal.screenType== 'chat'){
+    //     Get.toNamed(OrderDetails.route, arguments: [groupModal.orderId.toString()]);
+    //   } else if(groupModal.screenType== 'post_or_product_update'){
+    //     if (groupModal.isAnother == true) {
+    //       makingPhoneCall(groupModal.pLink.toString());
+    //     }else{
+    //       if(groupModal.isProduct == true ) {
+    //         Get.toNamed(SingleProductScreen.route, arguments: [groupModal.pId.toString()]);
+    //       }else{
+    //         makingPhoneCall(groupModal.pLink.toString());
+    //       }
+    //     }
+    //   }else {
+    //   }        print('something went wrong');
+    //
+    // });
+
+    FirebaseMessaging.onBackgroundMessage((event) async {
+      print('Notification issss  ${event.notification?.title.toString()}');
+      print('Notification issss dataedereere ${event.data?['payload']}');
+
+      if (event.data != null) {
+        final payload = event.data!['payload'];
+        if (payload != null) {
+          NotificationOnClickModel groupModal = NotificationOnClickModel.fromJson(jsonDecode(payload));
+
+          if (groupModal.screenType == 'chat') {
+            Get.toNamed(OrderDetails.route, arguments: [groupModal.orderId.toString()]);
+          } else if (groupModal.screenType == 'post_or_product_update') {
+            if (groupModal.isAnother == true) {
+              makingPhoneCall(groupModal.pLink.toString());
+            } else {
+              if (groupModal.isProduct == true) {
+                Get.toNamed(SingleProductScreen.route, arguments: [groupModal.pId.toString()]);
+              } else {
+                makingPhoneCall(groupModal.pLink.toString());
+              }
+            }
+          } else {
+            print('Unhandled screenType: ${groupModal.screenType}');
+          }
+        } else {
+          print('Payload is null');
+        }
+      } else {
+        print('Data is null');
+      }
+
+      // Ensure that the function returns a Future<void>
+      return Future.value(); // or return null;
+    });
+
+
   }
 
 
@@ -788,13 +824,13 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                     ],
                                   ).padded(
                                       givePadding:
-                                          const EdgeInsets.only(left: 20)),
+                                          const EdgeInsets.only(left: 15)),
                                   SizedBox(
                                     height: 225,
                                     child: ListView.builder(
                                       primary: false,
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 20,),
+                                          horizontal: 18,),
                                       scrollDirection: Axis.horizontal,
                                       itemCount:
                                           model.value.data!.vSlider!.length,
