@@ -95,7 +95,8 @@ class _MyAppState extends State<MyApp> {
     OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
 
 
-    // OneSignal.Debug.setAlertLevel(OSLogLevel.none);
+
+     // OneSignal.Debug.setAlertLevel(OSLogLevel.none);
     OneSignal.initialize(oneSignalAppId);
     OneSignal.Notifications.addClickListener((event) {
       log('NOTIFICATION CLICK LISTENER CALLED WITH EVENT: $event');
@@ -106,6 +107,7 @@ class _MyAppState extends State<MyApp> {
       log('NOTIFICATION WILL DISPLAY LISTENER CALLED WITH: ${event.notification.jsonRepresentation()}');
       event.preventDefault();
       event.notification.display();
+
 
       setState(() {});
     });

@@ -611,6 +611,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var height= MediaQuery.of(context).size.height;
 
 
     return showSplashScreen
@@ -824,13 +825,13 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                     ],
                                   ).padded(
                                       givePadding:
-                                          const EdgeInsets.only(left: 15)),
+                                          const EdgeInsets.only(left: 12)),
                                   SizedBox(
                                     height: 225,
                                     child: ListView.builder(
                                       primary: false,
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 18,),
+                                          horizontal: 13,),
                                       scrollDirection: Axis.horizontal,
                                       itemCount:
                                           model.value.data!.vSlider!.length,
@@ -897,7 +898,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                     },
                                     child: SizedBox(
                                       width: context.getDeviceSize.width,
-                                      height: 185,
+                                      height: 140,
                                       child: Stack(
                                         children: [
                                           Positioned.fill(
@@ -908,7 +909,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                                 Container(
                                                   margin:
                                                       const EdgeInsets.fromLTRB(
-                                                          14, 0, 6, 15),
+                                                          10, 0, 6, 10),
                                                   child: Card(
                                                     elevation: 4,
                                                     child: Row(
@@ -939,7 +940,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                                                           20,
                                                                       fontWeight:
                                                                           FontWeight
-                                                                              .bold),
+                                                                              .w500),
                                                                 ),
                                                                 const SizedBox(
                                                                   height: 5,
@@ -1047,7 +1048,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                     ],
                                   ).padded(
                                       givePadding:
-                                          const EdgeInsets.only(left: 20)),
+                                          const EdgeInsets.only(left: 13)),
                                   addHeight(6),
 
                                   SingleChildScrollView(
@@ -1563,12 +1564,12 @@ class MainHomeScreenState extends State<MainHomeScreen> {
             ),
           )
         ],
-      ).padded(givePadding: const EdgeInsets.only(left: 13)),
+      ).padded(givePadding: const EdgeInsets.only(left: 10)),
       addHeight(10),
       GridView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        padding: const EdgeInsets.symmetric(horizontal: 9),
+        padding: const EdgeInsets.symmetric(horizontal: 5),
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
             maxCrossAxisExtent: 150,
             crossAxisSpacing: 6,
@@ -1750,7 +1751,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
             ),
           )
         ],
-      ).padded(givePadding: const EdgeInsets.only(left: 20)),
+      ).padded(givePadding: const EdgeInsets.only(left: 13)),
       addHeight(6),
       SizedBox(
         height: 150,
@@ -1763,7 +1764,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                 Container(
                   height: 200,
                   width: MediaQuery.of(context).size.width * .85,
-                  margin: const EdgeInsets.all(5).copyWith(left: 20, right: 0),
+                  margin: const EdgeInsets.all(5).copyWith(left: 12, right: 0),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8.0),
                       color: Colors.white,

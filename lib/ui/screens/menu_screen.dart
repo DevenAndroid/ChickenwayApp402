@@ -421,7 +421,7 @@ class _MenuScreenState extends State<MenuScreen> {
   SliverAppBar firstAppBar(Size size) {
     return SliverAppBar(
       pinned: true,
-      expandedHeight: 320,
+      expandedHeight: 365,
       collapsedHeight: 56,
       flexibleSpace: headerSection(size),
       backgroundColor: Colors.white,
@@ -779,7 +779,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                     shopInfo.title1.toString(),
                                     style: GoogleFonts.poppins(
                                         color: const Color(0xFF888888),
-                                        fontSize: 12,
+                                        fontSize: 13,
                                         fontWeight: FontWeight.w400),
                                   ),
                                   const SizedBox(
@@ -793,7 +793,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                       style: GoogleFonts.poppins(
                                           color: const Color(0xFF444444),
                                           fontSize: 12,
-                                          fontWeight: FontWeight.w500),
+                                          fontWeight: FontWeight.w600),
                                     ),
                                   ),
                                   const VerticalDivider(
@@ -815,7 +815,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                     shopInfo.title2.toString(),
                                     style: GoogleFonts.poppins(
                                         color: const Color(0xFF888888),
-                                        fontSize: 12,
+                                        fontSize: 13,
                                         fontWeight: FontWeight.w400),
                                   ),
                                   const SizedBox(
@@ -826,7 +826,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                     style: GoogleFonts.poppins(
                                         color: const Color(0xFF444444),
                                         fontSize: 12,
-                                        fontWeight: FontWeight.w500),
+                                        fontWeight: FontWeight.w600),
                                   )
                                 ],
                               ),
@@ -843,7 +843,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                     shopInfo.title3.toString(),
                                     style: GoogleFonts.poppins(
                                         color: const Color(0xFF888888),
-                                        fontSize: 12,
+                                        fontSize: 13,
                                         fontWeight: FontWeight.w400),
                                   ),
                                   const SizedBox(
@@ -854,7 +854,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                     style: GoogleFonts.poppins(
                                         color: const Color(0xFF444444),
                                         fontSize: 12,
-                                        fontWeight: FontWeight.w500),
+                                        fontWeight: FontWeight.w600),
                                   )
                                 ],
                               ),
@@ -884,7 +884,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                     shopInfo.title4.toString(),
                                     style: GoogleFonts.poppins(
                                         color: const Color(0xFF888888),
-                                        fontSize: 12,
+                                        fontSize: 13,
                                         fontWeight: FontWeight.w400),
                                   ),
                                   const SizedBox(
@@ -894,8 +894,8 @@ class _MenuScreenState extends State<MenuScreen> {
                                     shopInfo.subtitle4.toString(),
                                     style: GoogleFonts.poppins(
                                         color: const Color(0xFF444444),
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600),
                                   )
                                 ],
                               ),
@@ -912,7 +912,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                     shopInfo.title5.toString(),
                                     style: GoogleFonts.poppins(
                                         color: const Color(0xFF888888),
-                                        fontSize: 12,
+                                        fontSize: 13,
                                         fontWeight: FontWeight.w400),
                                   ),
                                   const SizedBox(
@@ -923,7 +923,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                     style: GoogleFonts.poppins(
                                         color: const Color(0xFF444444),
                                         fontSize: 12,
-                                        fontWeight: FontWeight.w500),
+                                        fontWeight: FontWeight.w600),
                                   ),
                                 ],
                               ),
@@ -948,42 +948,50 @@ class _MenuScreenState extends State<MenuScreen> {
                           for (int i = 0; i < 6; i++)
                             Padding(
                               padding: const EdgeInsets.all(6.0),
-                              child: Container(
-                                width: size.width * .46,
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: const Color(0xFFFEF4D9)),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/icons/discount.svg',
+                              child: Column(
+                                children: [
+                                  Container(
+
+                                    width: size.width * .60,
+                                    // height: 150,
+                                    padding: const EdgeInsets.all(15),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: const Color(0xFFFEF4D9)),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        SvgPicture.asset(
+                                          'assets/icons/discount.svg',
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            getOfferText(shopInfo, i),
+                                            style: GoogleFonts.poppins(
+                                                color: const Color(0xFFFA6400),
+                                                fontSize: 11,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                        ),
+                                         // SizedBox(height:  3,)
+                                      ],
                                     ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        getOfferText(shopInfo, i),
-                                        style: GoogleFonts.poppins(
-                                            color: const Color(0xFFFA6400),
-                                            fontSize: 11,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                    ),
-                                    // SizedBox(height:  3,)
-                                  ],
-                                ),
+                                  ),
+                                  SizedBox(height: 60,)
+                                ],
                               ),
                             ),
-                          //SizedBox(height:  3,)
+                          // SizedBox(height:  3,)
                         ],
                       ),
                     ),
                   ),
                 ),
+               
               ],
             ),
           ),

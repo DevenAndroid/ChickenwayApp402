@@ -59,7 +59,7 @@ class _TimerWidgetScreenState extends State<TimerWidgetScreen> {
     }
     return Container(
       //padding: const EdgeInsets.symmetric(vertical: 10).copyWith(top: 0,bottom: 0),
-      margin: const EdgeInsets.symmetric(horizontal: 18).copyWith(top: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 12).copyWith(top: 20),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
