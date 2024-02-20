@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../models/chicken/model_home.dart';
 import '../../res/theme/theme.dart';
@@ -50,6 +51,7 @@ class _TimerWidgetScreenState extends State<TimerWidgetScreen> {
     kk = DateTime.now().difference(futureDate!);
     if(futureDate!.isBefore(DateTime.now())){
       time = "Expired";
+      //time = '${kk.abs().toString().split('.').first.padLeft(8, "0")}';
     } else{
       time = '${kk.abs().toString().split('.').first.padLeft(8, "0")}';
     }
@@ -57,13 +59,13 @@ class _TimerWidgetScreenState extends State<TimerWidgetScreen> {
     }
     return Container(
       //padding: const EdgeInsets.symmetric(vertical: 10).copyWith(top: 0,bottom: 0),
-      margin: const EdgeInsets.symmetric(horizontal: 14).copyWith(top: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 18).copyWith(top: 20),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF37C666).withOpacity(0.10),
+            color: const Color(0xFF37C666).withOpacity(0.15),
             offset: const Offset(.1, .1,
             ),
             blurRadius: 20.0,
@@ -91,20 +93,24 @@ class _TimerWidgetScreenState extends State<TimerWidgetScreen> {
                         child: Image.network(widget.adsUrl))),
                 // CachedNetworkImage(imageUrl: widget.adsUrl,),
                 Positioned(
-                  top: 5,
-                    left: 35,
+                  top: 18,
+                    left: 40,
                     child: Column(
+
                   children: [
-                    // Text(
-                    //   "hrs:min:sec",
-                    //   style: GoogleFonts.poppins(
-                    //     fontWeight: FontWeight.w600,
-                    //     fontSize: 14,
-                    //     color: Colors.black,
+                    // Padding(
+                    //   padding: const EdgeInsets.only(left: 5),
+                    //   child: Text(
+                    //     "hrs: min : sec",
+                    //     style: GoogleFonts.poppins(
+                    //       fontWeight: FontWeight.w600,
+                    //       fontSize: 14,
+                    //       color: Colors.black,
+                    //     ),
                     //   ),
                     // ),
                     SizedBox(
-                      height: 5,
+                      height: 15,
                     ),
 
                     time != "" ?
@@ -113,7 +119,7 @@ class _TimerWidgetScreenState extends State<TimerWidgetScreen> {
                           color: AppTheme.primaryColor,
                           borderRadius: BorderRadius.circular(125)),
                       padding:
-                      const EdgeInsets.symmetric(vertical: 3, horizontal: 22),
+                      const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
                       child:
                       // Obx(() {
                       //   return
@@ -122,8 +128,8 @@ class _TimerWidgetScreenState extends State<TimerWidgetScreen> {
                         time,
                         // time.value,
                         style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 12,
                           color: Colors.white,
                         ),
                       ),
@@ -138,23 +144,27 @@ class _TimerWidgetScreenState extends State<TimerWidgetScreen> {
         SizedBox(width: 25,),
         Expanded(
           child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              //mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.timeBannerAd.adsTitle.toString(),
+                  widget.timeBannerAd.adsTitle.toString().toUpperCase(),
                   style: GoogleFonts.poppins(
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
                     color: Colors.black,
                   ),
                 ),
-                Text(
-                  widget.timeBannerAd.adsSubtitle.toString(),
-                  style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 13,
-                    color: const Color(0xff656565),
+                Padding(
+                  padding: const EdgeInsets.only(right: 5),
+                  child: Text(
+                    // "Hey you got htis fofeer ti this price",
+                    widget.timeBannerAd.adsSubtitle.toString().capitalizeFirst.toString(),
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 13,
+                      color: const Color(0xff656565),
+                    ),
                   ),
                 ),
                 // Text(

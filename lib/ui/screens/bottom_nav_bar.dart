@@ -272,6 +272,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
     //     Permission.notification.request();
     //   }
     // });
+
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
       print('Notification issss  ${event.notification!.title.toString()}');
       print('Notification issss dataedereere ${ event.data['payload']}');
@@ -315,6 +316,29 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       // }
     }
     );
+
+    FirebaseMessaging.onMessage.listen((event) {
+      print('Notification issss  ${event.notification!.title.toString()}');
+      print('Notification issss dataedereere ${ event.data['payload']}');
+      print('Notificatio data ${event.data}');
+      NotificationOnClickModel groupModal = NotificationOnClickModel.fromJson(jsonDecode(event.data["payload"]));
+
+      if(groupModal.screenType== 'chat'){
+        Get.toNamed(OrderDetails.route, arguments: [groupModal.orderId.toString()]);
+      } else if(groupModal.screenType== 'post_or_product_update'){
+        if (groupModal.isAnother == true) {
+          makingPhoneCall(groupModal.pLink.toString());
+        }else{
+          if(groupModal.isProduct == true ) {
+            Get.toNamed(SingleProductScreen.route, arguments: [groupModal.pId.toString()]);
+          }else{
+            makingPhoneCall(groupModal.pLink.toString());
+          }
+        }
+      }else {
+      }        print('something went wrong');
+
+    });
   }
 
 
@@ -764,13 +788,13 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                     ],
                                   ).padded(
                                       givePadding:
-                                          const EdgeInsets.only(left: 15)),
+                                          const EdgeInsets.only(left: 20)),
                                   SizedBox(
                                     height: 225,
                                     child: ListView.builder(
                                       primary: false,
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 15,),
+                                          horizontal: 20,),
                                       scrollDirection: Axis.horizontal,
                                       itemCount:
                                           model.value.data!.vSlider!.length,
@@ -837,7 +861,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                     },
                                     child: SizedBox(
                                       width: context.getDeviceSize.width,
-                                      height: 180,
+                                      height: 185,
                                       child: Stack(
                                         children: [
                                           Positioned.fill(
@@ -848,7 +872,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                                 Container(
                                                   margin:
                                                       const EdgeInsets.fromLTRB(
-                                                          3, 0, 6, 15),
+                                                          14, 0, 6, 15),
                                                   child: Card(
                                                     elevation: 4,
                                                     child: Row(
@@ -869,7 +893,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                                                       .data!
                                                                       .freeDeliverys![
                                                                           0]
-                                                                      .freeDeliveryContent
+                                                                      .freeDeliveryTitle
                                                                       .toString()
                                                                       .toUpperCase(),
                                                                   style: GoogleFonts.poppins(
@@ -987,7 +1011,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                     ],
                                   ).padded(
                                       givePadding:
-                                          const EdgeInsets.only(left: 15)),
+                                          const EdgeInsets.only(left: 20)),
                                   addHeight(6),
 
                                   SingleChildScrollView(
@@ -1028,7 +1052,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                                           const EdgeInsets.all(
                                                                   5.0)
                                                               .copyWith(
-                                                                  left: 15,
+                                                                  left: 20,
                                                                   right: 0),
                                                       child: Container(
                                                         height: 80,
@@ -1060,23 +1084,26 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                                       ),
                                                     ),
                                                     Center(
-                                                      child: Text(
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.only(left:20),
+                                                        child: Text(
 
-                                                        service.serviceTitle
-                                                            .toString()
-                                                            .replaceAll(
-                                                                " ", " "),
-                                                        // maxLines: 2,
-                                                        style:
-                                                            GoogleFonts.poppins(
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          fontSize: 12.5,
-                                                          color: const Color(
-                                                              0xFF292323),
+                                                          service.serviceTitle
+                                                              .toString()
+                                                              .replaceAll(
+                                                                  " ", " "),
+                                                          // maxLines: 2,
+                                                          style:
+                                                              GoogleFonts.poppins(
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontSize: 12.5,
+                                                            color: const Color(
+                                                                0xFF292323),
+                                                          ),
+                                                          textAlign:
+                                                              TextAlign.center,
                                                         ),
-                                                        textAlign:
-                                                            TextAlign.center,
                                                       ),
                                                     ),
                                                   ],
@@ -1273,7 +1300,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                   );
                 },
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: CachedNetworkImage(
@@ -1500,12 +1527,12 @@ class MainHomeScreenState extends State<MainHomeScreen> {
             ),
           )
         ],
-      ).padded(givePadding: const EdgeInsets.only(left: 15)),
+      ).padded(givePadding: const EdgeInsets.only(left: 13)),
       addHeight(10),
       GridView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        padding: const EdgeInsets.symmetric(horizontal: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 9),
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
             maxCrossAxisExtent: 150,
             crossAxisSpacing: 6,
@@ -1687,7 +1714,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
             ),
           )
         ],
-      ).padded(givePadding: const EdgeInsets.only(left: 15)),
+      ).padded(givePadding: const EdgeInsets.only(left: 20)),
       addHeight(6),
       SizedBox(
         height: 150,
@@ -1700,7 +1727,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                 Container(
                   height: 200,
                   width: MediaQuery.of(context).size.width * .85,
-                  margin: const EdgeInsets.all(5).copyWith(left: 15, right: 0),
+                  margin: const EdgeInsets.all(5).copyWith(left: 20, right: 0),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8.0),
                       color: Colors.white,
@@ -1729,7 +1756,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Material(
                               color: Colors.transparent,

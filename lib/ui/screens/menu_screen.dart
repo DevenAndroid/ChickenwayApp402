@@ -792,8 +792,8 @@ class _MenuScreenState extends State<MenuScreen> {
                                       shopInfo.subtitle1.toString(),
                                       style: GoogleFonts.poppins(
                                           color: const Color(0xFF444444),
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.w800),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500),
                                     ),
                                   ),
                                   const VerticalDivider(
@@ -825,8 +825,8 @@ class _MenuScreenState extends State<MenuScreen> {
                                     shopInfo.subtitle2.toString(),
                                     style: GoogleFonts.poppins(
                                         color: const Color(0xFF444444),
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.w800),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500),
                                   )
                                 ],
                               ),
@@ -853,8 +853,8 @@ class _MenuScreenState extends State<MenuScreen> {
                                     shopInfo.subtitle3.toString(),
                                     style: GoogleFonts.poppins(
                                         color: const Color(0xFF444444),
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.w800),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500),
                                   )
                                 ],
                               ),
@@ -894,8 +894,8 @@ class _MenuScreenState extends State<MenuScreen> {
                                     shopInfo.subtitle4.toString(),
                                     style: GoogleFonts.poppins(
                                         color: const Color(0xFF444444),
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.w800),
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500),
                                   )
                                 ],
                               ),
@@ -922,8 +922,8 @@ class _MenuScreenState extends State<MenuScreen> {
                                     shopInfo.subtitle5.toString(),
                                     style: GoogleFonts.poppins(
                                         color: const Color(0xFF444444),
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.w800),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500),
                                   ),
                                 ],
                               ),
