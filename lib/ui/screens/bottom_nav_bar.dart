@@ -45,6 +45,7 @@ import '../widget/drawer.dart';
 import 'cart_screen.dart';
 import 'package:collection/collection.dart';
 import 'checkout_screen.dart';
+import 'notification_screen.dart';
 import 'notification_service.dart';
 import 'orderdetails.dart';
 import 'single_product_screen.dart';
@@ -52,6 +53,9 @@ import 'menu_screen.dart';
 
 // String siteUrl = "";
 ModelSiteUrl modelSiteUrl = ModelSiteUrl();
+
+
+NotificationServices notificationServices = NotificationServices();
 
 Future manageSiteUrl() async {
   if (modelSiteUrl.data == null) {
@@ -129,6 +133,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
   //   setState(() {});
   // }
 
+
   void _showPopup() {
     showDialog(
       context: context,
@@ -171,11 +176,12 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                         child: GestureDetector(
                           onTap: (){
                             Get.back();
+                            getInit();
                           },
                           child: Container(
                             height: 25,
                             width: 25,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               shape: BoxShape.circle,
                               color: Colors.red
                             ),
@@ -189,7 +195,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 15,)
+                  const SizedBox(height: 15,)
                 ],
               ),
             ),
@@ -260,12 +266,33 @@ class MainHomeScreenState extends State<MainHomeScreen> {
   //     // }
   //   });
   // }
+  getInit() async{
+    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    if(initialMessage != null && initialMessage.notification != null){
+      NotificationOnClickModel groupModal = NotificationOnClickModel.fromJson(jsonDecode(initialMessage.data["payload"]));
 
+      if(groupModal.screenType== 'chat'){
+        Get.toNamed(OrderDetails.route, arguments: [groupModal.orderId.toString()]);
+      } else if(groupModal.screenType== 'post_or_product_update'){
+        if (groupModal.isAnother == true) {
+          makingPhoneCall(groupModal.pLink.toString());
+        }else{
+          if(groupModal.isProduct == true ) {
+            Get.toNamed(SingleProductScreen.route, arguments: [groupModal.pId.toString()]);
+          }else{
+            makingPhoneCall(groupModal.pLink.toString());
+          }
+        }
+      }else {
+      }
+    }
+  }
 
   manageNotification() async {
 
     print("functionnnnn callll");
     NotificationService().initializeNotification();
+    getInit();
     // await Permission.notification.isDenied.then((value) {
     //   if (value) {
     //     print("Permissions");
@@ -538,8 +565,26 @@ class MainHomeScreenState extends State<MainHomeScreen> {
   }
 
   @override
+
+
+
+
   void initState() {
     super.initState();
+    getInit();
+    notificationServices.requestNotificationPermission();
+    notificationServices.forgroundMessage();
+    notificationServices.firebaseInit(context);
+    notificationServices.setupInteractMessage(context);
+    notificationServices.isTokenRefresh();
+
+    notificationServices.getDeviceToken().then((value){
+      if (kDebugMode) {
+        print('device token');
+        print(value);
+      }
+    });
+
     getFcmBeforLogin();
     // getFcm();
     setTimer(givenTime: DateTime.now() );
@@ -553,6 +598,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       manageSiteUrl();
       homeData();
       cartController.resetAll();
+
     });
   }
 
@@ -788,7 +834,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                       model.value.data!.bestSellerData!.icon !=
                                               ""
                                           ?  CachedNetworkImage(
-                                        
+
                                           width: 25,
                                           height: 25,
                                           imageUrl: model.value.data!
@@ -864,7 +910,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                                         BorderRadius.circular(
                                                             10)),
                                                 child: ClipRRect(
-                                                  
+
                                                   borderRadius: BorderRadius.circular(10),
 
                                                     child: CachedNetworkImage(
@@ -904,12 +950,12 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                           Positioned.fill(
                                             child: Column(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.end,
+                                              MainAxisAlignment.end,
                                               children: [
                                                 Container(
                                                   margin:
-                                                      const EdgeInsets.fromLTRB(
-                                                          10, 0, 6, 10),
+                                                  const EdgeInsets.fromLTRB(
+                                                      10, 0, 9, 10),
                                                   child: Card(
                                                     elevation: 4,
                                                     child: Row(
@@ -917,19 +963,19 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                                         Expanded(
                                                           child: Padding(
                                                             padding:
-                                                                const EdgeInsets
-                                                                    .all(14.0),
+                                                            const EdgeInsets
+                                                                .all(14.0),
                                                             child: Column(
                                                               crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
+                                                              CrossAxisAlignment
+                                                                  .start,
                                                               children: [
                                                                 Text(
                                                                   model
                                                                       .value
                                                                       .data!
                                                                       .freeDeliverys![
-                                                                          0]
+                                                                  0]
                                                                       .freeDeliveryTitle
                                                                       .toString()
                                                                       .toUpperCase(),
@@ -937,10 +983,10 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                                                       color: const Color(
                                                                           0xffE02020),
                                                                       fontSize:
-                                                                          20,
+                                                                      20,
                                                                       fontWeight:
-                                                                          FontWeight
-                                                                              .w500),
+                                                                      FontWeight
+                                                                          .bold),
                                                                 ),
                                                                 const SizedBox(
                                                                   height: 5,
@@ -950,19 +996,19 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                                                       .value
                                                                       .data!
                                                                       .freeDeliverys![
-                                                                          0]
+                                                                  0]
                                                                       .freeDeliveryContent
                                                                       .toString()
                                                                       .toUpperCase(),
                                                                   style: GoogleFonts
                                                                       .poppins(
-                                                                          // color: Colors.red,
-                                                                          fontSize:
-                                                                              12,
-                                                                          fontWeight: FontWeight
-                                                                              .w400,
-                                                                          color:
-                                                                              const Color(0xff656565)),
+                                                                    // color: Colors.red,
+                                                                      fontSize:
+                                                                      12,
+                                                                      fontWeight: FontWeight
+                                                                          .w400,
+                                                                      color:
+                                                                      const Color(0xff656565)),
                                                                 ),
                                                               ],
                                                             ),
@@ -970,8 +1016,8 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                                         ),
                                                         SizedBox(
                                                           width: context
-                                                                  .getDeviceSize
-                                                                  .width *
+                                                              .getDeviceSize
+                                                              .width *
                                                               .3,
                                                         )
                                                       ],
@@ -994,7 +1040,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                                     .toString(),
                                                 fit: BoxFit.contain,
                                                 errorWidget: (_, __, ___) =>
-                                                    const SizedBox(),
+                                                const SizedBox(),
                                               ),
                                             ),
                                           ),

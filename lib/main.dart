@@ -15,9 +15,14 @@ import 'package:permission_handler/permission_handler.dart';
 
 String initialCountryCode = "";
 
+
+
+
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  runApp(const MyApp());
   if (kDebugMode) {
     print('Handling a background message ${message.messageId}');
   }

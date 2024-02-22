@@ -12,7 +12,8 @@ import '../../widgets/common_error_widget.dart';
 import '../widget/app_bar.dart';
 
 class PrivacyPolicy extends StatefulWidget {
-  const PrivacyPolicy({Key? key}) : super(key: key);
+  String? id;
+   PrivacyPolicy({Key? key,this.id}) : super(key: key);
 
   @override
   State<PrivacyPolicy> createState() => _PrivacyPolicyState();
