@@ -170,8 +170,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                             modelPopUp.value.data!.img.toString()),
                       ),
                       Positioned(
-                        right:
-                        10,
+                        right: 10,
                         top: 10,
                         child: GestureDetector(
                           onTap: (){
@@ -947,107 +946,107 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                       height: 140,
                                       child: Stack(
                                         children: [
-                                          Positioned.fill(
-                                            child: Column(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                              children: [
-                                                Container(
-                                                  margin:
-                                                  const EdgeInsets.fromLTRB(
-                                                      10, 0, 9, 10),
-                                                  child: Card(
-                                                    elevation: 4,
-                                                    child: Row(
-                                                      children: [
-                                                        Expanded(
-                                                          child: Padding(
-                                                            padding:
-                                                            const EdgeInsets
-                                                                .all(14.0),
-                                                            child: Column(
-                                                              crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                              children: [
-                                                                Text(
-                                                                  model
-                                                                      .value
-                                                                      .data!
-                                                                      .freeDeliverys![
-                                                                  0]
-                                                                      .freeDeliveryTitle
-                                                                      .toString()
-                                                                      .toUpperCase(),
-                                                                  style: GoogleFonts.poppins(
-                                                                      color: const Color(
-                                                                          0xffE02020),
-                                                                      fontSize:
-                                                                      20,
-                                                                      fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                                ),
-                                                                const SizedBox(
-                                                                  height: 5,
-                                                                ),
-                                                                Text(
-                                                                  model
-                                                                      .value
-                                                                      .data!
-                                                                      .freeDeliverys![
-                                                                  0]
-                                                                      .freeDeliveryContent
-                                                                      .toString()
-                                                                      .toUpperCase(),
-                                                                  style: GoogleFonts
-                                                                      .poppins(
-                                                                    // color: Colors.red,
-                                                                      fontSize:
-                                                                      12,
-                                                                      fontWeight: FontWeight
-                                                                          .w400,
-                                                                      color:
-                                                                      const Color(0xff656565)),
-                                                                ),
-                                                              ],
-                                                            ),
+                                      Positioned.fill(
+                                      child: Column(
+                                      mainAxisAlignment:
+                                        MainAxisAlignment.end,
+                                        children: [
+                                          Container(
+                                            margin:
+                                            const EdgeInsets.fromLTRB(
+                                                10, 0, 9, 10),
+                                            child: Card(
+                                              elevation: 4,
+                                              child: Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: Padding(
+                                                      padding:
+                                                      const EdgeInsets
+                                                          .all(14.0),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                        children: [
+                                                          Text(
+                                                            model
+                                                                .value
+                                                                .data!
+                                                                .freeDeliverys![
+                                                            0]
+                                                                .freeDeliveryTitle
+                                                                .toString()
+                                                                .toUpperCase(),
+                                                            style: GoogleFonts.poppins(
+                                                                color: const Color(
+                                                                    0xffE02020),
+                                                                fontSize:
+                                                                20,
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold),
                                                           ),
-                                                        ),
-                                                        SizedBox(
-                                                          width: context
-                                                              .getDeviceSize
-                                                              .width *
-                                                              .3,
-                                                        )
-                                                      ],
+                                                          const SizedBox(
+                                                            height: 5,
+                                                          ),
+                                                          Text(
+                                                            model
+                                                                .value
+                                                                .data!
+                                                                .freeDeliverys![
+                                                            0]
+                                                                .freeDeliveryContent
+                                                                .toString()
+                                                                .toUpperCase(),
+                                                            style: GoogleFonts
+                                                                .poppins(
+                                                              // color: Colors.red,
+                                                                fontSize:
+                                                                12,
+                                                                fontWeight: FontWeight
+                                                                    .w400,
+                                                                color:
+                                                                const Color(0xff656565)),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Positioned(
-                                            right: 0,
-                                            child: SizedBox(
-                                              height: 140,
-                                              child: CachedNetworkImage(
-                                                imageUrl: model
-                                                    .value
-                                                    .data!
-                                                    .freeDeliverys![0]
-                                                    .freeDeliverys
-                                                    .toString(),
-                                                fit: BoxFit.contain,
-                                                errorWidget: (_, __, ___) =>
-                                                const SizedBox(),
+                                                  SizedBox(
+                                                    width: context
+                                                        .getDeviceSize
+                                                        .width *
+                                                        .3,
+                                                  )
+                                                ],
                                               ),
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
+                                    Positioned(
+                                      right: 0,
+                                      child: SizedBox(
+                                        height: 140,
+                                        child: CachedNetworkImage(
+                                            imageUrl: model
+                                                .value
+                                                .data!
+                                                .freeDeliverys![0]
+                                                .freeDeliverys
+                                                .toString(),
+                                            fit: BoxFit.contain,
+                                            errorWidget: (_, __, ___) =>
+                                            const SizedBox(),
+                                      ),
+                                    ),
                                   ),
+                                ],
+                              ),
+                            ),
+                    ),
                                   addHeight(20),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
