@@ -22,7 +22,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -37,10 +36,7 @@ import '../../models/model_shipping_methods.dart';
 import '../../models/notificaton_onclick_model.dart';
 import '../../repositories/new_common_repo/repository.dart';
 import '../../res/app_assets.dart';
-import '../../res/theme/theme.dart';
 import '../../utils/api_constant.dart';
-import '../../widgets/circular_progressindicator.dart';
-import '../../widgets/common_error_widget.dart';
 import '../widget/drawer.dart';
 import 'cart_screen.dart';
 import 'package:collection/collection.dart';
@@ -122,7 +118,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
   Rx<RxStatus> statusOfPopUp = RxStatus.empty().obs;
   final Repositories repositories = Repositories();
 
-  Duration difference = Duration();
+  Duration difference = const Duration();
 
   // void calculateDifference() {
   //   DateTime now = DateTime.now();
@@ -140,63 +136,70 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       builder: (BuildContext context) {
         return SizedBox(
           height: 400,
-          child: Dialog(
-   clipBehavior: Clip.none,
-            backgroundColor: Colors.transparent,
-
-            elevation: 0,
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-
-                  Stack(
-                    children: [
-                      // Positioned(
-                      //   right: 10,
-                      //   top: 50,
-                      //   child: GestureDetector(
-                      //     onTap: (){
-                      //       Get.back();
-                      //     },
-                      //     child: const Icon(
-                      //       Icons.close,
-                      //       color: Colors.white,
-                      //     ),
-                      //   ),
-                      // ),
-                      Image(
-                        image: NetworkImage(
-                            modelPopUp.value.data!.img.toString()),
-                      ),
-                      Positioned(
-                        right: 10,
-                        top: 10,
-                        child: GestureDetector(
-                          onTap: (){
-                            Get.back();
-                            getInit();
-                          },
-                          child: Container(
-                            height: 25,
-                            width: 25,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.red
-                            ),
-                            child: const Icon(
-
-                              Icons.close,
-                              color: Colors.white,
-                            size: 13,),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 15,)
-                ],
-              ),
+   //        child: Dialog(
+   // clipBehavior: Clip.none,
+   //          backgroundColor: Colors.transparent,
+   //
+   //          elevation: 0,
+   //          child: SingleChildScrollView(
+   //            child: Column(
+   //              crossAxisAlignment: CrossAxisAlignment.start,
+   //              children: [
+   //
+   //                Stack(
+   //                  children: [
+   //                    // Positioned(
+   //                    //   right: 10,
+   //                    //   top: 50,
+   //                    //   child: GestureDetector(
+   //                    //     onTap: (){
+   //                    //       Get.back();
+   //                    //     },
+   //                    //     child: const Icon(
+   //                    //       Icons.close,
+   //                    //       color: Colors.white,
+   //                    //     ),
+   //                    //   ),
+   //                    // ),
+   //                    Image(
+   //                      image: NetworkImage(
+   //                          modelPopUp.value.data!.img.toString()),
+   //                    ),
+   //                    Positioned(
+   //                      right: 10,
+   //                      top: 10,
+   //                      child: GestureDetector(
+   //                        onTap: (){
+   //                          Navigator.pop(context);
+   //                          // Get.back();
+   //                          // getInit();
+   //                        },
+   //                        child: Container(
+   //                          height: 25,
+   //                          width: 25,
+   //                          decoration: const BoxDecoration(
+   //                            shape: BoxShape.circle,
+   //                            color: Colors.red
+   //                          ),
+   //                          child: const Icon(
+   //
+   //                            Icons.close,
+   //                            color: Colors.white,
+   //                          size: 13,),
+   //                        ),
+   //                      ),
+   //                    ),
+   //                  ],
+   //                ),
+   //                const SizedBox(height: 15,)
+   //              ],
+   //            ),
+   //          ),
+   //        ),
+          child: AlertDialog(
+            icon:    Image(
+              image: NetworkImage(
+                  modelPopUp.value.data!.img.toString()),
             ),
           ),
         );

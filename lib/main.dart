@@ -48,6 +48,7 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown
   ]);
+
   //Remove this method to stop OneSignal Debugging
 //
 //
