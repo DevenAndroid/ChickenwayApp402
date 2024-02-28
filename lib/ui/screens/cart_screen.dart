@@ -602,7 +602,7 @@ class CartScreenState extends State<CartScreen> {
   }
 }
 
-cartBottomWidget({onTap}) {
+  cartBottomWidget({onTap}) {
   final cartController = Get.put(CartController());
   return Obx(() {
     if (cartController.refreshInt.value > 0) {}
