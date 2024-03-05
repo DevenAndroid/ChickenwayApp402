@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:dinelah/res/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ApiUrls {
-  static const String apiBaseUrl = 'https://chickenway.app/statging/wp-json/api/';
+  static const String apiBaseUrl = 'https://chickenway.app/wp-json/api/';
 
   static const String loginUrl = "${apiBaseUrl}woocustomer/sign_in";
   static const String deleteAddress =
@@ -37,9 +38,11 @@ class ApiUrls {
       "${apiBaseUrl}woo_api/get_product_copy";
 
   static const String updateCartUrl = "${apiBaseUrl}woocustomer/update_cart";
-  static const String splashScreenUrl = "${apiBaseUrl}woohomepage/splash_screen";
+  static const String splashScreenUrl =
+      "${apiBaseUrl}woohomepage/splash_screen";
 
-  static const String homePage = "https://chickenway.app/statging/wp-json/api/woohomepage/get_home_data";
+  static const String homePage =
+      "https://chickenway.app/wp-json/api/woohomepage/get_home_data";
 
   static const String addToCart = "${apiBaseUrl}woocustomer/update_cart";
   static const String aboutUs =
@@ -67,9 +70,10 @@ class ApiUrls {
   static const String siteUrl = "${apiBaseUrl}woohomepage/site_url";
   static const String addReviewUrl = "${apiBaseUrl}woo_api/product_review";
 
-  static const String switchOffUrl = "https://chickenway.app/statging/wp-json/api/woohomepage/switch_off_store";
-  static const String popUpUrl = "https://chickenway.app/statging/wp-json/api/woohomepage/popup_data";
-
+  static const String switchOffUrl =
+      "https://chickenway.app/wp-json/api/woohomepage/switch_off_store";
+  static const String popUpUrl =
+      "https://chickenway.app/wp-json/api/woohomepage/popup_data";
 
   static const String getAllMenuProductsUrl =
       "${apiBaseUrl}woo_api/category_all_products";

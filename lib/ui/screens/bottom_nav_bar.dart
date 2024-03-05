@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:client_information/client_information.dart';
-import 'package:dinelah/controller/wishlist_controller.dart';
+import 'package:collection/collection.dart';
 import 'package:dinelah/controller/new_controllers/cart_controller.dart';
+import 'package:dinelah/controller/wishlist_controller.dart';
 import 'package:dinelah/helper/new_helper.dart';
 import 'package:dinelah/models/model_response_common.dart';
 import 'package:dinelah/models/new_models/model_site_url.dart';
@@ -22,14 +24,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../../controller/menu_controller.dart';
-import '../../controller/profile_controller.dart';
 import '../../controller/new_controllers/address_controller.dart';
 import '../../controller/orders_controller.dart';
+import '../../controller/profile_controller.dart';
 import '../../helper/helper.dart';
 import '../../models/chicken/model_home.dart';
 import '../../models/model_popup_data.dart';
@@ -37,23 +39,18 @@ import '../../models/model_shipping_methods.dart';
 import '../../models/notificaton_onclick_model.dart';
 import '../../repositories/new_common_repo/repository.dart';
 import '../../res/app_assets.dart';
-import '../../res/theme/theme.dart';
 import '../../utils/api_constant.dart';
-import '../../widgets/circular_progressindicator.dart';
-import '../../widgets/common_error_widget.dart';
 import '../widget/drawer.dart';
 import 'cart_screen.dart';
-import 'package:collection/collection.dart';
 import 'checkout_screen.dart';
+import 'menu_screen.dart';
 import 'notification_screen.dart';
 import 'notification_service.dart';
 import 'orderdetails.dart';
 import 'single_product_screen.dart';
-import 'menu_screen.dart';
 
 // String siteUrl = "";
 ModelSiteUrl modelSiteUrl = ModelSiteUrl();
-
 
 NotificationServices notificationServices = NotificationServices();
 
@@ -82,9 +79,9 @@ String fcm = "";
 //   return isFirstTime;
 // }
 
-
 DateTime reverseTime(DateTime date) {
-  return DateTime(date.year, date.month, date.day, 23 - date.hour, 59 - date.minute, 59 - date.second);
+  return DateTime(date.year, date.month, date.day, 23 - date.hour,
+      59 - date.minute, 59 - date.second);
 }
 
 ModelShippingMethodsList shippingMethodsList = ModelShippingMethodsList();
@@ -120,6 +117,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
 
   Rx<ModelPopUp> modelPopUp = ModelPopUp().obs;
   Rx<RxStatus> statusOfPopUp = RxStatus.empty().obs;
+
   final Repositories repositories = Repositories();
 
   Duration difference = Duration();
@@ -133,7 +131,6 @@ class MainHomeScreenState extends State<MainHomeScreen> {
   //   setState(() {});
   // }
 
-
   void _showPopup() {
     showDialog(
       context: context,
@@ -141,15 +138,13 @@ class MainHomeScreenState extends State<MainHomeScreen> {
         return SizedBox(
           height: 400,
           child: Dialog(
-   clipBehavior: Clip.none,
+            clipBehavior: Clip.none,
             backgroundColor: Colors.transparent,
-
             elevation: 0,
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   Stack(
                     children: [
                       // Positioned(
@@ -166,14 +161,14 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                       //   ),
                       // ),
                       Image(
-                        image: NetworkImage(
-                            modelPopUp.value.data!.img.toString()),
+                        image:
+                            NetworkImage(modelPopUp.value.data!.img.toString()),
                       ),
                       Positioned(
                         right: 10,
                         top: 10,
                         child: GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             Get.back();
                             getInit();
                           },
@@ -181,20 +176,20 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                             height: 25,
                             width: 25,
                             decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.red
-                            ),
+                                shape: BoxShape.circle, color: Colors.red),
                             child: const Icon(
-
                               Icons.close,
                               color: Colors.white,
-                            size: 13,),
+                              size: 13,
+                            ),
                           ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 15,)
+                  const SizedBox(
+                    height: 15,
+                  )
                 ],
               ),
             ),
@@ -265,30 +260,32 @@ class MainHomeScreenState extends State<MainHomeScreen> {
   //     // }
   //   });
   // }
-  getInit() async{
-    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
-    if(initialMessage != null && initialMessage.notification != null){
-      NotificationOnClickModel groupModal = NotificationOnClickModel.fromJson(jsonDecode(initialMessage.data["payload"]));
+  getInit() async {
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null && initialMessage.notification != null) {
+      NotificationOnClickModel groupModal = NotificationOnClickModel.fromJson(
+          jsonDecode(initialMessage.data["payload"]));
 
-      if(groupModal.screenType== 'chat'){
-        Get.toNamed(OrderDetails.route, arguments: [groupModal.orderId.toString()]);
-      } else if(groupModal.screenType== 'post_or_product_update'){
+      if (groupModal.screenType == 'chat') {
+        Get.toNamed(OrderDetails.route,
+            arguments: [groupModal.orderId.toString()]);
+      } else if (groupModal.screenType == 'post_or_product_update') {
         if (groupModal.isAnother == true) {
           makingPhoneCall(groupModal.pLink.toString());
-        }else{
-          if(groupModal.isProduct == true ) {
-            Get.toNamed(SingleProductScreen.route, arguments: [groupModal.pId.toString()]);
-          }else{
+        } else {
+          if (groupModal.isProduct == true) {
+            Get.toNamed(SingleProductScreen.route,
+                arguments: [groupModal.pId.toString()]);
+          } else {
             makingPhoneCall(groupModal.pLink.toString());
           }
         }
-      }else {
-      }
+      } else {}
     }
   }
 
   manageNotification() async {
-
     print("functionnnnn callll");
     NotificationService().initializeNotification();
     getInit();
@@ -301,24 +298,27 @@ class MainHomeScreenState extends State<MainHomeScreen> {
 
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
       print('Notification issss  ${event.notification!.title.toString()}');
-      print('Notification issss dataedereere ${ event.data['payload']}');
-       print('Notificatio data ${event.data}');
-      NotificationOnClickModel groupModal = NotificationOnClickModel.fromJson(jsonDecode(event.data["payload"]));
+      print('Notification issss dataedereere ${event.data['payload']}');
+      print('Notificatio data ${event.data}');
+      NotificationOnClickModel groupModal =
+          NotificationOnClickModel.fromJson(jsonDecode(event.data["payload"]));
 
-      if(groupModal.screenType== 'chat'){
-        Get.toNamed(OrderDetails.route, arguments: [groupModal.orderId.toString()]);
-      } else if(groupModal.screenType== 'post_or_product_update'){
-          if (groupModal.isAnother == true) {
-                  makingPhoneCall(groupModal.pLink.toString());
-            }else{
-              if(groupModal.isProduct == true ) {
-                Get.toNamed(SingleProductScreen.route, arguments: [groupModal.pId.toString()]);
-              }else{
-                makingPhoneCall(groupModal.pLink.toString());
-              }
+      if (groupModal.screenType == 'chat') {
+        Get.toNamed(OrderDetails.route,
+            arguments: [groupModal.orderId.toString()]);
+      } else if (groupModal.screenType == 'post_or_product_update') {
+        if (groupModal.isAnother == true) {
+          makingPhoneCall(groupModal.pLink.toString());
+        } else {
+          if (groupModal.isProduct == true) {
+            Get.toNamed(SingleProductScreen.route,
+                arguments: [groupModal.pId.toString()]);
+          } else {
+            makingPhoneCall(groupModal.pLink.toString());
           }
-      }else {
-      }        print('something went wrong');
+        }
+      } else {}
+      print('something went wrong');
 
       // dynamic payload = event.data['payload'];
       // if (payload != null && payload is Map && payload.containsKey('screen_type')) {
@@ -372,16 +372,19 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       if (event.data != null) {
         final payload = event.data!['payload'];
         if (payload != null) {
-          NotificationOnClickModel groupModal = NotificationOnClickModel.fromJson(jsonDecode(payload));
+          NotificationOnClickModel groupModal =
+              NotificationOnClickModel.fromJson(jsonDecode(payload));
 
           if (groupModal.screenType == 'chat') {
-            Get.toNamed(OrderDetails.route, arguments: [groupModal.orderId.toString()]);
+            Get.toNamed(OrderDetails.route,
+                arguments: [groupModal.orderId.toString()]);
           } else if (groupModal.screenType == 'post_or_product_update') {
             if (groupModal.isAnother == true) {
               makingPhoneCall(groupModal.pLink.toString());
             } else {
               if (groupModal.isProduct == true) {
-                Get.toNamed(SingleProductScreen.route, arguments: [groupModal.pId.toString()]);
+                Get.toNamed(SingleProductScreen.route,
+                    arguments: [groupModal.pId.toString()]);
               } else {
                 makingPhoneCall(groupModal.pLink.toString());
               }
@@ -399,10 +402,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       // Ensure that the function returns a Future<void>
       return Future.value(); // or return null;
     });
-
-
   }
-
 
   checkFirstAppLaunch() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -465,7 +465,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       if (model.value.data != null) {
         DateTime? time11;
         try {
-           // time11 = DateFormat("yyyy-MM-dd").parse(model.value.data!.timeBannerAd![4].offerDuration.toString());
+          // time11 = DateFormat("yyyy-MM-dd").parse(model.value.data!.timeBannerAd![4].offerDuration.toString());
           if (kDebugMode) {
             print("Time...........       $time11");
           }
@@ -528,6 +528,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       }
     });
   }
+
 // GET FCM AND DRVICE ID BEFORE LOGIN
   String deviceId = "";
   getFcmBeforLogin() async {
@@ -542,9 +543,13 @@ class MainHomeScreenState extends State<MainHomeScreen> {
     map['fcm_token'] = fcmToekn!;
     log("Data ${map.toString()}");
     repositories
-        .postApi(url: ("https://chickenway.app/statging/wp-json/api/woocustomer/update_user_fcm_data"), mapData: map, context: context)
+        .postApi(
+            url:
+                ("https://chickenway.app/wp-json/api/woocustomer/update_user_fcm_data"),
+            mapData: map,
+            context: context)
         .then((value) {
-          log("Data before login ${map.toString()}");
+      log("Data before login ${map.toString()}");
     });
   }
 
@@ -558,16 +563,13 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       });
     }
   }
+
   getFcm() async {
     fcm = (await FirebaseMessaging.instance.getToken())!;
     log(" FCM IS ${fcm}");
   }
 
   @override
-
-
-
-
   void initState() {
     super.initState();
     getInit();
@@ -577,7 +579,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
     notificationServices.setupInteractMessage(context);
     notificationServices.isTokenRefresh();
 
-    notificationServices.getDeviceToken().then((value){
+    notificationServices.getDeviceToken().then((value) {
       if (kDebugMode) {
         print('device token');
         print(value);
@@ -586,7 +588,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
 
     getFcmBeforLogin();
     // getFcm();
-    setTimer(givenTime: DateTime.now() );
+    setTimer(givenTime: DateTime.now());
     manageNotification();
     // calculateDifference();
 
@@ -596,8 +598,8 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       checkFirstAppLaunch();
       manageSiteUrl();
       homeData();
+      menuController.getProducts();
       cartController.resetAll();
-
     });
   }
 
@@ -614,11 +616,11 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       timer!.cancel();
     }
     int seconds =
-    ((givenTime.millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond) -
-        DateTime.now().millisecondsSinceEpoch ~/
-            Duration.millisecondsPerSecond);
-     // DateTime.now().millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond;
-     // referenceTime = DateTime.parse("2022-09-10 00:00:00.000000").add(Duration(seconds: timeInSeconds));
+        ((givenTime.millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond) -
+            DateTime.now().millisecondsSinceEpoch ~/
+                Duration.millisecondsPerSecond);
+    // DateTime.now().millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond;
+    // referenceTime = DateTime.parse("2022-09-10 00:00:00.000000").add(Duration(seconds: timeInSeconds));
 
     int hours = seconds ~/ (60 * 60);
 
@@ -636,8 +638,8 @@ class MainHomeScreenState extends State<MainHomeScreen> {
         hours = fiveMinute ~/ (60 * 60);
         referenceTime = referenceTime.subtract(const Duration(seconds: 1));
         time.value =
-        "${hours == 0 ? "00" : hours < 10 ? "0$hours" : hours}:${logTime1.format(referenceTime)}";
-        log("TIME ISSSS" +time.value);
+            "${hours == 0 ? "00" : hours < 10 ? "0$hours" : hours}:${logTime1.format(referenceTime)}";
+        log("TIME ISSSS" + time.value);
       } else {
         timer.cancel();
         fiveMinute = 0;
@@ -646,6 +648,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       }
     });
   }
+
   @override
   void dispose() {
     if (timer != null) {
@@ -656,8 +659,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var height= MediaQuery.of(context).size.height;
-
+    var height = MediaQuery.of(context).size.height;
 
     return showSplashScreen
         ? const SplashScreen()
@@ -832,25 +834,24 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                     children: [
                                       model.value.data!.bestSellerData!.icon !=
                                               ""
-                                          ?  CachedNetworkImage(
-
-                                          width: 25,
-                                          height: 25,
-                                          imageUrl: model.value.data!
-                                              .bestSellerData!.icon
-                                              .toString(),
-                                          errorWidget: (_, __, ___) =>
-                                              Image.asset(
-                                                'assets/images/chicken_icon.png',
-                                                width: 25,
-                                                height: 25,
-                                              ),
-                                          placeholder: (_, __) =>
-                                              Image.asset(
-                                                'assets/images/chicken_icon.png',
-                                                width: 25,
-                                                height: 25,
-                                              ))
+                                          ? CachedNetworkImage(
+                                              width: 25,
+                                              height: 25,
+                                              imageUrl: model.value.data!
+                                                  .bestSellerData!.icon
+                                                  .toString(),
+                                              errorWidget: (_, __, ___) =>
+                                                  Image.asset(
+                                                    'assets/images/chicken_icon.png',
+                                                    width: 25,
+                                                    height: 25,
+                                                  ),
+                                              placeholder: (_, __) =>
+                                                  Image.asset(
+                                                    'assets/images/chicken_icon.png',
+                                                    width: 25,
+                                                    height: 25,
+                                                  ))
                                           : Image.asset(
                                               'assets/images/chicken_icon.png',
                                               width: 25,
@@ -876,7 +877,8 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                     child: ListView.builder(
                                       primary: false,
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 13,),
+                                        horizontal: 13,
+                                      ),
                                       scrollDirection: Axis.horizontal,
                                       itemCount:
                                           model.value.data!.vSlider!.length,
@@ -909,9 +911,9 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                                         BorderRadius.circular(
                                                             10)),
                                                 child: ClipRRect(
-
-                                                  borderRadius: BorderRadius.circular(10),
-
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
                                                     child: CachedNetworkImage(
                                                       imageUrl: model
                                                           .value
@@ -946,107 +948,107 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                       height: 140,
                                       child: Stack(
                                         children: [
-                                      Positioned.fill(
-                                      child: Column(
-                                      mainAxisAlignment:
-                                        MainAxisAlignment.end,
-                                        children: [
-                                          Container(
-                                            margin:
-                                            const EdgeInsets.fromLTRB(
-                                                10, 0, 9, 10),
-                                            child: Card(
-                                              elevation: 4,
-                                              child: Row(
-                                                children: [
-                                                  Expanded(
-                                                    child: Padding(
-                                                      padding:
-                                                      const EdgeInsets
-                                                          .all(14.0),
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                        children: [
-                                                          Text(
-                                                            model
-                                                                .value
-                                                                .data!
-                                                                .freeDeliverys![
-                                                            0]
-                                                                .freeDeliveryTitle
-                                                                .toString()
-                                                                .toUpperCase(),
-                                                            style: GoogleFonts.poppins(
-                                                                color: const Color(
-                                                                    0xffE02020),
-                                                                fontSize:
-                                                                20,
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .bold),
+                                          Positioned.fill(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                Container(
+                                                  margin:
+                                                      const EdgeInsets.fromLTRB(
+                                                          10, 0, 9, 10),
+                                                  child: Card(
+                                                    elevation: 4,
+                                                    child: Row(
+                                                      children: [
+                                                        Expanded(
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(14.0),
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Text(
+                                                                  model
+                                                                      .value
+                                                                      .data!
+                                                                      .freeDeliverys![
+                                                                          0]
+                                                                      .freeDeliveryTitle
+                                                                      .toString()
+                                                                      .toUpperCase(),
+                                                                  style: GoogleFonts.poppins(
+                                                                      color: const Color(
+                                                                          0xffE02020),
+                                                                      fontSize:
+                                                                          20,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold),
+                                                                ),
+                                                                const SizedBox(
+                                                                  height: 5,
+                                                                ),
+                                                                Text(
+                                                                  model
+                                                                      .value
+                                                                      .data!
+                                                                      .freeDeliverys![
+                                                                          0]
+                                                                      .freeDeliveryContent
+                                                                      .toString()
+                                                                      .toUpperCase(),
+                                                                  style: GoogleFonts
+                                                                      .poppins(
+                                                                          // color: Colors.red,
+                                                                          fontSize:
+                                                                              12,
+                                                                          fontWeight: FontWeight
+                                                                              .w400,
+                                                                          color:
+                                                                              const Color(0xff656565)),
+                                                                ),
+                                                              ],
+                                                            ),
                                                           ),
-                                                          const SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                          Text(
-                                                            model
-                                                                .value
-                                                                .data!
-                                                                .freeDeliverys![
-                                                            0]
-                                                                .freeDeliveryContent
-                                                                .toString()
-                                                                .toUpperCase(),
-                                                            style: GoogleFonts
-                                                                .poppins(
-                                                              // color: Colors.red,
-                                                                fontSize:
-                                                                12,
-                                                                fontWeight: FontWeight
-                                                                    .w400,
-                                                                color:
-                                                                const Color(0xff656565)),
-                                                          ),
-                                                        ],
-                                                      ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: context
+                                                                  .getDeviceSize
+                                                                  .width *
+                                                              .3,
+                                                        )
+                                                      ],
                                                     ),
                                                   ),
-                                                  SizedBox(
-                                                    width: context
-                                                        .getDeviceSize
-                                                        .width *
-                                                        .3,
-                                                  )
-                                                ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Positioned(
+                                            right: 0,
+                                            child: SizedBox(
+                                              height: 140,
+                                              child: CachedNetworkImage(
+                                                imageUrl: model
+                                                    .value
+                                                    .data!
+                                                    .freeDeliverys![0]
+                                                    .freeDeliverys
+                                                    .toString(),
+                                                fit: BoxFit.contain,
+                                                errorWidget: (_, __, ___) =>
+                                                    const SizedBox(),
                                               ),
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
-                                    Positioned(
-                                      right: 0,
-                                      child: SizedBox(
-                                        height: 140,
-                                        child: CachedNetworkImage(
-                                            imageUrl: model
-                                                .value
-                                                .data!
-                                                .freeDeliverys![0]
-                                                .freeDeliverys
-                                                .toString(),
-                                            fit: BoxFit.contain,
-                                            errorWidget: (_, __, ___) =>
-                                            const SizedBox(),
-                                      ),
-                                    ),
                                   ),
-                                ],
-                              ),
-                            ),
-                    ),
                                   addHeight(20),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
@@ -1073,7 +1075,6 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                                     width: 25,
                                                     height: 25,
                                                   ))
-
                                           : Image.asset(
                                               'assets/images/chicken_icon.png',
                                               width: 25,
@@ -1095,7 +1096,6 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                       givePadding:
                                           const EdgeInsets.only(left: 13)),
                                   addHeight(6),
-
                                   SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
                                     child: Row(
@@ -1105,16 +1105,21 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                             .map(
                                               (service) => GestureDetector(
                                                 onTap: () {
-
-                                                  if (service.isProduct == true) {
+                                                  if (service.isProduct ==
+                                                      true) {
                                                     Get.toNamed(
                                                         SingleProductScreen
-                                                            .route, arguments: [
-                                                      service.pId.toString()
-                                                    ]);
-                                                  }else {
-                                                      Get.toNamed(MenuScreen.route, arguments: [service.casteSlug.toString()]);
-
+                                                            .route,
+                                                        arguments: [
+                                                          service.pId.toString()
+                                                        ]);
+                                                  } else {
+                                                    Get.toNamed(
+                                                        MenuScreen.route,
+                                                        arguments: [
+                                                          service.casteSlug
+                                                              .toString()
+                                                        ]);
                                                   }
                                                   // if (service.isProduct !=
                                                   //     null) {
@@ -1167,16 +1172,17 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                                     ),
                                                     Center(
                                                       child: Padding(
-                                                        padding: const EdgeInsets.only(left:20),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(left: 20),
                                                         child: Text(
-
                                                           service.serviceTitle
                                                               .toString()
                                                               .replaceAll(
                                                                   " ", " "),
                                                           // maxLines: 2,
-                                                          style:
-                                                              GoogleFonts.poppins(
+                                                          style: GoogleFonts
+                                                              .poppins(
                                                             fontWeight:
                                                                 FontWeight.w600,
                                                             fontSize: 12.5,
@@ -1492,15 +1498,16 @@ class MainHomeScreenState extends State<MainHomeScreen> {
           ]
         : [];
   }
-  Widget timerAd(BuildContext context) {
 
-    String apiTimeString = model.value.data!.timeBannerAd![0].offerDuration.toString();
+  Widget timerAd(BuildContext context) {
+    String apiTimeString =
+        model.value.data!.timeBannerAd![0].offerDuration.toString();
     print(apiTimeString);
 
     return TimerWidgetScreen(
       time: apiTimeString,
       adsUrl: model.value.data!.timeBannerAd![0].adsUrl.toString(),
-      timeBannerAd: model.value.data!.timeBannerAd![0]  ,
+      timeBannerAd: model.value.data!.timeBannerAd![0],
     );
   }
 
@@ -1576,24 +1583,20 @@ class MainHomeScreenState extends State<MainHomeScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           model.value.data!.yallaData!.icon != ""
-              ?  CachedNetworkImage(
-              width: 25,
-              height: 25,
-              imageUrl: model.value.data!
-                  .yallaData!.icon
-                  .toString(),
-              errorWidget: (_, __, ___) =>
-                  Image.asset(
-                    'assets/images/chicken_icon.png',
-                    width: 25,
-                    height: 25,
-                  ),
-              placeholder: (_, __) =>
-                  Image.asset(
-                    'assets/images/chicken_icon.png',
-                    width: 25,
-                    height: 25,
-                  ))
+              ? CachedNetworkImage(
+                  width: 25,
+                  height: 25,
+                  imageUrl: model.value.data!.yallaData!.icon.toString(),
+                  errorWidget: (_, __, ___) => Image.asset(
+                        'assets/images/chicken_icon.png',
+                        width: 25,
+                        height: 25,
+                      ),
+                  placeholder: (_, __) => Image.asset(
+                        'assets/images/chicken_icon.png',
+                        width: 25,
+                        height: 25,
+                      ))
               : Image.asset(
                   'assets/images/chicken_icon.png',
                   width: 25,
@@ -1763,24 +1766,20 @@ class MainHomeScreenState extends State<MainHomeScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           model.value.data!.deliciousData!.icon != ""
-                 ?  CachedNetworkImage(
-      width: 25,
-          height: 25,
-          imageUrl: model.value.data!
-              .deliciousData!.icon
-              .toString(),
-          errorWidget: (_, __, ___) =>
-              Image.asset(
-                'assets/images/chicken_icon.png',
-                width: 25,
-                height: 25,
-              ),
-          placeholder: (_, __) =>
-              Image.asset(
-                'assets/images/chicken_icon.png',
-                width: 25,
-                height: 25,
-              ))
+              ? CachedNetworkImage(
+                  width: 25,
+                  height: 25,
+                  imageUrl: model.value.data!.deliciousData!.icon.toString(),
+                  errorWidget: (_, __, ___) => Image.asset(
+                        'assets/images/chicken_icon.png',
+                        width: 25,
+                        height: 25,
+                      ),
+                  placeholder: (_, __) => Image.asset(
+                        'assets/images/chicken_icon.png',
+                        width: 25,
+                        height: 25,
+                      ))
               : Image.asset(
                   'assets/images/chicken_icon.png',
                   width: 25,
@@ -1971,7 +1970,8 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                             cartBottomWidget();
                                           },
                                           child: Container(
-                                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10),
                                             height: 25,
                                             // width: 100,
                                             decoration: BoxDecoration(
