@@ -597,7 +597,10 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       popup();
       checkFirstAppLaunch();
       manageSiteUrl();
+
+      menuController.getProducts();
       homeData();
+
       menuController.getProducts();
       cartController.resetAll();
     });
@@ -684,6 +687,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                         ? RefreshIndicator(
                             onRefresh: () async {
                               await homeData();
+                              await menuController.getProducts();
                               await cartController.getData();
                               await wishList.getWishListData();
                               // if (menuController.forMenuScreen.isEmpty &&
@@ -691,7 +695,9 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                               await menuController.getAllAsync();
                               // }
                               manageSiteUrl();
-                              setState(() {});
+                              setState(() {
+                                menuController.getProducts();
+                              });
                             },
                             child: SingleChildScrollView(
                               child: Column(
@@ -1639,10 +1645,9 @@ class MainHomeScreenState extends State<MainHomeScreen> {
               child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: CachedNetworkImage(
-                    imageUrl: shortcut.yallaImage.toString(),
-                    fit: BoxFit.cover,
-                    errorWidget: (_, __, ___) => const SizedBox(),
-                  )),
+                      imageUrl: shortcut.yallaImage.toString(),
+                      fit: BoxFit.cover,
+                      errorWidget: (_, __, ___) => const Icon(Icons.error))),
             ),
           );
         },
@@ -1676,14 +1681,11 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(7),
                               child: CachedNetworkImage(
-                                imageUrl: e.value.iconCate.toString(),
-                                width: 40,
-                                height: 40,
-                                errorWidget: (_, __, ___) => const SizedBox(
+                                  imageUrl: e.value.iconCate.toString(),
                                   width: 40,
                                   height: 40,
-                                ),
-                              ),
+                                  errorWidget: (_, __, ___) =>
+                                      const Icon(Icons.error)),
                             ),
                           ),
                         ),
