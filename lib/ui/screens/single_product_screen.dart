@@ -22,8 +22,9 @@ import 'menu_screen.dart';
 
 class SingleProductScreen extends StatefulWidget {
   static const String route = "/SingleProductScreen";
+  String? id1;
 
-  const SingleProductScreen({Key? key}) : super(key: key);
+   SingleProductScreen({Key? key,this.id1}) : super(key: key);
 
   @override
   State<SingleProductScreen> createState() => _SingleProductScreenState();

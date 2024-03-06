@@ -45,5 +45,12 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+       <meta-data
+           android:name="com.onesignal.NotificationServiceExtension"
+           android:value="com.companyName.applicationName.NotificationServiceExtension" />
+       <meta-data
+           android:name="com.google.firebase.messaging.default_notification_channel_id"
+           android:value="" />
+           />
     </application>
 </manifest>
