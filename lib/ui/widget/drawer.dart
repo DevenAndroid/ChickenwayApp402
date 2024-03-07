@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -7,6 +8,7 @@ import 'package:dinelah/repositories/new_common_repo/repository.dart';
 import 'package:dinelah/res/theme/theme.dart';
 import 'package:dinelah/ui/screens/address/address_screen.dart';
 import 'package:dinelah/ui/screens/bottom_nav_bar.dart';
+import 'package:dinelah/ui/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -18,7 +20,10 @@ import '../../controller/new_controllers/address_controller.dart';
 import '../../controller/orders_controller.dart';
 import '../../controller/wishlist_controller.dart';
 import '../../helper/helper.dart';
+import '../../models/model_response_common.dart';
+import '../../repositories/delete_user_repo.dart';
 import '../../routers/my_router.dart';
+import '../../utils/api_constant.dart';
 import '../screens/checkout_screen.dart';
 import '../screens/item/popup_msg.dart';
 import '../screens/menu_screen.dart';
@@ -40,6 +45,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
   final ProfileController _profileController = Get.put(ProfileController());
   final Repositories repositories = Repositories();
 
+
+  Rx<ModelResponseCommon> modelDelete = ModelResponseCommon().obs;
+
+  Rx<RxStatus> statusOfDelete = RxStatus.empty().obs;
+
+
   checkUser() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     if (preferences.getString('user_details') != null) {
@@ -50,6 +61,105 @@ class _CustomDrawerState extends State<CustomDrawer> {
     if (mounted) {
       setState(() {});
     }
+  }
+  showDialog1() {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            insetPadding: EdgeInsets.all(15),
+            child: Padding(
+              padding: const EdgeInsets.all(28),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: GestureDetector(
+                        onTap: () {
+                          Get.back();
+                        },
+                        child: Container(
+                          height: 40,
+                          width: 40,
+
+                          decoration: BoxDecoration(shape: BoxShape.circle,color: Colors.red),
+                          child: Icon(Icons.close,color: Colors.white,),
+                          ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: height * .02,
+                    ),
+                    Text(
+                      'Would You Like To Delete This Account?'.tr,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        height: 1.6,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: height * .03,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                            color: Colors.red,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  deleteUser(context).then((value) {
+                                    showToast(value.message.toString());
+                                    if (value.status == true) {
+                                      showToast(value.message.toString());
+                                      Get.to(()=> const LoginScreen());
+                                    }
+                                  });
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.transparent, elevation: 0, minimumSize: Size(80, 40)),
+                                child: FittedBox(
+                                  child: Text('Yes, Delete This Account'.tr,
+                                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.white)),
+                                )),
+                          ),
+                        ),
+                        SizedBox(
+                          width: width * .02,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Get.back();
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10), border: Border.all(color: Colors.red)),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 13),
+                              child: Center(
+                                  child: Text('Cancel'.tr,
+                                      style:
+                                      TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.red))),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
   }
 
   bool userLoggedIn = false;
@@ -267,6 +377,42 @@ class _CustomDrawerState extends State<CustomDrawer> {
                               title: 'TERMS CONDITIONS',
                               onTap: () {
                                 Get.toNamed(MyRouter.term);
+                              }),
+                          const SizedBox(
+                            height: 3,
+                          ),
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     showDialog1();
+                          //   },
+                          //   child: Row(
+                          //     children: [
+                          //       Icon(Icons.delete_outline_sharp),
+                          //       SizedBox(
+                          //         width: screenSize.width * .04,
+                          //       ),
+                          //       Text('Delete User'.tr,
+                          //           style: TextStyle(
+                          //             fontSize: 18,
+                          //             fontWeight: FontWeight.w400,
+                          //             fontFamily: "Regular",
+                          //             color: Color(0xFF363636),
+                          //           )),
+                          //       Spacer(),
+                          //       Icon(
+                          //         Icons.keyboard_arrow_right,
+                          //         color: Color(0xFF616A75),
+                          //       )
+                          //     ],
+                          //   ),
+                          // ),
+                          // if(userLoggedIn)
+                          _drawerTile(
+                              active: true,
+                              icon: "==",
+                              title: 'Delete User',
+                              onTap: () {
+                                showDialog1() ;
                               }),
                           const SizedBox(
                             height: 3,

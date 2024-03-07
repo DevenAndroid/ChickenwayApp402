@@ -485,6 +485,10 @@ class MainHomeScreenState extends State<MainHomeScreen> {
   final profileController = Get.put(ProfileController());
   final addressController = Get.put(AddressController());
   final menuController = Get.put(ProductsMenuController());
+
+  Rx<ModelResponseCommon> modelDelete = ModelResponseCommon().obs;
+
+  Rx<RxStatus> statusOfDelete = RxStatus.empty().obs;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
   updateCartCount({
@@ -616,6 +620,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
   }
   Rx<MatchApkModel> matchApkVersion = MatchApkModel().obs;
   Rx<RxStatus> statusOfMatch = RxStatus.empty().obs;
+
 
   manageSplash() {
     if (showSplashScreen == true) {
