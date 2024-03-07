@@ -22,6 +22,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
@@ -32,6 +33,7 @@ import '../../controller/new_controllers/address_controller.dart';
 import '../../controller/orders_controller.dart';
 import '../../helper/helper.dart';
 import '../../models/chicken/model_home.dart';
+import '../../models/match_apk_model.dart';
 import '../../models/model_popup_data.dart';
 import '../../models/model_shipping_methods.dart';
 import '../../models/notificaton_onclick_model.dart';
@@ -612,6 +614,8 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       log("Data before login ${map.toString()}");
     });
   }
+  Rx<MatchApkModel> matchApkVersion = MatchApkModel().obs;
+  Rx<RxStatus> statusOfMatch = RxStatus.empty().obs;
 
   manageSplash() {
     if (showSplashScreen == true) {
@@ -628,16 +632,69 @@ class MainHomeScreenState extends State<MainHomeScreen> {
     log(" FCM IS ${fcm}");
   }
 
+  version() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String appVersion = packageInfo.version;
+    print('app version is${appVersion.toString()}');
+
+
+    repositories.postApi(url: ApiUrls.matchApkVersion, mapData: {
+      "apk_version":appVersion.toString()
+    }).then((value) {
+      matchApkVersion.value = MatchApkModel.fromJson(jsonDecode(value));
+      if (matchApkVersion.value.status!) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('New Version Available'),
+                content: Text('A new version is available. Would you like to update?'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      _launchPlayStore();
+                    },
+                    child: Text('Update Now'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Later'),
+                  ),
+                ],
+              );
+              });
+
+
+        statusOfMatch.value = RxStatus.success();
+      } else {
+        statusOfMatch.value = RxStatus.error();
+      }
+    });
+  }
+
   @override
 
 
 
+  // final Repositories repositories = Repositories();
 
-  void initState() {
+  void _launchPlayStore() async {
+    final String packageName = 'com.chickenway.moka'; // Replace with your app's package name
+    final url = 'market://details?id=$packageName';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      final fallbackUrl = 'https://play.google.com/store/apps/details?id=$packageName';
+      await launch(fallbackUrl);
+    }
+  }
+ initState()  {
     super.initState();
     getInit();
-    notificationServices.requestNotificationPermission();
-    notificationServices.forgroundMessage();
+     notificationServices.requestNotificationPermission();
+     notificationServices.forgroundMessage();
     notificationServices.firebaseInit(context);
     notificationServices.setupInteractMessage(context);
     notificationServices.isTokenRefresh();
@@ -650,13 +707,14 @@ class MainHomeScreenState extends State<MainHomeScreen> {
     });
 
     getFcmBeforLogin();
-    // getFcm();
+    getFcm();
     setTimer(givenTime: DateTime.now() );
     manageNotification();
     // calculateDifference();
 
     manageSplash();
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+      version();
       popup();
       checkFirstAppLaunch();
       manageSiteUrl();
@@ -665,6 +723,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       cartController.resetAll();
 
     });
+
   }
 
   bool noInternetRetry = false;

@@ -4,12 +4,16 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dinelah/helper/new_helper.dart';
 import 'package:dinelah/res/app_assets.dart';
+import 'package:dinelah/routers/my_router.dart';
+import 'package:dinelah/ui/screens/update_Screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../controller/splash_screen_controller.dart';
+import '../../models/match_apk_model.dart';
 import '../../models/splash_model.dart';
 import '../../repositories/new_common_repo/repository.dart';
 import '../../utils/api_constant.dart';
@@ -26,12 +30,12 @@ class _SplashScreen2State extends State<SplashScreen2> {
   // final splashController = Get.put(SplashScreenController());
 
   Rx<SplashModel> modelSplash = SplashModel().obs;
-
+  final Repositories repositories = Repositories();
   Rx<RxStatus> statusOfSplash = RxStatus
       .empty()
       .obs;
 
-  final Repositories repositories = Repositories();
+
   String image = "";
   bool animatedStarted = false;
   RxBool animate = true.obs;
@@ -44,6 +48,7 @@ class _SplashScreen2State extends State<SplashScreen2> {
     await Future.delayed(const Duration(milliseconds: 3500));
     animate.value = false;
     await Future.delayed(const Duration(milliseconds: 900));
+
     Get.offAll(() => const MainHomeScreen());
   }
 

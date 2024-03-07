@@ -15,18 +15,18 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
-    FirebaseMessaging.onMessage.listen((message) {
-      log("fgdjg"+message.data.toString());
-      RemoteNotification? notification = message.notification ;
-      AndroidNotification? android = message.notification!.android ;
+  FirebaseMessaging.onMessage.listen((message) {
+    log("fgdjg"+message.data.toString());
+    RemoteNotification? notification = message.notification ;
+    AndroidNotification? android = message.notification!.android ;
 
-      if (kDebugMode) {
-        print("notifications title:${notification!.title}");
-        print("notifications body:${notification.body}");
-        print('count:${android!.count}');
-        print('data:${message.data.toString()}');
-      }
-    });
+    if (kDebugMode) {
+      print("notifications title:${notification!.title}");
+      print("notifications body:${notification.body}");
+      print('count:${android!.count}');
+      print('data:${message.data.toString()}');
+    }
+  });
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus!.unfocus();

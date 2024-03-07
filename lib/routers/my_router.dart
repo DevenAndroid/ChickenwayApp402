@@ -9,6 +9,7 @@ import '../ui/screens/address/choose_address.dart';
 import '../ui/screens/address/address_screen.dart';
 
 import '../ui/screens/item/order_tracking_behaviour.dart';
+import '../ui/screens/update_Screen.dart';
 import '../ui/screens/wishlist_screen.dart';
 import '../ui/screens/bottom_nav_bar.dart';
 import '../ui/screens/checkout_screen.dart';
@@ -28,6 +29,7 @@ class MyRouter {
   static var signUpScreen = "/signUpScreen";
   static var profileScreen = "/profileScreen";
   static var aboutapp = "/aboutapp";
+  static var versionUpdate = "/versionUpdate";
   static var myOrdersScreen = "/myOrdersScreen";
   static var privacypolicy = "/privacypolicy";
   static var yourorder = "/yourorder";
@@ -41,6 +43,7 @@ class MyRouter {
     GetPage(name: '/', page: () => SplashScreen2()),
     // GetPage(name: '/', page: () => const MainHomeScreen()),
     GetPage(name: MainHomeScreen.route, page: () => const MainHomeScreen()),
+    GetPage(name:  MyRouter.versionUpdate, page: () => const VersionUpdate()),
     GetPage(name: OrderDetails.route, page: () => const OrderDetails()),
     GetPage(name: MyRouter.logInScreen, page: () => const LoginScreen()),
     GetPage(name: MyRouter.signUpScreen, page: () => const SignUpScreen()),

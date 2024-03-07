@@ -1,9 +1,14 @@
+import 'dart:convert';
 import 'dart:developer';
 
+import 'package:dinelah/models/model_response_common.dart';
+import 'package:dinelah/repositories/new_common_repo/repository.dart';
 import 'package:dinelah/res/size_config.dart';
 import 'package:dinelah/res/theme/theme.dart';
 import 'package:dinelah/routers/my_router.dart';
 import 'package:dinelah/ui/screens/notification_service.dart';
+import 'package:dinelah/ui/screens/update_Screen.dart';
+import 'package:dinelah/utils/api_constant.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -15,15 +20,22 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:upgrader/upgrader.dart';
 
+import 'models/match_apk_model.dart';
+
 String initialCountryCode = "";
 
+Rx<ModelResponseCommon> modelAboutapp = ModelResponseCommon().obs;
+Rx<MatchApkModel> matchApkVersion = MatchApkModel().obs;
+Rx<RxStatus> statusOfAbout = RxStatus.empty().obs;
+Rx<RxStatus> statusOfMatch = RxStatus.empty().obs;
+final Repositories repositories = Repositories();
 
 
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   // runApp(const MyApp());
   if (kDebugMode) {
     print('Handling a background message ${message.messageId}');
@@ -34,18 +46,39 @@ Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await FirebaseMessaging.instance.requestPermission(
+    // alert: true,
+    // announcement: true,
+      badge: true,
+      // carPlay: true,
+      // criticalAlert: true,
+      // provisional: true,
+      sound: true);
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   String appVersion = packageInfo.version;
   print('app version is${appVersion.toString()}');
 
+
+    repositories.postApi(url: ApiUrls.apkVersion, mapData: {
+      "apk_version":appVersion.toString()
+    }).then((value) {
+      modelAboutapp.value = ModelResponseCommon.fromJson(jsonDecode(value));
+      if (modelAboutapp.value.status!) {
+        statusOfAbout.value = RxStatus.success();
+      } else {
+        statusOfAbout.value = RxStatus.error();
+      }
+    });
+
+
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
   FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
   NotificationService().initializeNotification();
-  await Permission.notification.isDenied.then((value) {
-    if (value) {
-      Permission.notification.request();
-    }
-  });
+  // await Permission.notification.isDenied.then((value) {
+  //   if (value) {
+  //     Permission.notification.request();
+  //   }
+  // });
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -97,6 +130,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
    // initPlatformState();
   }
 
