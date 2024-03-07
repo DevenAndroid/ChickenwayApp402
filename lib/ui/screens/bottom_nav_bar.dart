@@ -483,6 +483,10 @@ class MainHomeScreenState extends State<MainHomeScreen> {
   final profileController = Get.put(ProfileController());
   final addressController = Get.put(AddressController());
   final menuController = Get.put(ProductsMenuController());
+
+  Rx<ModelResponseCommon> modelDelete = ModelResponseCommon().obs;
+
+  Rx<RxStatus> statusOfDelete = RxStatus.empty().obs;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
   updateCartCount({
@@ -612,6 +616,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       log("Data before login ${map.toString()}");
     });
   }
+
 
   manageSplash() {
     if (showSplashScreen == true) {
