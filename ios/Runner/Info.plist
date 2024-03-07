@@ -35,6 +35,8 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+
+
 	<key>NSCameraUsageDescription</key>
 	<string>Allow this to access your camera to update profile.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
@@ -51,7 +53,7 @@
 	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>fetch</string>
+	    	<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>

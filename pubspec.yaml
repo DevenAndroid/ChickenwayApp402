@@ -18,6 +18,7 @@ dependencies:
   firebase_core: ^2.13.0
   firebase_messaging: ^14.6.1
   fluttertoast: ^8.0.9
+  upgrader:
   client_information: ^2.0.4
   url_launcher: ^6.1.10
   badges: ^3.1.1
@@ -54,6 +55,7 @@ dependencies:
   page_transition: ^2.0.9
   onesignal_flutter: ^5.0.0
   flutter_math_fork: ^0.7.2
+  package_info_plus:
 
 
 dev_dependencies:

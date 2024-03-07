@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ApiUrls {
-  static const String apiBaseUrl = 'https://chickenway.app/wp-json/api/';
+  static const String apiBaseUrl = 'https://chickenway.app/statging/wp-json/api/';
 
   static const String loginUrl = "${apiBaseUrl}woocustomer/sign_in";
   static const String deleteAddress =
@@ -42,11 +42,11 @@ class ApiUrls {
       "${apiBaseUrl}woohomepage/splash_screen";
 
   static const String homePage =
-      "https://chickenway.app/wp-json/api/woohomepage/get_home_data";
+      "https://chickenway.app/statging/wp-json/api/woohomepage/get_home_data";
 
   static const String addToCart = "${apiBaseUrl}woocustomer/update_cart";
   static const String aboutUs =
-      "https://www.chickenway.me/wp-json/wp/v2/pages/9095";
+      "https://www.chickenway.me/statging/wp-json/wp/v2/pages/9095";
   // static const String aboutUs = "${apiBaseUrl}woohomepage/about_us";
   static const String privicyPolicy =
       "${apiBaseUrl}woohomepage/privacy_policy_screen";

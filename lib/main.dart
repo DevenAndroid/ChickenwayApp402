@@ -11,7 +11,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:upgrader/upgrader.dart';
 
 String initialCountryCode = "";
 
@@ -22,16 +24,19 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  runApp(const MyApp());
+  // runApp(const MyApp());
   if (kDebugMode) {
     print('Handling a background message ${message.messageId}');
   }
 }
 
 Future<void> main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
+  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  String appVersion = packageInfo.version;
+  print('app version is${appVersion.toString()}');
 
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
   FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
@@ -121,11 +126,13 @@ class _MyAppState extends State<MyApp> {
 
   var theme = ThemeData(
     useMaterial3: true,
+
     scaffoldBackgroundColor: const Color(0xffF5F5F5),
     cardTheme: const CardTheme(surfaceTintColor: Colors.white, color: Colors.white),
     primaryColor: AppTheme.primaryColor,
     dialogTheme: const DialogTheme(backgroundColor: Colors.white, surfaceTintColor: Colors.white),
     primarySwatch: Colors.red,
+
   );
 
   @override
@@ -135,13 +142,28 @@ class _MyAppState extends State<MyApp> {
         SizeConfig().init(constraints, orientation);
         return GetMaterialApp(
           title: "Chickenway",
+          // home: UpgradeAlert(
+          //   upgrader: Upgrader(
+          //     canDismissDialog: false,
+          //     showIgnore: false,showLater: false,showReleaseNotes: false,
+          //
+          //   ),
+          // ),
           darkTheme: theme,
           debugShowCheckedModeBanner: false,
           getPages: MyRouter.route,
           theme: theme,
 
+
         );
-      });
-    });
+
+
+      }
+
+      );
+
+    }
+
+    );
   }
 }
