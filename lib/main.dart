@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:device_info/device_info.dart';
 import 'package:dinelah/models/model_response_common.dart';
 import 'package:dinelah/repositories/new_common_repo/repository.dart';
 import 'package:dinelah/res/size_config.dart';
@@ -17,6 +18,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:upgrader/upgrader.dart';
 
 import 'models/match_apk_model.dart';
 
@@ -40,14 +43,16 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   }
 }
 
+// Future<void>
+
 Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
+  await Upgrader.clearSavedSettings();
   await Firebase.initializeApp();
   await FirebaseMessaging.instance.requestPermission(
-
-
-
+      // alert: true,
+      // announcement: true,
       badge: true,
       // carPlay: true,
       // criticalAlert: true,
@@ -57,11 +62,17 @@ Future<void> main() async {
   String appVersion = packageInfo.version;
   log('app version is${appVersion.toString()}');
 
+  // Future<void> getIOSVersion() async {
+  //   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  //   IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+  //   print('iOS Version: ${iosInfo.systemVersion}');
+  // }
+  //
   // repositories.postApi(
   //     url: ApiUrls.apkVersion,
-  //     mapData: {"apk_version": appVersion.toString()}).then((value) {
-  //
-  //   log('app version is${appVersion.toString()}');
+  //     mapData: {"apk_version": appVersion.toString(),
+  //     // "ios_apk_version":appVersion.toString()
+  //     }).then((value) {
   //   modelAboutapp.value = ModelResponseCommon.fromJson(jsonDecode(value));
   //   if (modelAboutapp.value.status!) {
   //     statusOfAbout.value = RxStatus.success();
@@ -172,14 +183,24 @@ class _MyAppState extends State<MyApp> {
     return LayoutBuilder(builder: (context, constraints) {
       return OrientationBuilder(builder: (context, orientation) {
         SizeConfig().init(constraints, orientation);
-        return GetMaterialApp(
-          title: "Chickenway",
-          darkTheme: theme,
-          debugShowCheckedModeBanner: false,
-          getPages: MyRouter.route,
-          theme: theme,
+        return UpgradeAlert(
+          upgrader: Upgrader(
+              canDismissDialog: false,
+              showLater: false,
+              showIgnore: false,
+              showReleaseNotes: false
+
+          ),
+          child: GetMaterialApp(
+
+            title: "Chickenway",
+            darkTheme: theme,
+            debugShowCheckedModeBanner: false,
+            getPages: MyRouter.route,
+            theme: theme,
 
 
+          ),
         );
 
 

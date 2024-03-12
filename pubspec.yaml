@@ -26,6 +26,7 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   flutter_html:
   google_fonts: ^4.0.4
+
   flutter_svg:
   country_picker:
   connectivity_plus:
@@ -55,6 +56,8 @@ dependencies:
   onesignal_flutter: ^5.0.0
   flutter_math_fork: ^0.7.2
   package_info_plus:
+  app_upgrade_flutter_sdk:
+  device_info:
 
 
 dev_dependencies:
