@@ -46,8 +46,7 @@ class Repositories {
     await assignDeviceToken();
     SharedPreferences preferences = await SharedPreferences.getInstance();
     if (preferences.getString('user_details') != null) {
-      ModelLoginResponse model = ModelLoginResponse.fromJson(
-          jsonDecode(preferences.getString("user_details")!));
+      ModelLoginResponse model = ModelLoginResponse.fromJson(jsonDecode(preferences.getString("user_details")!));
       if (mapData != null) {
         mapData['cookie'] = model.data!.cookie!;
         log( "User Id ${model.data!.user!.id!.toString()}");

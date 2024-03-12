@@ -50,6 +50,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   Rx<RxStatus> statusOfDelete = RxStatus.empty().obs;
 
+  Rx<ModelResponseCommon> modelPrivacy = ModelResponseCommon().obs;
+  Rx<RxStatus> statusOfDeleteUser= RxStatus.empty().obs;
 
   checkUser() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -117,13 +119,21 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             ),
                             child: ElevatedButton(
                                 onPressed: () {
-                                  deleteUser(context).then((value) {
-                                    showToast(value.message.toString());
-                                    if (value.status == true) {
-                                      showToast(value.message.toString());
-                                      Get.to(()=> const LoginScreen());
-                                    }
-                                  });
+
+                                    // Map<String, dynamic> map = {};
+
+                                    repositories.postApi(url: ApiUrls.deleteUser, mapData: {}).then((value) async {
+                                      modelPrivacy.value = ModelResponseCommon.fromJson(jsonDecode(value));
+                                      if (modelPrivacy.value.status!) {
+                                        SharedPreferences pref = await SharedPreferences.getInstance();
+                                        await pref.clear();
+                                        Get.offAllNamed(MyRouter.logInScreen);
+                                        statusOfDeleteUser.value = RxStatus.success();
+                                      } else {
+                                        statusOfDeleteUser.value = RxStatus.error();
+                                      }
+                                    });
+
                                 },
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.transparent, elevation: 0, minimumSize: Size(80, 40)),
@@ -406,7 +416,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           //     ],
                           //   ),
                           // ),
-                          // if(userLoggedIn)
+                          if(userLoggedIn)
                           _drawerTile(
                               active: true,
                               icon: "==",

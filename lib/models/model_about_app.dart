@@ -2,35 +2,19 @@ class ModelAboutApp {
   bool? status;
   String? message;
   Data? data;
-  String? html;
 
   ModelAboutApp({this.status, this.message, this.data});
-
-  ModelAboutApp.fromHtmlJson(Map<String, dynamic> json) {
-    if (!json.containsKey('content')) {
-      status = false;
-      return;
-    }
-
-    if (!json['content'].containsKey('rendered')) {
-      status = false;
-      return;
-    }
-
-    html = json['content']['rendered'];
-    status = true;
-  }
 
   ModelAboutApp.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['status'] = status;
-    data['message'] = message;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status'] = this.status;
+    data['message'] = this.message;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -39,23 +23,20 @@ class ModelAboutApp {
 }
 
 class Data {
-  List<AboutApp>? aboutApp;
+  AboutApp? aboutApp;
 
   Data({this.aboutApp});
 
   Data.fromJson(Map<String, dynamic> json) {
-    if (json['about-app'] != null) {
-      aboutApp = <AboutApp>[];
-      json['about-app'].forEach((v) {
-        aboutApp!.add(AboutApp.fromJson(v));
-      });
-    }
+    aboutApp = json['about-app'] != null
+        ? new AboutApp.fromJson(json['about-app'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    if (aboutApp != null) {
-      data['about-app'] = aboutApp!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.aboutApp != null) {
+      data['about-app'] = this.aboutApp!.toJson();
     }
     return data;
   }
@@ -75,10 +56,10 @@ class AboutApp {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['name'] = name;
-    data['slug'] = slug;
-    data['content'] = content;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    data['slug'] = this.slug;
+    data['content'] = this.content;
     return data;
   }
 }

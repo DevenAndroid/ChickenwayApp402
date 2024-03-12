@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -26,6 +27,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:upgrader/upgrader.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../controller/menu_controller.dart';
 import '../../controller/profile_controller.dart';
@@ -647,7 +649,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       "apk_version":appVersion.toString()
     }).then((value) {
       matchApkVersion.value = MatchApkModel.fromJson(jsonDecode(value));
-      if (matchApkVersion.value.status!) {
+      if (matchApkVersion.value.matchApk ==false) {
         showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -657,7 +659,9 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
-                      _launchPlayStore();
+                      if(Platform.isAndroid){_launchPlayStore();}
+                      else if (Platform.isIOS){_launchAppStore();}
+
                     },
                     child: Text('Update Now'),
                   ),
@@ -684,6 +688,15 @@ class MainHomeScreenState extends State<MainHomeScreen> {
 
 
   // final Repositories repositories = Repositories();
+  _launchAppStore() async {
+    const url =
+        'https://apps.apple.com/us/app/chickenway/id6450103488'; // Replace this with your App Store link
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   void _launchPlayStore() async {
     final String packageName = 'com.chickenway.moka'; // Replace with your app's package name
@@ -798,696 +811,698 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       },
       child: Container(
         color: Colors.white,
-        child: Scaffold(
-          key: scaffoldKey,
-          drawer: const CustomDrawer(),
-          backgroundColor: Colors.white,
-          body: SafeArea(
-            child: Obx(() {
-              // if(menuItemsModel.data == null &&
-              //     menuController.storeInfo.data == null){
-              //   menuController.getAll();
-              // }
-              return status.value.isSuccess
-                  ? RefreshIndicator(
-                onRefresh: () async {
-                  await homeData();
-                  await cartController.getData();
-                  await wishList.getWishListData();
-                  // if (menuController.forMenuScreen.isEmpty &&
-                  //     menuController.storeInfo.data == null) {
-                  await menuController.getAllAsync();
-                  // }
-                  manageSiteUrl();
-                  setState(() {
-
-
-                    menuController.getProducts();
-                  });
-                },
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        decoration: const BoxDecoration(
-                            color: Colors.white,
-                            image: DecorationImage(
-                                image: AssetImage(
-                                    AppAssets.dashboardNewBg),
-                                alignment: Alignment.topLeft)),
-                        child: Column(
-                          crossAxisAlignment:
-                          CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    scaffoldKey.currentState!
-                                        .openDrawer();
-                                  },
-                                  icon: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 13, top: 8),
-                                    child: Image.asset(
-                                      'assets/images/drawer_icon.png',
-                                      width: 20,
-                                      height: 20,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 24.0, top: 8),
-                                  child: Obx(() {
-                                    return InkWell(
-                                      onTap: () {
-                                        Get.toNamed(
-                                            CartScreen.route);
-                                      },
-                                      child: (cartController
-                                          .isDataLoading
-                                          .value &&
-                                          cartController.model
-                                              .value.data !=
-                                              null)
-                                          ? Badge(
-                                          badgeStyle:
-                                          const BadgeStyle(
-                                              badgeColor:
-                                              Colors
-                                                  .black),
-                                          badgeContent: Text(
-                                            cartController
-                                                .model
-                                                .value
-                                                .data!
-                                                .items!
-                                                .map((e) => int.parse(
-                                                (e.quantity ??
-                                                    0)
-                                                    .toString()))
-                                                .toList()
-                                                .sum
-                                                .toString(),
-                                            style: GoogleFonts
-                                                .poppins(
-                                                color: Colors
-                                                    .white,
-                                                fontSize:
-                                                10),
-                                          ),
-                                          child: Image.asset(
-                                            'assets/images/cooking_icon.png',
-                                            width: 26,
-                                            height: 26,
-                                          ))
-                                          : Image.asset(
-                                        'assets/images/cooking_icon.png',
-                                        width: 26,
-                                        height: 26,
-                                      ),
-                                    );
-                                  }),
-                                )
-                              ],
-                            ),
-                            addHeight(10),
-                            GestureDetector(
-                              onTap: () async {
-                                // log((DateTime.now().millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond).toString());
-                                if (kDebugMode) {
-                                  log((await FirebaseMessaging
-                                      .instance
-                                      .getToken())!);
-                                }
-                              },
-                              child: Padding(
-                                padding:
-                                const EdgeInsets.only(left: 5),
-                                child: Text(
-                                    'What would you\nlike to eat?',
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 18,
-                                      color: const Color(
-                                          0xFF292323),
-                                      fontWeight:
-                                      FontWeight.w600,
-                                    ))
-                                    .padded(
-                                    givePadding:
-                                    const EdgeInsets.only(
-                                        left: 15)),
-                              ),
-                            ),
-                            addHeight(10),
-                            menuItems(),
-                            addHeight(40),
-                            bannerSlider(),
-                            addHeight(35),
-                            ...yallaMenu()
-                          ],
-                        ),
-                      ),
-                      if (time.value == "00:00" &&
-                          model.value.data!.timeBannerAd![0]
-                              .addScreen ==
-                              "Activate")
-                        timerAd(context),
-                      addHeight(20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment:
-                        CrossAxisAlignment.center,
-                        children: [
-                          model.value.data!.bestSellerData!.icon !=
-                              ""
-                              ?  CachedNetworkImage(
-
-                              width: 25,
-                              height: 25,
-                              imageUrl: model.value.data!
-                                  .bestSellerData!.icon
-                                  .toString(),
-                              errorWidget: (_, __, ___) =>
-                                  Image.asset(
-                                    'assets/images/chicken_icon.png',
-                                    width: 25,
-                                    height: 25,
-                                  ),
-                              placeholder: (_, __) =>
-                                  Image.asset(
-                                    'assets/images/chicken_icon.png',
-                                    width: 25,
-                                    height: 25,
-                                  ))
-                              : Image.asset(
-                            'assets/images/chicken_icon.png',
-                            width: 25,
-                            height: 25,
-                          ).toAppIcon,
-                          addWidth(9),
-                          Text(
-                            model.value.data!.bestSellerData!.title!
-                                .toUpperCase()
-                                .toString(),
-                            style: GoogleFonts.poppins(
-                              color: const Color(0xFF292323),
-                              fontSize: 14.5,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ],
-                      ).padded(
-                          givePadding:
-                          const EdgeInsets.only(left: 12)),
-                      SizedBox(
-                        height: 225,
-                        child: ListView.builder(
-                          primary: false,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 13,),
-                          scrollDirection: Axis.horizontal,
-                          itemCount:
-                          model.value.data!.vSlider!.length,
-                          // padding: const EdgeInsets.fromLTRB(2, 2, 2, 2),
-                          itemBuilder: (context, index) {
-                            return Row(
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    Get.toNamed(
-                                        SingleProductScreen.route,
-                                        arguments: [
-                                          model
-                                              .value
-                                              .data!
-                                              .vSlider![index]
-                                              .productId,
-                                          model
-                                              .value
-                                              .data!
-                                              .vSlider![index]
-                                              .image,
-                                        ]);
-                                  },
-                                  child: Container(
-                                    width: 165,
-                                    height: 210,
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                        BorderRadius.circular(
-                                            10)),
-                                    child: ClipRRect(
-
-                                        borderRadius: BorderRadius.circular(10),
-
-                                        child: CachedNetworkImage(
-                                          imageUrl: model
-                                              .value
-                                              .data!
-                                              .vSlider![index]
-                                              .image
-                                              .toString(),
-                                          fit: BoxFit.cover,
-                                          errorWidget:
-                                              (_, __, ___) =>
-                                          const SizedBox(
-                                            width: 160,
-                                          ),
-                                        )),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 12,
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                      ),
-                      ...delicious(),
-                      InkWell(
-                        onTap: () {
-                          Get.toNamed(MenuScreen.route);
-                        },
-                        child: SizedBox(
-                          width: context.getDeviceSize.width,
-                          height: 140,
-                          child: Stack(
-                            children: [
-                              Positioned.fill(
-                                child: Column(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.end,
-                                  children: [
-                                    Container(
-                                      margin:
-                                      const EdgeInsets.fromLTRB(
-                                          10, 0, 9, 10),
-                                      child: Card(
-                                        elevation: 4,
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                              child: Padding(
-                                                padding:
-                                                const EdgeInsets
-                                                    .all(14.0),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment
-                                                      .start,
-                                                  children: [
-                                                    Text(
-                                                      model
-                                                          .value
-                                                          .data!
-                                                          .freeDeliverys![
-                                                      0]
-                                                          .freeDeliveryTitle
-                                                          .toString()
-                                                          .toUpperCase(),
-                                                      style: GoogleFonts.poppins(
-                                                          color: const Color(
-                                                              0xffE02020),
-                                                          fontSize:
-                                                          20,
-                                                          fontWeight:
-                                                          FontWeight
-                                                              .bold),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 5,
-                                                    ),
-                                                    Text(
-                                                      model
-                                                          .value
-                                                          .data!
-                                                          .freeDeliverys![
-                                                      0]
-                                                          .freeDeliveryContent
-                                                          .toString()
-                                                          .toUpperCase(),
-                                                      style: GoogleFonts
-                                                          .poppins(
-                                                        // color: Colors.red,
-                                                          fontSize:
-                                                          12,
-                                                          fontWeight: FontWeight
-                                                              .w400,
-                                                          color:
-                                                          const Color(0xff656565)),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: context
-                                                  .getDeviceSize
-                                                  .width *
-                                                  .3,
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Positioned(
-                                right: 0,
-                                child: SizedBox(
-                                  height: 140,
-                                  child: CachedNetworkImage(
-                                    imageUrl: model
-                                        .value
-                                        .data!
-                                        .freeDeliverys![0]
-                                        .freeDeliverys
-                                        .toString(),
-                                    fit: BoxFit.contain,
-                                    errorWidget: (_, __, ___) =>
-                                    const SizedBox(),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      addHeight(20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment:
-                        CrossAxisAlignment.center,
-                        children: [
-                          model.value.data!.shortcutsData!.icon !=
-                              ""
-                              ? CachedNetworkImage(
-                              width: 25,
-                              height: 25,
-                              imageUrl: model.value.data!
-                                  .shortcutsData!.icon
-                                  .toString(),
-                              errorWidget: (_, __, ___) =>
-                                  Image.asset(
-                                    'assets/images/chicken_icon.png',
-                                    width: 25,
-                                    height: 25,
-                                  ),
-                              placeholder: (_, __) =>
-                                  Image.asset(
-                                    'assets/images/chicken_icon.png',
-                                    width: 25,
-                                    height: 25,
-                                  ))
-
-                              : Image.asset(
-                            'assets/images/chicken_icon.png',
-                            width: 25,
-                            height: 25,
-                          ).toAppIcon,
-                          addWidth(9),
-                          Text(
-                            model.value.data!.shortcutsData!.title!
-                                .toUpperCase()
-                                .toString(),
-                            style: GoogleFonts.poppins(
-                              color: const Color(0xFF292323),
-                              fontSize: 14.5,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          )
-                        ],
-                      ).padded(
-                          givePadding:
-                          const EdgeInsets.only(left: 13)),
-                      addHeight(6),
-
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            //moka 4
-                            ...model.value.data!.serviceSection!
-                                .map(
-                                  (service) => GestureDetector(
-                                onTap: () {
-
-                                  if (service.isProduct == true) {
-                                    Get.toNamed(
-                                        SingleProductScreen
-                                            .route, arguments: [
-                                      service.pId.toString()
-                                    ]);
-                                  }else {
-                                    Get.toNamed(MenuScreen.route, arguments: [service.casteSlug.toString()]);
-
-                                  }
-                                  // if (service.isProduct !=
-                                  //     null) {
-                                  //   Get.offAllNamed(
-                                  //       service.serviceUrl!);
-                                  //
-                                  // }
-                                },
-                                child: Column(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.center,
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding:
-                                      const EdgeInsets.all(
-                                          5.0)
-                                          .copyWith(
-                                          left: 20,
-                                          right: 0),
-                                      child: Container(
-                                        height: 80,
-                                        width: 80,
-                                        decoration:
-                                        BoxDecoration(
-                                          borderRadius:
-                                          BorderRadius
-                                              .circular(10),
-                                          color: const Color(
-                                              0xFFFEF4D9),
-                                        ),
-                                        margin: const EdgeInsets
-                                            .all(5),
-                                        child:
-                                        CachedNetworkImage(
-                                          imageUrl: service
-                                              .serviceImages
-                                              .toString(),
-                                          height: 43,
-                                          width: 54,
-                                          errorWidget: (_, __,
-                                              ___) =>
-                                          const SizedBox(
-                                            height: 43,
-                                            width: 54,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(left:20),
-                                        child: Text(
-
-                                          service.serviceTitle
-                                              .toString()
-                                              .replaceAll(
-                                              " ", " "),
-                                          // maxLines: 2,
-                                          style:
-                                          GoogleFonts.poppins(
-                                            fontWeight:
-                                            FontWeight.w600,
-                                            fontSize: 12.5,
-                                            color: const Color(
-                                                0xFF292323),
-                                          ),
-                                          textAlign:
-                                          TextAlign.center,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )
-                                .toList()
-                          ],
-                        ),
-                      ),
-                      Obx(() {
-                        if (wishList.refreshInt.value > 0) {}
-                        return Column(
-                          crossAxisAlignment:
-                          CrossAxisAlignment.start,
-                          children: favoriteList(context),
-                        );
-                      }),
-                      appBottomLogo()
-                    ],
-                  ),
-                ),
-              )
-                  : InkWell(
-                  onTap: () async {
-                    if (noInternetRetry == false) {
-                      noInternetRetry = true;
-                      await homeData().catchError((e) {
-                        noInternetRetry = false;
-                      });
-                      await cartController.getData().catchError((e) {
-                        noInternetRetry = false;
-                      });
-                      manageSiteUrl();
-                      noInternetRetry = false;
-                    }
+        child: UpgradeAlert(
+          child: Scaffold(
+            key: scaffoldKey,
+            drawer: const CustomDrawer(),
+            backgroundColor: Colors.white,
+            body: SafeArea(
+              child: Obx(() {
+                // if(menuItemsModel.data == null &&
+                //     menuController.storeInfo.data == null){
+                //   menuController.getAll();
+                // }
+                return status.value.isSuccess
+                    ? RefreshIndicator(
+                  onRefresh: () async {
+                    await homeData();
+                    await cartController.getData();
+                    await wishList.getWishListData();
+                    // if (menuController.forMenuScreen.isEmpty &&
+                    //     menuController.storeInfo.data == null) {
+                    await menuController.getAllAsync();
+                    // }
+                    manageSiteUrl();
+                    setState(() {
+          
+          
+                      menuController.getProducts();
+                    });
                   },
                   child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Padding(
-                            padding: const EdgeInsets.all(5)
-                                .copyWith(top: 40),
-                            child: buildShimmer(
-                              border: 15,
-                              width: AddSize.screenWidth * .35,
-                              height: 50,
-                            )),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                              children: List.generate(
-                                  9,
-                                      (index) => Padding(
-                                      padding: const EdgeInsets.all(5)
-                                          .copyWith(top: 15),
-                                      child: buildShimmer(
-                                        border: 15,
-                                        width: 50,
-                                        height: 60,
-                                      )))),
+                        Container(
+                          decoration: const BoxDecoration(
+                              color: Colors.white,
+                              image: DecorationImage(
+                                  image: AssetImage(
+                                      AppAssets.dashboardNewBg),
+                                  alignment: Alignment.topLeft)),
+                          child: Column(
+                            crossAxisAlignment:
+                            CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      scaffoldKey.currentState!
+                                          .openDrawer();
+                                    },
+                                    icon: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 13, top: 8),
+                                      child: Image.asset(
+                                        'assets/images/drawer_icon.png',
+                                        width: 20,
+                                        height: 20,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        right: 24.0, top: 8),
+                                    child: Obx(() {
+                                      return InkWell(
+                                        onTap: () {
+                                          Get.toNamed(
+                                              CartScreen.route);
+                                        },
+                                        child: (cartController
+                                            .isDataLoading
+                                            .value &&
+                                            cartController.model
+                                                .value.data !=
+                                                null)
+                                            ? Badge(
+                                            badgeStyle:
+                                            const BadgeStyle(
+                                                badgeColor:
+                                                Colors
+                                                    .black),
+                                            badgeContent: Text(
+                                              cartController
+                                                  .model
+                                                  .value
+                                                  .data!
+                                                  .items!
+                                                  .map((e) => int.parse(
+                                                  (e.quantity ??
+                                                      0)
+                                                      .toString()))
+                                                  .toList()
+                                                  .sum
+                                                  .toString(),
+                                              style: GoogleFonts
+                                                  .poppins(
+                                                  color: Colors
+                                                      .white,
+                                                  fontSize:
+                                                  10),
+                                            ),
+                                            child: Image.asset(
+                                              'assets/images/cooking_icon.png',
+                                              width: 26,
+                                              height: 26,
+                                            ))
+                                            : Image.asset(
+                                          'assets/images/cooking_icon.png',
+                                          width: 26,
+                                          height: 26,
+                                        ),
+                                      );
+                                    }),
+                                  )
+                                ],
+                              ),
+                              addHeight(10),
+                              GestureDetector(
+                                onTap: () async {
+                                  // log((DateTime.now().millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond).toString());
+                                  if (kDebugMode) {
+                                    log((await FirebaseMessaging
+                                        .instance
+                                        .getToken())!);
+                                  }
+                                },
+                                child: Padding(
+                                  padding:
+                                  const EdgeInsets.only(left: 5),
+                                  child: Text(
+                                      'What would you\nlike to eat?',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 18,
+                                        color: const Color(
+                                            0xFF292323),
+                                        fontWeight:
+                                        FontWeight.w600,
+                                      ))
+                                      .padded(
+                                      givePadding:
+                                      const EdgeInsets.only(
+                                          left: 15)),
+                                ),
+                              ),
+                              addHeight(10),
+                              menuItems(),
+                              addHeight(40),
+                              bannerSlider(),
+                              addHeight(35),
+                              ...yallaMenu()
+                            ],
+                          ),
                         ),
+                        if (time.value == "00:00" &&
+                            model.value.data!.timeBannerAd![0]
+                                .addScreen ==
+                                "Activate")
+                          timerAd(context),
+                        addHeight(20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment:
+                          CrossAxisAlignment.center,
+                          children: [
+                            model.value.data!.bestSellerData!.icon !=
+                                ""
+                                ?  CachedNetworkImage(
+          
+                                width: 25,
+                                height: 25,
+                                imageUrl: model.value.data!
+                                    .bestSellerData!.icon
+                                    .toString(),
+                                errorWidget: (_, __, ___) =>
+                                    Image.asset(
+                                      'assets/images/chicken_icon.png',
+                                      width: 25,
+                                      height: 25,
+                                    ),
+                                placeholder: (_, __) =>
+                                    Image.asset(
+                                      'assets/images/chicken_icon.png',
+                                      width: 25,
+                                      height: 25,
+                                    ))
+                                : Image.asset(
+                              'assets/images/chicken_icon.png',
+                              width: 25,
+                              height: 25,
+                            ).toAppIcon,
+                            addWidth(9),
+                            Text(
+                              model.value.data!.bestSellerData!.title!
+                                  .toUpperCase()
+                                  .toString(),
+                              style: GoogleFonts.poppins(
+                                color: const Color(0xFF292323),
+                                fontSize: 14.5,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ).padded(
+                            givePadding:
+                            const EdgeInsets.only(left: 12)),
+                        SizedBox(
+                          height: 225,
+                          child: ListView.builder(
+                            primary: false,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 13,),
+                            scrollDirection: Axis.horizontal,
+                            itemCount:
+                            model.value.data!.vSlider!.length,
+                            // padding: const EdgeInsets.fromLTRB(2, 2, 2, 2),
+                            itemBuilder: (context, index) {
+                              return Row(
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      Get.toNamed(
+                                          SingleProductScreen.route,
+                                          arguments: [
+                                            model
+                                                .value
+                                                .data!
+                                                .vSlider![index]
+                                                .productId,
+                                            model
+                                                .value
+                                                .data!
+                                                .vSlider![index]
+                                                .image,
+                                          ]);
+                                    },
+                                    child: Container(
+                                      width: 150,
+                                      height: 205,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                          BorderRadius.circular(
+                                              10)),
+                                      child: ClipRRect(
+          
+                                          borderRadius: BorderRadius.circular(10),
+          
+                                          child: CachedNetworkImage(
+                                            imageUrl: model
+                                                .value
+                                                .data!
+                                                .vSlider![index]
+                                                .image
+                                                .toString(),
+                                            fit: BoxFit.cover,
+                                            errorWidget:
+                                                (_, __, ___) =>
+                                            const SizedBox(
+                                              width: 160,
+                                            ),
+                                          )),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 12,
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                        ...delicious(),
+                        InkWell(
+                          onTap: () {
+                            Get.toNamed(MenuScreen.route);
+                          },
+                          child: SizedBox(
+                            width: context.getDeviceSize.width,
+                            height: 140,
+                            child: Stack(
+                              children: [
+                                Positioned.fill(
+                                  child: Column(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.end,
+                                    children: [
+                                      Container(
+                                        margin:
+                                        const EdgeInsets.fromLTRB(
+                                            10, 0, 9, 10),
+                                        child: Card(
+                                          elevation: 4,
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: Padding(
+                                                  padding:
+                                                  const EdgeInsets
+                                                      .all(14.0),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                    CrossAxisAlignment
+                                                        .start,
+                                                    children: [
+                                                      Text(
+                                                        model
+                                                            .value
+                                                            .data!
+                                                            .freeDeliverys![
+                                                        0]
+                                                            .freeDeliveryTitle
+                                                            .toString()
+                                                            .toUpperCase(),
+                                                        style: GoogleFonts.poppins(
+                                                            color: const Color(
+                                                                0xffE02020),
+                                                            fontSize:
+                                                            20,
+                                                            fontWeight:
+                                                            FontWeight
+                                                                .bold),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Text(
+                                                        model
+                                                            .value
+                                                            .data!
+                                                            .freeDeliverys![
+                                                        0]
+                                                            .freeDeliveryContent
+                                                            .toString()
+                                                            .toUpperCase(),
+                                                        style: GoogleFonts
+                                                            .poppins(
+                                                          // color: Colors.red,
+                                                            fontSize:
+                                                            12,
+                                                            fontWeight: FontWeight
+                                                                .w400,
+                                                            color:
+                                                            const Color(0xff656565)),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: context
+                                                    .getDeviceSize
+                                                    .width *
+                                                    .3,
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Positioned(
+                                  right: 0,
+                                  child: SizedBox(
+                                    height: 140,
+                                    child: CachedNetworkImage(
+                                      imageUrl: model
+                                          .value
+                                          .data!
+                                          .freeDeliverys![0]
+                                          .freeDeliverys
+                                          .toString(),
+                                      fit: BoxFit.contain,
+                                      errorWidget: (_, __, ___) =>
+                                      const SizedBox(),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        addHeight(20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment:
+                          CrossAxisAlignment.center,
+                          children: [
+                            model.value.data!.shortcutsData!.icon !=
+                                ""
+                                ? CachedNetworkImage(
+                                width: 25,
+                                height: 25,
+                                imageUrl: model.value.data!
+                                    .shortcutsData!.icon
+                                    .toString(),
+                                errorWidget: (_, __, ___) =>
+                                    Image.asset(
+                                      'assets/images/chicken_icon.png',
+                                      width: 25,
+                                      height: 25,
+                                    ),
+                                placeholder: (_, __) =>
+                                    Image.asset(
+                                      'assets/images/chicken_icon.png',
+                                      width: 25,
+                                      height: 25,
+                                    ))
+          
+                                : Image.asset(
+                              'assets/images/chicken_icon.png',
+                              width: 25,
+                              height: 25,
+                            ).toAppIcon,
+                            addWidth(9),
+                            Text(
+                              model.value.data!.shortcutsData!.title!
+                                  .toUpperCase()
+                                  .toString(),
+                              style: GoogleFonts.poppins(
+                                color: const Color(0xFF292323),
+                                fontSize: 14.5,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            )
+                          ],
+                        ).padded(
+                            givePadding:
+                            const EdgeInsets.only(left: 13)),
+                        addHeight(6),
+          
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
+                            children: [
+                              //moka 4
+                              ...model.value.data!.serviceSection!
+                                  .map(
+                                    (service) => GestureDetector(
+                                  onTap: () {
+          
+                                    if (service.isProduct == true) {
+                                      Get.toNamed(
+                                          SingleProductScreen
+                                              .route, arguments: [
+                                        service.pId.toString()
+                                      ]);
+                                    }else {
+                                      Get.toNamed(MenuScreen.route, arguments: [service.casteSlug.toString()]);
+          
+                                    }
+                                    // if (service.isProduct !=
+                                    //     null) {
+                                    //   Get.offAllNamed(
+                                    //       service.serviceUrl!);
+                                    //
+                                    // }
+                                  },
+                                  child: Column(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                        const EdgeInsets.all(
+                                            5.0)
+                                            .copyWith(
+                                            left: 20,
+                                            right: 0),
+                                        child: Container(
+                                          height: 80,
+                                          width: 80,
+                                          decoration:
+                                          BoxDecoration(
+                                            borderRadius:
+                                            BorderRadius
+                                                .circular(10),
+                                            color: const Color(
+                                                0xFFFEF4D9),
+                                          ),
+                                          margin: const EdgeInsets
+                                              .all(5),
+                                          child:
+                                          CachedNetworkImage(
+                                            imageUrl: service
+                                                .serviceImages
+                                                .toString(),
+                                            height: 43,
+                                            width: 54,
+                                            errorWidget: (_, __,
+                                                ___) =>
+                                            const SizedBox(
+                                              height: 43,
+                                              width: 54,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(left:20),
+                                          child: Text(
+          
+                                            service.serviceTitle
+                                                .toString()
+                                                .replaceAll(
+                                                " ", " "),
+                                            // maxLines: 2,
+                                            style:
+                                            GoogleFonts.poppins(
+                                              fontWeight:
+                                              FontWeight.w600,
+                                              fontSize: 12.5,
+                                              color: const Color(
+                                                  0xFF292323),
+                                            ),
+                                            textAlign:
+                                            TextAlign.center,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                                  .toList()
+                            ],
+                          ),
+                        ),
+                        Obx(() {
+                          if (wishList.refreshInt.value > 0) {}
+                          return Column(
+                            crossAxisAlignment:
+                            CrossAxisAlignment.start,
+                            children: favoriteList(context),
+                          );
+                        }),
+                        appBottomLogo()
+                      ],
+                    ),
+                  ),
+                )
+                    : InkWell(
+                    onTap: () async {
+                      if (noInternetRetry == false) {
+                        noInternetRetry = true;
+                        await homeData().catchError((e) {
+                          noInternetRetry = false;
+                        });
+                        await cartController.getData().catchError((e) {
+                          noInternetRetry = false;
+                        });
+                        manageSiteUrl();
+                        noInternetRetry = false;
+                      }
+                    },
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                              padding: const EdgeInsets.all(5)
+                                  .copyWith(top: 40),
+                              child: buildShimmer(
+                                border: 15,
+                                width: AddSize.screenWidth * .35,
+                                height: 50,
+                              )),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                                children: List.generate(
+                                    9,
+                                        (index) => Padding(
+                                        padding: const EdgeInsets.all(5)
+                                            .copyWith(top: 15),
+                                        child: buildShimmer(
+                                          border: 15,
+                                          width: 50,
+                                          height: 60,
+                                        )))),
+                          ),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                Padding(
+                                    padding: const EdgeInsets.all(8)
+                                        .copyWith(top: 25),
+                                    child: buildShimmer(
+                                      border: 15,
+                                      width: AddSize.screenWidth * .75,
+                                      height: 175,
+                                    )),
+                                Padding(
+                                    padding: const EdgeInsets.all(8)
+                                        .copyWith(top: 25),
+                                    child: buildShimmer(
+                                      border: 15,
+                                      width: AddSize.screenWidth * .75,
+                                      height: 175,
+                                    )),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                              padding: const EdgeInsets.all(8)
+                                  .copyWith(top: 25),
+                              child: buildShimmer(
+                                border: 5,
+                                width: AddSize.screenWidth * .2,
+                                height: 35,
+                              )),
+                          Row(
                             children: [
                               Padding(
                                   padding: const EdgeInsets.all(8)
                                       .copyWith(top: 25),
                                   child: buildShimmer(
-                                    border: 15,
-                                    width: AddSize.screenWidth * .75,
-                                    height: 175,
+                                    border: 5,
+                                    width: AddSize.screenWidth * .28,
+                                    height: 120,
                                   )),
                               Padding(
                                   padding: const EdgeInsets.all(8)
                                       .copyWith(top: 25),
                                   child: buildShimmer(
-                                    border: 15,
-                                    width: AddSize.screenWidth * .75,
-                                    height: 175,
+                                    border: 5,
+                                    width: AddSize.screenWidth * .28,
+                                    height: 120,
+                                  )),
+                              Padding(
+                                  padding: const EdgeInsets.all(8)
+                                      .copyWith(top: 25),
+                                  child: buildShimmer(
+                                    border: 5,
+                                    width: AddSize.screenWidth * .28,
+                                    height: 120,
                                   )),
                             ],
                           ),
-                        ),
-                        Padding(
-                            padding: const EdgeInsets.all(8)
-                                .copyWith(top: 25),
-                            child: buildShimmer(
-                              border: 5,
-                              width: AddSize.screenWidth * .2,
-                              height: 35,
-                            )),
-                        Row(
-                          children: [
-                            Padding(
-                                padding: const EdgeInsets.all(8)
-                                    .copyWith(top: 25),
-                                child: buildShimmer(
-                                  border: 5,
-                                  width: AddSize.screenWidth * .28,
-                                  height: 120,
-                                )),
-                            Padding(
-                                padding: const EdgeInsets.all(8)
-                                    .copyWith(top: 25),
-                                child: buildShimmer(
-                                  border: 5,
-                                  width: AddSize.screenWidth * .28,
-                                  height: 120,
-                                )),
-                            Padding(
-                                padding: const EdgeInsets.all(8)
-                                    .copyWith(top: 25),
-                                child: buildShimmer(
-                                  border: 5,
-                                  width: AddSize.screenWidth * .28,
-                                  height: 120,
-                                )),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Padding(
-                                padding: const EdgeInsets.all(8)
-                                    .copyWith(top: 25),
-                                child: buildShimmer(
-                                  border: 5,
-                                  width: AddSize.screenWidth * .28,
-                                  height: 120,
-                                )),
-                            Padding(
-                                padding: const EdgeInsets.all(8)
-                                    .copyWith(top: 25),
-                                child: buildShimmer(
-                                  border: 5,
-                                  width: AddSize.screenWidth * .28,
-                                  height: 120,
-                                )),
-                            Padding(
-                                padding: const EdgeInsets.all(8)
-                                    .copyWith(top: 25),
-                                child: buildShimmer(
-                                  border: 5,
-                                  width: AddSize.screenWidth * .28,
-                                  height: 120,
-                                )),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ));
-            }),
-          ),
-          bottomNavigationBar: cartBottomWidget(
-            // onTap: () async {
-            //   await homeData();
-            //   await cartController.getData();
-            //   if(siteUrl.isEmpty){
-            //     await repositories.postApi(url: ApiUrls.siteUrl,mapData: {}).then((value) {
-            //       ModelSiteUrl modelSiteUrl = ModelSiteUrl.fromJson(jsonDecode(value));
-            //       if(modelSiteUrl.status!){
-            //         siteUrl = modelSiteUrl.data!.siteUrl ?? "";
-            //       }
-            //     });
-            //   }
-            // }
+                          Row(
+                            children: [
+                              Padding(
+                                  padding: const EdgeInsets.all(8)
+                                      .copyWith(top: 25),
+                                  child: buildShimmer(
+                                    border: 5,
+                                    width: AddSize.screenWidth * .28,
+                                    height: 120,
+                                  )),
+                              Padding(
+                                  padding: const EdgeInsets.all(8)
+                                      .copyWith(top: 25),
+                                  child: buildShimmer(
+                                    border: 5,
+                                    width: AddSize.screenWidth * .28,
+                                    height: 120,
+                                  )),
+                              Padding(
+                                  padding: const EdgeInsets.all(8)
+                                      .copyWith(top: 25),
+                                  child: buildShimmer(
+                                    border: 5,
+                                    width: AddSize.screenWidth * .28,
+                                    height: 120,
+                                  )),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ));
+              }),
+            ),
+            bottomNavigationBar: cartBottomWidget(
+              // onTap: () async {
+              //   await homeData();
+              //   await cartController.getData();
+              //   if(siteUrl.isEmpty){
+              //     await repositories.postApi(url: ApiUrls.siteUrl,mapData: {}).then((value) {
+              //       ModelSiteUrl modelSiteUrl = ModelSiteUrl.fromJson(jsonDecode(value));
+              //       if(modelSiteUrl.status!){
+              //         siteUrl = modelSiteUrl.data!.siteUrl ?? "";
+              //       }
+              //     });
+              //   }
+              // }
+            ),
           ),
         ),
       ),

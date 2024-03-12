@@ -1,9 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
-
 import '../../models/model_about_app.dart';
 import '../../repositories/new_common_repo/repository.dart';
 import '../../utils/api_constant.dart';
@@ -26,7 +24,7 @@ class _AboutAppState extends State<AboutApp> {
     // Map<String, dynamic> map = {};
 
     repositories.getApi(url: ApiUrls.aboutUs, mapData: {}).then((value) {
-      modelAboutapp.value = ModelAboutApp.fromHtmlJson(jsonDecode(value));
+      modelAboutapp.value = ModelAboutApp.fromJson(jsonDecode(value));
       if (modelAboutapp.value.status!) {
         statusOfAbout.value = RxStatus.success();
       } else {
@@ -54,11 +52,27 @@ class _AboutAppState extends State<AboutApp> {
         () {
           return statusOfAbout.value.isSuccess
               ? SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Html(
-                      data: modelAboutapp.value.html,
-                    ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+
+                      Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child:Text(modelAboutapp.value.data!.aboutApp!.name.toString(),style: TextStyle(
+                          color: Colors.black,fontWeight: FontWeight.w500,
+                          fontSize: 20
+                        ),)
+
+
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Html(
+                          data: modelAboutapp.value.data!.aboutApp!.content.toString(),
+                        ),
+                      ),
+                    ],
                   ),
                 )
               : statusOfAbout.value.isError

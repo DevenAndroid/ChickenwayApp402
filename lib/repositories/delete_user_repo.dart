@@ -9,12 +9,18 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/model_response_common.dart';
+import '../models/model_verify_otp_forgot_password.dart';
 import '../utils/api_constant.dart';
 
-Future<ModelResponseCommon> deleteUser(BuildContext context) async {
+Future<ModelResponseCommon> deleteUser(BuildContext context,) async {
   SharedPreferences pref = await SharedPreferences.getInstance();
-  ModelLoginResponse? user =
-      ModelLoginResponse.fromJson(jsonDecode(pref.getString('user_info')!));
+  ModelLoginResponse model = ModelLoginResponse.fromJson(jsonDecode(pref.getString("user_details")!));
+  pref.getString("user_info");
+  var map = <String, dynamic>{};
+
+  map['cookie'] =model.data!.cookie;
+
+
   final headers = {
     HttpHeaders.contentTypeHeader: 'application/json',
     HttpHeaders.acceptHeader: 'application/json',
@@ -24,7 +30,7 @@ Future<ModelResponseCommon> deleteUser(BuildContext context) async {
   };
 
   http.Response response = await http.post(Uri.parse(ApiUrls.deleteUser),
-      headers: headers);
+      headers: headers,body: jsonEncode(map));
 
   if (response.statusCode == 200  || response.statusCode == 400) {
     log("::::::::::Delete user:::::::::::${response.body}");
