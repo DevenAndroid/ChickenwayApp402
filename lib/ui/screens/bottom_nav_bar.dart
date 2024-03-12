@@ -649,6 +649,8 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       "apk_version":appVersion.toString()
     }).then((value) {
       matchApkVersion.value = MatchApkModel.fromJson(jsonDecode(value));
+
+      print('app version is${appVersion.toString()}');
       if (matchApkVersion.value.matchApk ==false) {
         showDialog(
             context: context,

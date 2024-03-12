@@ -17,8 +17,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:upgrader/upgrader.dart';
 
 import 'models/match_apk_model.dart';
 
@@ -47,8 +45,9 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await FirebaseMessaging.instance.requestPermission(
-    // alert: true,
-    // announcement: true,
+
+
+
       badge: true,
       // carPlay: true,
       // criticalAlert: true,
@@ -56,23 +55,24 @@ Future<void> main() async {
       sound: true);
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   String appVersion = packageInfo.version;
-  print('app version is${appVersion.toString()}');
+  log('app version is${appVersion.toString()}');
 
-
-    repositories.postApi(url: ApiUrls.apkVersion, mapData: {
-      "apk_version":appVersion.toString()
-    }).then((value) {
-      modelAboutapp.value = ModelResponseCommon.fromJson(jsonDecode(value));
-      if (modelAboutapp.value.status!) {
-        statusOfAbout.value = RxStatus.success();
-      } else {
-        statusOfAbout.value = RxStatus.error();
-      }
-    });
-
+  // repositories.postApi(
+  //     url: ApiUrls.apkVersion,
+  //     mapData: {"apk_version": appVersion.toString()}).then((value) {
+  //
+  //   log('app version is${appVersion.toString()}');
+  //   modelAboutapp.value = ModelResponseCommon.fromJson(jsonDecode(value));
+  //   if (modelAboutapp.value.status!) {
+  //     statusOfAbout.value = RxStatus.success();
+  //   } else {
+  //     statusOfAbout.value = RxStatus.error();
+  //   }
+  // });
 
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
-  FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
+  FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+      alert: true, badge: true, sound: true);
   NotificationService().initializeNotification();
   // await Permission.notification.isDenied.then((value) {
   //   if (value) {
@@ -82,10 +82,8 @@ Future<void> main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown
-  ]);
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
   //Remove this method to stop OneSignal Debugging
 //
@@ -176,13 +174,6 @@ class _MyAppState extends State<MyApp> {
         SizeConfig().init(constraints, orientation);
         return GetMaterialApp(
           title: "Chickenway",
-          // home: UpgradeAlert(
-          //   upgrader: Upgrader(
-          //     canDismissDialog: false,
-          //     showIgnore: false,showLater: false,showReleaseNotes: false,
-          //
-          //   ),
-          // ),
           darkTheme: theme,
           debugShowCheckedModeBanner: false,
           getPages: MyRouter.route,
