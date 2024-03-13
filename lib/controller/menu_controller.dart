@@ -69,6 +69,7 @@ class ProductsMenuController extends GetxController {
         forMenuScreen = Map.fromEntries(forMenuScreen.entries.toList()
           ..sort((a, b) => (int.tryParse(a.key) ?? 1000)
               .compareTo((int.tryParse(b.key) ?? 1000))));
+         updateUi();
         log("homescreentop list.......     $homeScreenTop");
         log("yala list.......     $yalCategories");
         log("Menu Screen list.......     $forMenuScreen");

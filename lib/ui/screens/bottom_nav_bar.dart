@@ -56,15 +56,13 @@ import 'orderdetails.dart';
 import 'single_product_screen.dart';
 import 'menu_screen.dart';
 
-// String siteUrl = "";
 ModelSiteUrl modelSiteUrl = ModelSiteUrl();
 
 NotificationServices notificationServices = NotificationServices();
 
 Future manageSiteUrl() async {
   if (modelSiteUrl.data == null) {
-    await Repositories()
-        .postApi(url: ApiUrls.siteUrl, mapData: {}).then((value) {
+    await Repositories().postApi(url: ApiUrls.siteUrl, mapData: {}).then((value) {
       modelSiteUrl = ModelSiteUrl.fromJson(jsonDecode(value));
       getShippingList();
     });
@@ -74,18 +72,6 @@ Future manageSiteUrl() async {
 bool showSplashScreen = false;
 bool shouldShowCartIcon = true;
 String fcm = "";
-
-// Future<bool> isFirstTime() async {
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   bool isFirstTime = prefs.getBool('first_time') ?? true;
-//
-//   if (isFirstTime) {
-//     prefs.setBool('first_time', false);
-//   }
-//
-//   return isFirstTime;
-// }
-
 
 DateTime reverseTime(DateTime date) {
   return DateTime(date.year, date.month, date.day, 23 - date.hour, 59 - date.minute, 59 - date.second);
@@ -101,10 +87,7 @@ class MainHomeScreen extends StatefulWidget {
   @override
   MainHomeScreenState createState() => MainHomeScreenState();
 
-  static fromColors(
-      {required Color baseColor,
-        required Color highlightColor,
-        required Container child}) {}
+  static fromColors({required Color baseColor, required Color highlightColor, required Container child}) {}
 }
 
 class MainHomeScreenState extends State<MainHomeScreen> {
@@ -123,21 +106,12 @@ class MainHomeScreenState extends State<MainHomeScreen> {
   }
 
   Rx<ModelPopUp> modelPopUp = ModelPopUp().obs;
-  Rx<RxStatus> statusOfPopUp = RxStatus.empty().obs;
+  Rx<RxStatus> statusOfPopUp = RxStatus
+      .empty()
+      .obs;
   final Repositories repositories = Repositories();
 
   Duration difference = Duration();
-  // Duration difference = const Duration();
-
-  // void calculateDifference() {
-  //   DateTime now = DateTime.now();
-  //   DateTime tomorrow = DateTime(now.year, now.month, now.day + 1);
-  //   difference = tomorrow.difference(now);
-  //   log("THIS IS DIFFRENCE"+difference.toString());
-  //
-  //   setState(() {});
-  // }
-
 
   void _showPopup() {
     showDialog(
@@ -146,129 +120,46 @@ class MainHomeScreenState extends State<MainHomeScreen> {
         return SizedBox(
             height: 400,
             child: Dialog(
-            clipBehavior: Clip.none,
-            backgroundColor: Colors.transparent,
-
-            elevation: 0,
-            child: SingleChildScrollView(
-            child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-
-            Stack(
-            children: [
-            // Positioned(
-            //   right: 10,
-            //   top: 50,
-            //   child: GestureDetector(
-            //     onTap: (){
-            //       Get.back();
-            //     },
-            //     child: const Icon(
-            //       Icons.close,
-            //       color: Colors.white,
-            //     ),
-            //   ),
-            // ),
-            Image(
-            image: NetworkImage(
-            modelPopUp.value.data!.img.toString()),
-        ),
-        Positioned(
-        right: 10,
-        top: 10,
-        child: GestureDetector(
-        onTap: (){
-        Get.back();
-        getInit();
-        },
-        child: Container(
-        height: 25,
-        width: 25,
-        decoration: const BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.red
-        ),
-        child: const Icon(
-
-        Icons.close,
-        color: Colors.white,
-        size: 13,),
-        ),
-        ),
-        ),
-        ],
-        ),
-        const SizedBox(height: 15,)
-        ],
-        ),
-        //        child: Dialog(
-        // clipBehavior: Clip.none,
-        //          backgroundColor: Colors.transparent,
-        //
-        //          elevation: 0,
-        //          child: SingleChildScrollView(
-        //            child: Column(
-        //              crossAxisAlignment: CrossAxisAlignment.start,
-        //              children: [
-        //
-        //                Stack(
-        //                  children: [
-        //                    // Positioned(
-        //                    //   right: 10,
-        //                    //   top: 50,
-        //                    //   child: GestureDetector(
-        //                    //     onTap: (){
-        //                    //       Get.back();
-        //                    //     },
-        //                    //     child: const Icon(
-        //                    //       Icons.close,
-        //                    //       color: Colors.white,
-        //                    //     ),
-        //                    //   ),
-        //                    // ),
-        //                    Image(
-        //                      image: NetworkImage(
-        //                          modelPopUp.value.data!.img.toString()),
-        //                    ),
-        //                    Positioned(
-        //                      right: 10,
-        //                      top: 10,
-        //                      child: GestureDetector(
-        //                        onTap: (){
-        //                          Navigator.pop(context);
-        //                          // Get.back();
-        //                          // getInit();
-        //                        },
-        //                        child: Container(
-        //                          height: 25,
-        //                          width: 25,
-        //                          decoration: const BoxDecoration(
-        //                            shape: BoxShape.circle,
-        //                            color: Colors.red
-        //                          ),
-        //                          child: const Icon(
-        //
-        //                            Icons.close,
-        //                            color: Colors.white,
-        //                          size: 13,),
-        //                        ),
-        //                      ),
-        //                    ),
-        //                  ],
-        //                ),
-        //                const SizedBox(height: 15,)
-        //              ],
-        //            ),
-        //          ),
-        //        ),
-        // child: AlertDialog(
-        // icon:    Image(
-        // image: NetworkImage(
-        // modelPopUp.value.data!.img.toString()),
-        // ),
-        // ),
-        )));
+                clipBehavior: Clip.none,
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Stack(
+                        children: [
+                          Image(
+                            image: NetworkImage(modelPopUp.value.data!.img.toString()),
+                          ),
+                          Positioned(
+                            right: 10,
+                            top: 10,
+                            child: GestureDetector(
+                              onTap: () {
+                                Get.back();
+                                getInit();
+                              },
+                              child: Container(
+                                height: 25,
+                                width: 25,
+                                decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.red),
+                                child: const Icon(
+                                  Icons.close,
+                                  color: Colors.white,
+                                  size: 13,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      )
+                    ],
+                  ),
+                )));
 
         // : const CommonProgressIndicator();
       },
@@ -284,155 +175,55 @@ class MainHomeScreenState extends State<MainHomeScreen> {
     }
   }
 
-  // manageNotification() {
-  //   print("functionnnnn callll");
-  //   NotificationService().initializeNotification();
-  //   FirebaseMessaging.onMessageOpenedApp.listen((event) {
-  //     print('Notification issss  ${event.notification!.title.toString()}');
-  //     print('Notification issss data ${event.data}');
-  //     print('Notification issss  ${event.data['payload']['screen_type']}');
-  //
-  //     // if(event.data['screen_type'] == 'chat'){
-  //     //   Get.toNamed(OrderDetails.route, arguments: [event.data['order_id'].toString()]);
-  //     // }
-  //      if(event.data['screen_type'] == 'post_or_product_update'){
-  //        if(event.data['is_another'] == true){
-  //          makingPhoneCall(event.data['p_link'].toString());
-  //        }
-  //        else{
-  //          makingPhoneCall(event.data['p_link'].toString());
-  //        }
-  //       // Get.toNamed(SingleProductScreen.route, arguments: [event.data['order_id'].toString()]);
-  //     }
-  //     else if(event.data['screen_type'] == 'chat'){
-  //       Get.toNamed(OrderDetails.route, arguments: [event.data['order_id'].toString()]);
-  //     }
-  //     // switch (event.data) {
-  //     //   case 'Following':
-  //     //     Get.toNamed(MyRouters.allUserProfileScreen, arguments: [event.data['post_id'].toString()]);
-  //     //     break;
-  //     //   case 'Tag':
-  //     //     bottomController.updateIndexValue(0);
-  //     //     break;
-  //     //   case 'Recommendation':
-  //     //   case 'Like':
-  //     //     getRecommendationController.idForReco = event.data['post_id'].toString();
-  //     //     getRecommendationController.idForAskReco = event.data['post_id'].toString();
-  //     //     getRecommendationController.settingModalBottomSheet(context);
-  //     //     break;
-  //     //   case 'Comment':
-  //     //     if (event.data['post_type'] == 'askrecommandation') {
-  //     //       getCommentController.id = event.data['post_id'].toString();
-  //     //       getCommentController.type = 'askrecommandation';
-  //     //       getRecommendationController.commentBottomSheet(context);
-  //     //     } else if (event.data['post_type'] == 'recommandation') {
-  //     //       getRecommendationController.getComments(event.data['post_id'].toString(), context);
-  //     //       getRecommendationController.postId = event.data['post_id'].toString();
-  //     //       getRecommendationController.commentBottomSheetReco(context);
-  //     //     }
-  //     //     break;
-  //     // }
-  //   });
-  // }
-  getInit() async{
+  getInit() async {
     RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
-    if(initialMessage != null && initialMessage.notification != null){
-      NotificationOnClickModel groupModal = NotificationOnClickModel.fromJson(jsonDecode(initialMessage.data["payload"]));
+    if (initialMessage != null && initialMessage.notification != null) {
+      NotificationOnClickModel groupModal =
+      NotificationOnClickModel.fromJson(jsonDecode(initialMessage.data["payload"]));
 
-      if(groupModal.screenType== 'chat'){
+      if (groupModal.screenType == 'chat') {
         Get.toNamed(OrderDetails.route, arguments: [groupModal.orderId.toString()]);
-      } else if(groupModal.screenType== 'post_or_product_update'){
+      } else if (groupModal.screenType == 'post_or_product_update') {
         if (groupModal.isAnother == true) {
           makingPhoneCall(groupModal.pLink.toString());
-        }else{
-          if(groupModal.isProduct == true ) {
+        } else {
+          if (groupModal.isProduct == true) {
             Get.toNamed(SingleProductScreen.route, arguments: [groupModal.pId.toString()]);
-          }else{
+          } else {
             makingPhoneCall(groupModal.pLink.toString());
           }
         }
-      }else {
-      }
+      } else {}
     }
   }
 
   manageNotification() async {
-
     print("functionnnnn callll");
     NotificationService().initializeNotification();
     getInit();
-    // await Permission.notification.isDenied.then((value) {
-    //   if (value) {
-    //     print("Permissions");
-    //     Permission.notification.request();
-    //   }
-    // });
 
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
       print('Notification issss  ${event.notification!.title.toString()}');
-      print('Notification issss dataedereere ${ event.data['payload']}');
+      print('Notification issss dataedereere ${event.data['payload']}');
       print('Notificatio data ${event.data}');
       NotificationOnClickModel groupModal = NotificationOnClickModel.fromJson(jsonDecode(event.data["payload"]));
 
-      if(groupModal.screenType== 'chat'){
+      if (groupModal.screenType == 'chat') {
         Get.toNamed(OrderDetails.route, arguments: [groupModal.orderId.toString()]);
-      } else if(groupModal.screenType== 'post_or_product_update'){
+      } else if (groupModal.screenType == 'post_or_product_update') {
         if (groupModal.isAnother == true) {
           makingPhoneCall(groupModal.pLink.toString());
-        }else{
-          if(groupModal.isProduct == true ) {
+        } else {
+          if (groupModal.isProduct == true) {
             Get.toNamed(SingleProductScreen.route, arguments: [groupModal.pId.toString()]);
-          }else{
+          } else {
             makingPhoneCall(groupModal.pLink.toString());
           }
         }
-      }else {
-      }        print('something went wrong');
-
-      // dynamic payload = event.data['payload'];
-      // if (payload != null && payload is Map && payload.containsKey('screen_type')) {
-      //   String screenType = payload['screen_type'];
-      //
-      //   if (screenType == 'post_or_product_update') {
-      //     if (payload['is_another'] == true) {
-      //       makingPhoneCall(payload['p_link'].toString());
-      //     } else {
-      //       makingPhoneCall(payload['p_link'].toString());
-      //     }
-      //   }
-      //   else if (screenType == 'chat') {
-      //     Get.toNamed(OrderDetails.route, arguments: [payload['order_id'].toString()]);
-      //   }
-      // }
-      // else {
-      //   // Handle the case when 'payload' or 'screen_type' is not present
-      //   print('Payload or screen_type not found in the notification data');
-      //   print('Payload or s${payload.toString()}');
-      // }
+      } else {}
+      print('something went wrong');
     });
 
-    // FirebaseMessaging.onMessage.listen((event) {
-    //   print('Notification issss  ${event.notification!.title.toString()}');
-    //   print('Notification issss dataedereere ${ event.data['payload']}');
-    //   print('Notificatio data ${event.data}');
-    //   NotificationOnClickModel groupModal = NotificationOnClickModel.fromJson(jsonDecode(event.data["payload"]));
-    //
-    //   if(groupModal.screenType== 'chat'){
-    //     Get.toNamed(OrderDetails.route, arguments: [groupModal.orderId.toString()]);
-    //   } else if(groupModal.screenType== 'post_or_product_update'){
-    //     if (groupModal.isAnother == true) {
-    //       makingPhoneCall(groupModal.pLink.toString());
-    //     }else{
-    //       if(groupModal.isProduct == true ) {
-    //         Get.toNamed(SingleProductScreen.route, arguments: [groupModal.pId.toString()]);
-    //       }else{
-    //         makingPhoneCall(groupModal.pLink.toString());
-    //       }
-    //     }
-    //   }else {
-    //   }        print('something went wrong');
-    //
-    // });
 
     FirebaseMessaging.onBackgroundMessage((event) async {
       print('Notification issss  ${event.notification?.title.toString()}');
@@ -468,10 +259,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       // Ensure that the function returns a Future<void>
       return Future.value(); // or return null;
     });
-
-
   }
-
 
   checkFirstAppLaunch() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -487,19 +275,21 @@ class MainHomeScreenState extends State<MainHomeScreen> {
   final profileController = Get.put(ProfileController());
   final addressController = Get.put(AddressController());
   final menuController = Get.put(ProductsMenuController());
+
   // final menuController = Get.put(ProductsMenuController());
 
   Rx<ModelResponseCommon> modelDelete = ModelResponseCommon().obs;
 
-  Rx<RxStatus> statusOfDelete = RxStatus.empty().obs;
+  Rx<RxStatus> statusOfDelete = RxStatus
+      .empty()
+      .obs;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
   updateCartCount({
     required id,
     required bool increase,
   }) {
-    repositories
-        .postApi(context: context, url: ApiUrls.updateCartUrl, mapData: {
+    repositories.postApi(context: context, url: ApiUrls.updateCartUrl, mapData: {
       "product_id": id,
       "quantity": increase ? "1" : "-1",
     }).then((value) {
@@ -518,23 +308,18 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       child: Container(
         width: width,
         height: height,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(border), color: Colors.white),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(border), color: Colors.white),
       ),
     );
   }
 
   Rx<HomeModel> model = HomeModel().obs;
-  Rx<RxStatus> status = RxStatus.empty().obs;
+  Rx<RxStatus> status = RxStatus
+      .empty()
+      .obs;
 
   Future homeData() async {
-    await repositories
-        .postApi(
-        url: ApiUrls.homePage,
-        mapData: {},
-        showMap: true,
-        showResponse: true)
-        .then((value) {
+    await repositories.postApi(url: ApiUrls.homePage, mapData: {}, showMap: true, showResponse: true).then((value) {
       model.value = HomeModel.fromJson(jsonDecode(value));
       if (model.value.data != null) {
         DateTime? time11;
@@ -558,17 +343,19 @@ class MainHomeScreenState extends State<MainHomeScreen> {
   }
 
   Rx<ModelResponseCommon> modelAddToCart = ModelResponseCommon().obs;
+
   addToCart(id) {
     Map<String, dynamic> map = {};
     map['quantity'] = '1';
     map['product_id'] = id;
-    repositories
-        .postApi(url: ApiUrls.addToCart, mapData: map, context: context)
-        .then((value) {
+    repositories.postApi(url: ApiUrls.addToCart, mapData: map, context: context).then((value) {
       modelAddToCart.value = ModelResponseCommon.fromJson(jsonDecode(value));
       cartController.getData();
       if (modelAddToCart.value.status!) {
-        showToast(modelAddToCart.value.message.toString().split("'").first);
+        showToast(modelAddToCart.value.message
+            .toString()
+            .split("'")
+            .first);
       } else {
         showToast(modelAddToCart.value.message.toString());
       }
@@ -580,19 +367,18 @@ class MainHomeScreenState extends State<MainHomeScreen> {
   addToWishlist(id) {
     Map<String, dynamic> map = {};
     map['product_id'] = id;
-    repositories
-        .postApi(url: ApiUrls.addToWishlist, mapData: map, context: context)
-        .then((value) {
-      modelAddToWishlist.value =
-          ModelResponseCommon.fromJson(jsonDecode(value));
+    repositories.postApi(url: ApiUrls.addToWishlist, mapData: map, context: context).then((value) {
+      modelAddToWishlist.value = ModelResponseCommon.fromJson(jsonDecode(value));
       if (modelAddToWishlist.value.message.toString().contains("added")) {
         wishList.favProductsList.add(id.toString());
       } else {
-        wishList.favProductsList
-            .removeWhere((element) => element.toString() == id.toString());
+        wishList.favProductsList.removeWhere((element) => element.toString() == id.toString());
       }
       if (modelAddToWishlist.value.status!) {
-        showToast(modelAddToWishlist.value.message.toString().split("'").first);
+        showToast(modelAddToWishlist.value.message
+            .toString()
+            .split("'")
+            .first);
         // homeData();
       } else {
         showToast(modelAddToWishlist.value.message.toString());
@@ -602,8 +388,10 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       }
     });
   }
+
 // GET FCM AND DRVICE ID BEFORE LOGIN
   String deviceId = "";
+
   getFcmBeforLogin() async {
     var fcmToekn = await FirebaseMessaging.instance.getToken();
     await ClientInformation.fetch().then((value) {
@@ -616,14 +404,19 @@ class MainHomeScreenState extends State<MainHomeScreen> {
     map['fcm_token'] = fcmToekn!;
     log("Data ${map.toString()}");
     repositories
-        .postApi(url: ("https://chickenway.app/wp-json/api/woocustomer/update_user_fcm_data"), mapData: map, context: context)
+        .postApi(
+        url: ("https://chickenway.app/wp-json/api/woocustomer/update_user_fcm_data"),
+        mapData: map,
+        context: context)
         .then((value) {
       log("Data before login ${map.toString()}");
     });
   }
-  Rx<MatchApkModel> matchApkVersion = MatchApkModel().obs;
-  Rx<RxStatus> statusOfMatch = RxStatus.empty().obs;
 
+  Rx<MatchApkModel> matchApkVersion = MatchApkModel().obs;
+  Rx<RxStatus> statusOfMatch = RxStatus
+      .empty()
+      .obs;
 
   manageSplash() {
     if (showSplashScreen == true) {
@@ -635,68 +428,15 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       });
     }
   }
+
   getFcm() async {
     fcm = (await FirebaseMessaging.instance.getToken())!;
     log(" FCM IS ${fcm}");
   }
 
-  // version() async {
-  //
-  //   PackageInfo packageInfo1 = await PackageInfo.fromPlatform();
-  //   String appVersion1 = packageInfo1.version;
-  //   PackageInfo packageInfo = await PackageInfo.fromPlatform();
-  //   String appVersion = packageInfo.version;
-  //   print('app version is${appVersion.toString()}');
-  //
-  //
-  //   repositories.postApi(url: ApiUrls.matchApkVersion, mapData: {
-  //     "apk_version":appVersion.toString()
-  //   }).then((value) {
-  //     matchApkVersion.value = MatchApkModel.fromJson(jsonDecode(value));
-  //
-  //     print('app version is${appVersion.toString()}');
-  //     if (matchApkVersion.value.matchApk ==false) {
-  //       showDialog(
-  //           context: context,
-  //           builder: (BuildContext context) {
-  //             return AlertDialog(
-  //               title: Text('New Version Available'),
-  //               content: Text('A new version is available. Would you like to update?'),
-  //               actions: <Widget>[
-  //                 TextButton(
-  //                   onPressed: () {
-  //                     if(Platform.isAndroid){_launchPlayStore();}
-  //                     else if (Platform.isIOS){_launchAppStore();}
-  //
-  //                   },
-  //                   child: Text('Update Now'),
-  //                 ),
-  //                 TextButton(
-  //                   onPressed: () {
-  //                     Navigator.of(context).pop();
-  //                   },
-  //                   child: Text('Later'),
-  //                 ),
-  //               ],
-  //             );
-  //             });
-  //
-  //
-  //       statusOfMatch.value = RxStatus.success();
-  //     } else {
-  //       statusOfMatch.value = RxStatus.error();
-  //     }
-  //   });
-  // }
-
   @override
-
-
-
-  // final Repositories repositories = Repositories();
   _launchAppStore() async {
-    const url =
-        'https://apps.apple.com/us/app/chickenway/id6450103488'; // Replace this with your App Store link
+    const url = 'https://apps.apple.com/us/app/chickenway/id6450103488'; // Replace this with your App Store link
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -714,52 +454,41 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       await launch(fallbackUrl);
     }
   }
- initState()  {
+
+  initState() {
     super.initState();
+    homeData();
+    cartController.getData();
+    wishList.getWishListData();
+    menuController.getProducts();
+    menuController.getAllAsync();
+    menuController.getAll();
     getInit();
-     notificationServices.requestNotificationPermission();
-     notificationServices.forgroundMessage();
+    notificationServices.requestNotificationPermission();
+    notificationServices.forgroundMessage();
     notificationServices.firebaseInit(context);
     notificationServices.setupInteractMessage(context);
     notificationServices.isTokenRefresh();
-
-    notificationServices.getDeviceToken().then((value){
+    notificationServices.getDeviceToken().then((value) {
       if (kDebugMode) {
         print('device token');
         print(value);
       }
     });
-
     getFcmBeforLogin();
     getFcm();
-    setTimer(givenTime: DateTime.now() );
+    setTimer(givenTime: DateTime.now());
     manageNotification();
-    // calculateDifference();
-
     manageSplash();
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-
-      // version();
       popup();
       checkFirstAppLaunch();
-      // gg();
       manageSiteUrl();
-       // menuController.getProducts();
-       homeData();
+      homeData();
       cartController.resetAll();
-
-      // menuController.ic;
-      // gg();
-
-
     });
-
   }
-  //
-  // gg()
-  // async{
-  //   await menuController.getAllAsync();
-  // }
+
 
   bool noInternetRetry = false;
   RxString time = "00:00".obs;
@@ -773,10 +502,10 @@ class MainHomeScreenState extends State<MainHomeScreen> {
     if (timer != null) {
       timer!.cancel();
     }
-    int seconds =
-    ((givenTime.millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond) -
-        DateTime.now().millisecondsSinceEpoch ~/
-            Duration.millisecondsPerSecond);
+    int seconds = ((givenTime.millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond) -
+        DateTime
+            .now()
+            .millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond);
     // DateTime.now().millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond;
     // referenceTime = DateTime.parse("2022-09-10 00:00:00.000000").add(Duration(seconds: timeInSeconds));
 
@@ -785,8 +514,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
     if (kDebugMode) {
       print("Time...........       $seconds");
     }
-    referenceTime = DateTime.parse("2024-02-17 00:00:00.000000")
-        .add(Duration(seconds: seconds.abs()));
+    referenceTime = DateTime.parse("2024-02-17 00:00:00.000000").add(Duration(seconds: seconds.abs()));
     fiveMinute = seconds;
     log(time.value);
     var logTime1 = DateFormat("mm:ss");
@@ -795,9 +523,8 @@ class MainHomeScreenState extends State<MainHomeScreen> {
         fiveMinute--;
         hours = fiveMinute ~/ (60 * 60);
         referenceTime = referenceTime.subtract(const Duration(seconds: 1));
-        time.value =
-        "${hours == 0 ? "00" : hours < 10 ? "0$hours" : hours}:${logTime1.format(referenceTime)}";
-        log("TIME ISSSS" +time.value);
+        time.value = "${hours == 0 ? "00" : hours < 10 ? "0$hours" : hours}:${logTime1.format(referenceTime)}";
+        log("TIME ISSSS" + time.value);
       } else {
         timer.cancel();
         fiveMinute = 0;
@@ -806,6 +533,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       }
     });
   }
+
   @override
   void dispose() {
     if (timer != null) {
@@ -816,10 +544,6 @@ class MainHomeScreenState extends State<MainHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    menuController.getProducts();
-    var height= MediaQuery.of(context).size.height;
-     // menuController.getProducts();
-
     return showSplashScreen
         ? const SplashScreen()
         : WillPopScope(
@@ -835,10 +559,6 @@ class MainHomeScreenState extends State<MainHomeScreen> {
           backgroundColor: Colors.white,
           body: SafeArea(
             child: Obx(() {
-              // if(menuItemsModel.data == null &&
-              //     menuController.storeInfo.data == null){
-              //   menuController.getAll();
-              // }
               return status.value.isSuccess
                   ? RefreshIndicator(
                 onRefresh: () async {
@@ -846,8 +566,6 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                   await cartController.getData();
                   await wishList.getWishListData();
                   await menuController.getProducts();
-                  // if (menuController.forMenuScreen.isEmpty &&
-                  //     menuController.storeInfo.data == null) {
                   await menuController.getAllAsync();
 
                   // }
@@ -862,25 +580,19 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                         decoration: const BoxDecoration(
                             color: Colors.white,
                             image: DecorationImage(
-                                image: AssetImage(
-                                    AppAssets.dashboardNewBg),
-                                alignment: Alignment.topLeft)),
+                                image: AssetImage(AppAssets.dashboardNewBg), alignment: Alignment.topLeft)),
                         child: Column(
-                          crossAxisAlignment:
-                          CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 IconButton(
                                   onPressed: () {
-                                    scaffoldKey.currentState!
-                                        .openDrawer();
+                                    scaffoldKey.currentState!.openDrawer();
                                   },
                                   icon: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 13, top: 8),
+                                    padding: const EdgeInsets.only(left: 13, top: 8),
                                     child: Image.asset(
                                       'assets/images/drawer_icon.png',
                                       width: 20,
@@ -889,45 +601,25 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 24.0, top: 8),
+                                  padding: const EdgeInsets.only(right: 24.0, top: 8),
                                   child: Obx(() {
                                     return InkWell(
                                       onTap: () {
-                                        Get.toNamed(
-                                            CartScreen.route);
+                                        Get.toNamed(CartScreen.route);
                                       },
-                                      child: (cartController
-                                          .isDataLoading
-                                          .value &&
-                                          cartController.model
-                                              .value.data !=
-                                              null)
+                                      child: (cartController.isDataLoading.value &&
+                                          cartController.model.value.data != null)
                                           ? Badge(
-                                          badgeStyle:
-                                          const BadgeStyle(
-                                              badgeColor:
-                                              Colors
-                                                  .black),
+                                          badgeStyle: const BadgeStyle(badgeColor: Colors.black),
                                           badgeContent: Text(
-                                            cartController
-                                                .model
-                                                .value
-                                                .data!
+                                            cartController.model.value.data!
                                                 .items!
-                                                .map((e) => int.parse(
-                                                (e.quantity ??
-                                                    0)
-                                                    .toString()))
+                                                .map((e) => int.parse((e.quantity ?? 0).toString()))
                                                 .toList()
                                                 .sum
                                                 .toString(),
-                                            style: GoogleFonts
-                                                .poppins(
-                                                color: Colors
-                                                    .white,
-                                                fontSize:
-                                                10),
+                                            style:
+                                            GoogleFonts.poppins(color: Colors.white, fontSize: 10),
                                           ),
                                           child: Image.asset(
                                             'assets/images/cooking_icon.png',
@@ -949,27 +641,17 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                               onTap: () async {
                                 // log((DateTime.now().millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond).toString());
                                 if (kDebugMode) {
-                                  log((await FirebaseMessaging
-                                      .instance
-                                      .getToken())!);
+                                  log((await FirebaseMessaging.instance.getToken())!);
                                 }
                               },
                               child: Padding(
-                                padding:
-                                const EdgeInsets.only(left: 5),
-                                child: Text(
-                                    'What would you\nlike to eat?',
+                                padding: const EdgeInsets.only(left: 5),
+                                child: Text('What would you\nlike to eat?',
                                     style: GoogleFonts.poppins(
                                       fontSize: 18,
-                                      color: const Color(
-                                          0xFF292323),
-                                      fontWeight:
-                                      FontWeight.w600,
-                                    ))
-                                    .padded(
-                                    givePadding:
-                                    const EdgeInsets.only(
-                                        left: 15)),
+                                      color: const Color(0xFF292323),
+                                      fontWeight: FontWeight.w600,
+                                    )).padded(givePadding: const EdgeInsets.only(left: 15)),
                               ),
                             ),
                             addHeight(10),
@@ -982,25 +664,18 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                         ),
                       ),
                       if (time.value == "00:00" &&
-                          model.value.data!.timeBannerAd![0]
-                              .addScreen ==
-                              "Activate")
+                          model.value.data!.timeBannerAd![0].addScreen == "Activate")
                         timerAd(context),
                       addHeight(20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment:
-                        CrossAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          model.value.data!.bestSellerData!.icon !=
-                              ""
-                              ?  CachedNetworkImage(
-
+                          model.value.data!.bestSellerData!.icon != ""
+                              ? CachedNetworkImage(
                               width: 25,
                               height: 25,
-                              imageUrl: model.value.data!
-                                  .bestSellerData!.icon
-                                  .toString(),
+                              imageUrl: model.value.data!.bestSellerData!.icon.toString(),
                               errorWidget: (_, __, ___) =>
                                   Image.asset(
                                     'assets/images/chicken_icon.png',
@@ -1013,16 +688,16 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                     width: 25,
                                     height: 25,
                                   ))
-                              : Image.asset(
+                              : Image
+                              .asset(
                             'assets/images/chicken_icon.png',
                             width: 25,
                             height: 25,
-                          ).toAppIcon,
+                          )
+                              .toAppIcon,
                           addWidth(9),
                           Text(
-                            model.value.data!.bestSellerData!.title!
-                                .toUpperCase()
-                                .toString(),
+                            model.value.data!.bestSellerData!.title!.toUpperCase().toString(),
                             style: GoogleFonts.poppins(
                               color: const Color(0xFF292323),
                               fontSize: 14.5,
@@ -1030,60 +705,37 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                             ),
                           ),
                         ],
-                      ).padded(
-                          givePadding:
-                          const EdgeInsets.only(left: 12)),
+                      ).padded(givePadding: const EdgeInsets.only(left: 12)),
                       SizedBox(
                         height: 225,
                         child: ListView.builder(
                           primary: false,
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 13,),
+                            horizontal: 13,
+                          ),
                           scrollDirection: Axis.horizontal,
-                          itemCount:
-                          model.value.data!.vSlider!.length,
+                          itemCount: model.value.data!.vSlider!.length,
                           // padding: const EdgeInsets.fromLTRB(2, 2, 2, 2),
                           itemBuilder: (context, index) {
                             return Row(
                               children: [
                                 InkWell(
                                   onTap: () {
-                                    Get.toNamed(
-                                        SingleProductScreen.route,
-                                        arguments: [
-                                          model
-                                              .value
-                                              .data!
-                                              .vSlider![index]
-                                              .productId,
-                                          model
-                                              .value
-                                              .data!
-                                              .vSlider![index]
-                                              .image,
-                                        ]);
+                                    Get.toNamed(SingleProductScreen.route, arguments: [
+                                      model.value.data!.vSlider![index].productId,
+                                      model.value.data!.vSlider![index].image,
+                                    ]);
                                   },
                                   child: Container(
                                     width: 150,
                                     height: 205,
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                        BorderRadius.circular(
-                                            10)),
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
                                     child: ClipRRect(
-
                                         borderRadius: BorderRadius.circular(10),
-
                                         child: CachedNetworkImage(
-                                          imageUrl: model
-                                              .value
-                                              .data!
-                                              .vSlider![index]
-                                              .image
-                                              .toString(),
+                                          imageUrl: model.value.data!.vSlider![index].image.toString(),
                                           fit: BoxFit.cover,
-                                          errorWidget:
-                                              (_, __, ___) =>
+                                          errorWidget: (_, __, ___) =>
                                           const SizedBox(
                                             width: 160,
                                           ),
@@ -1110,76 +762,49 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                             children: [
                               Positioned.fill(
                                 child: Column(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.end,
+                                  mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     Container(
-                                      margin:
-                                      const EdgeInsets.fromLTRB(
-                                          10, 0, 9, 10),
+                                      margin: const EdgeInsets.fromLTRB(10, 0, 9, 10),
                                       child: Card(
                                         elevation: 4,
                                         child: Row(
                                           children: [
                                             Expanded(
                                               child: Padding(
-                                                padding:
-                                                const EdgeInsets
-                                                    .all(14.0),
+                                                padding: const EdgeInsets.all(14.0),
                                                 child: Column(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment
-                                                      .start,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
-                                                      model
-                                                          .value
-                                                          .data!
-                                                          .freeDeliverys![
-                                                      0]
-                                                          .freeDeliveryTitle
+                                                      model.value.data!.freeDeliverys![0].freeDeliveryTitle
                                                           .toString()
                                                           .toUpperCase(),
                                                       style: GoogleFonts.poppins(
-                                                          color: const Color(
-                                                              0xffE02020),
-                                                          fontSize:
-                                                          20,
-                                                          fontWeight:
-                                                          FontWeight
-                                                              .bold),
+                                                          color: const Color(0xffE02020),
+                                                          fontSize: 20,
+                                                          fontWeight: FontWeight.bold),
                                                     ),
                                                     const SizedBox(
                                                       height: 5,
                                                     ),
                                                     Text(
                                                       model
-                                                          .value
-                                                          .data!
-                                                          .freeDeliverys![
-                                                      0]
-                                                          .freeDeliveryContent
+                                                          .value.data!.freeDeliverys![0].freeDeliveryContent
                                                           .toString()
                                                           .toUpperCase(),
-                                                      style: GoogleFonts
-                                                          .poppins(
+                                                      style: GoogleFonts.poppins(
                                                         // color: Colors.red,
-                                                          fontSize:
-                                                          12,
-                                                          fontWeight: FontWeight
-                                                              .w400,
-                                                          color:
-                                                          const Color(0xff656565)),
+                                                          fontSize: 12,
+                                                          fontWeight: FontWeight.w400,
+                                                          color: const Color(0xff656565)),
                                                     ),
                                                   ],
                                                 ),
                                               ),
                                             ),
                                             SizedBox(
-                                              width: context
-                                                  .getDeviceSize
-                                                  .width *
-                                                  .3,
+                                              width: context.getDeviceSize.width * .3,
                                             )
                                           ],
                                         ),
@@ -1193,15 +818,9 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                 child: SizedBox(
                                   height: 140,
                                   child: CachedNetworkImage(
-                                    imageUrl: model
-                                        .value
-                                        .data!
-                                        .freeDeliverys![0]
-                                        .freeDeliverys
-                                        .toString(),
+                                    imageUrl: model.value.data!.freeDeliverys![0].freeDeliverys.toString(),
                                     fit: BoxFit.contain,
-                                    errorWidget: (_, __, ___) =>
-                                    const SizedBox(),
+                                    errorWidget: (_, __, ___) => const SizedBox(),
                                   ),
                                 ),
                               ),
@@ -1212,17 +831,13 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                       addHeight(20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment:
-                        CrossAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          model.value.data!.shortcutsData!.icon !=
-                              ""
+                          model.value.data!.shortcutsData!.icon != ""
                               ? CachedNetworkImage(
                               width: 25,
                               height: 25,
-                              imageUrl: model.value.data!
-                                  .shortcutsData!.icon
-                                  .toString(),
+                              imageUrl: model.value.data!.shortcutsData!.icon.toString(),
                               errorWidget: (_, __, ___) =>
                                   Image.asset(
                                     'assets/images/chicken_icon.png',
@@ -1235,17 +850,16 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                     width: 25,
                                     height: 25,
                                   ))
-
-                              : Image.asset(
+                              : Image
+                              .asset(
                             'assets/images/chicken_icon.png',
                             width: 25,
                             height: 25,
-                          ).toAppIcon,
+                          )
+                              .toAppIcon,
                           addWidth(9),
                           Text(
-                            model.value.data!.shortcutsData!.title!
-                                .toUpperCase()
-                                .toString(),
+                            model.value.data!.shortcutsData!.title!.toUpperCase().toString(),
                             style: GoogleFonts.poppins(
                               color: const Color(0xFF292323),
                               fontSize: 14.5,
@@ -1253,11 +867,8 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                             ),
                           )
                         ],
-                      ).padded(
-                          givePadding:
-                          const EdgeInsets.only(left: 13)),
+                      ).padded(givePadding: const EdgeInsets.only(left: 13)),
                       addHeight(6),
-
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
@@ -1265,94 +876,67 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                             //moka 4
                             ...model.value.data!.serviceSection!
                                 .map(
-                                  (service) => GestureDetector(
-                                onTap: () {
-
-                                  if (service.isProduct == true) {
-                                    Get.toNamed(
-                                        SingleProductScreen
-                                            .route, arguments: [
-                                      service.pId.toString()
-                                    ]);
-                                  }else {
-                                    Get.toNamed(MenuScreen.route, arguments: [service.casteSlug.toString()]);
-
-                                  }
-                                  // if (service.isProduct !=
-                                  //     null) {
-                                  //   Get.offAllNamed(
-                                  //       service.serviceUrl!);
-                                  //
-                                  // }
-                                },
-                                child: Column(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.center,
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding:
-                                      const EdgeInsets.all(
-                                          5.0)
-                                          .copyWith(
-                                          left: 20,
-                                          right: 0),
-                                      child: Container(
-                                        height: 80,
-                                        width: 80,
-                                        decoration:
-                                        BoxDecoration(
-                                          borderRadius:
-                                          BorderRadius
-                                              .circular(10),
-                                          color: const Color(
-                                              0xFFFEF4D9),
-                                        ),
-                                        margin: const EdgeInsets
-                                            .all(5),
-                                        child:
-                                        CachedNetworkImage(
-                                          imageUrl: service
-                                              .serviceImages
-                                              .toString(),
-                                          height: 43,
-                                          width: 54,
-                                          errorWidget: (_, __,
-                                              ___) =>
-                                          const SizedBox(
-                                            height: 43,
-                                            width: 54,
+                                  (service) =>
+                                  GestureDetector(
+                                    onTap: () {
+                                      if (service.isProduct == true) {
+                                        Get.toNamed(SingleProductScreen.route,
+                                            arguments: [service.pId.toString()]);
+                                      } else {
+                                        Get.toNamed(MenuScreen.route,
+                                            arguments: [service.casteSlug.toString()]);
+                                      }
+                                      // if (service.isProduct !=
+                                      //     null) {
+                                      //   Get.offAllNamed(
+                                      //       service.serviceUrl!);
+                                      //
+                                      // }
+                                    },
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(5.0).copyWith(left: 20, right: 0),
+                                          child: Container(
+                                            height: 80,
+                                            width: 80,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(10),
+                                              color: const Color(0xFFFEF4D9),
+                                            ),
+                                            margin: const EdgeInsets.all(5),
+                                            child: CachedNetworkImage(
+                                              imageUrl: service.serviceImages.toString(),
+                                              height: 43,
+                                              width: 54,
+                                              errorWidget: (_, __, ___) =>
+                                              const SizedBox(
+                                                height: 43,
+                                                width: 54,
+                                              ),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                    Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(left:20),
-                                        child: Text(
-
-                                          service.serviceTitle
-                                              .toString()
-                                              .replaceAll(
-                                              " ", " "),
-                                          // maxLines: 2,
-                                          style:
-                                          GoogleFonts.poppins(
-                                            fontWeight:
-                                            FontWeight.w600,
-                                            fontSize: 12.5,
-                                            color: const Color(
-                                                0xFF292323),
+                                        Center(
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(left: 20),
+                                            child: Text(
+                                              service.serviceTitle.toString().replaceAll(" ", " "),
+                                              // maxLines: 2,
+                                              style: GoogleFonts.poppins(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 12.5,
+                                                color: const Color(0xFF292323),
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
                                           ),
-                                          textAlign:
-                                          TextAlign.center,
                                         ),
-                                      ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              ),
+                                  ),
                             )
                                 .toList()
                           ],
@@ -1361,8 +945,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                       Obx(() {
                         if (wishList.refreshInt.value > 0) {}
                         return Column(
-                          crossAxisAlignment:
-                          CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: favoriteList(context),
                         );
                       }),
@@ -1390,8 +973,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                            padding: const EdgeInsets.all(5)
-                                .copyWith(top: 40),
+                            padding: const EdgeInsets.all(5).copyWith(top: 40),
                             child: buildShimmer(
                               border: 15,
                               width: AddSize.screenWidth * .35,
@@ -1402,30 +984,28 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                           child: Row(
                               children: List.generate(
                                   9,
-                                      (index) => Padding(
-                                      padding: const EdgeInsets.all(5)
-                                          .copyWith(top: 15),
-                                      child: buildShimmer(
-                                        border: 15,
-                                        width: 50,
-                                        height: 60,
-                                      )))),
+                                      (index) =>
+                                      Padding(
+                                          padding: const EdgeInsets.all(5).copyWith(top: 15),
+                                          child: buildShimmer(
+                                            border: 15,
+                                            width: 50,
+                                            height: 60,
+                                          )))),
                         ),
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             children: [
                               Padding(
-                                  padding: const EdgeInsets.all(8)
-                                      .copyWith(top: 25),
+                                  padding: const EdgeInsets.all(8).copyWith(top: 25),
                                   child: buildShimmer(
                                     border: 15,
                                     width: AddSize.screenWidth * .75,
                                     height: 175,
                                   )),
                               Padding(
-                                  padding: const EdgeInsets.all(8)
-                                      .copyWith(top: 25),
+                                  padding: const EdgeInsets.all(8).copyWith(top: 25),
                                   child: buildShimmer(
                                     border: 15,
                                     width: AddSize.screenWidth * .75,
@@ -1435,8 +1015,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                           ),
                         ),
                         Padding(
-                            padding: const EdgeInsets.all(8)
-                                .copyWith(top: 25),
+                            padding: const EdgeInsets.all(8).copyWith(top: 25),
                             child: buildShimmer(
                               border: 5,
                               width: AddSize.screenWidth * .2,
@@ -1445,24 +1024,21 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                         Row(
                           children: [
                             Padding(
-                                padding: const EdgeInsets.all(8)
-                                    .copyWith(top: 25),
+                                padding: const EdgeInsets.all(8).copyWith(top: 25),
                                 child: buildShimmer(
                                   border: 5,
                                   width: AddSize.screenWidth * .28,
                                   height: 120,
                                 )),
                             Padding(
-                                padding: const EdgeInsets.all(8)
-                                    .copyWith(top: 25),
+                                padding: const EdgeInsets.all(8).copyWith(top: 25),
                                 child: buildShimmer(
                                   border: 5,
                                   width: AddSize.screenWidth * .28,
                                   height: 120,
                                 )),
                             Padding(
-                                padding: const EdgeInsets.all(8)
-                                    .copyWith(top: 25),
+                                padding: const EdgeInsets.all(8).copyWith(top: 25),
                                 child: buildShimmer(
                                   border: 5,
                                   width: AddSize.screenWidth * .28,
@@ -1473,24 +1049,21 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                         Row(
                           children: [
                             Padding(
-                                padding: const EdgeInsets.all(8)
-                                    .copyWith(top: 25),
+                                padding: const EdgeInsets.all(8).copyWith(top: 25),
                                 child: buildShimmer(
                                   border: 5,
                                   width: AddSize.screenWidth * .28,
                                   height: 120,
                                 )),
                             Padding(
-                                padding: const EdgeInsets.all(8)
-                                    .copyWith(top: 25),
+                                padding: const EdgeInsets.all(8).copyWith(top: 25),
                                 child: buildShimmer(
                                   border: 5,
                                   width: AddSize.screenWidth * .28,
                                   height: 120,
                                 )),
                             Padding(
-                                padding: const EdgeInsets.all(8)
-                                    .copyWith(top: 25),
+                                padding: const EdgeInsets.all(8).copyWith(top: 25),
                                 child: buildShimmer(
                                   border: 5,
                                   width: AddSize.screenWidth * .28,
@@ -1533,31 +1106,32 @@ class MainHomeScreenState extends State<MainHomeScreen> {
             height: 172),
         items: model.value.data!.hSlider!
             .map(
-              (e) => InkWell(
-            onTap: () {
-              Get.toNamed(
-                SingleProductScreen.route,
-                arguments: [
-                  e.productId.toString(),
-                  e.image.toString(),
-                ],
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: CachedNetworkImage(
-                  imageUrl: e.image.toString(),
-                  height: 172,
-                  fit: BoxFit.fill,
-                  width: double.maxFinite,
-                  alignment: Alignment.center,
-                  errorWidget: (_, __, ___) => const SizedBox(),
+              (e) =>
+              InkWell(
+                onTap: () {
+                  Get.toNamed(
+                    SingleProductScreen.route,
+                    arguments: [
+                      e.productId.toString(),
+                      e.image.toString(),
+                    ],
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: CachedNetworkImage(
+                      imageUrl: e.image.toString(),
+                      height: 172,
+                      fit: BoxFit.fill,
+                      width: double.maxFinite,
+                      alignment: Alignment.center,
+                      errorWidget: (_, __, ___) => const SizedBox(),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
         )
             .toList());
   }
@@ -1573,11 +1147,13 @@ class MainHomeScreenState extends State<MainHomeScreen> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Image.asset(
+          Image
+              .asset(
             'assets/images/chicken_icon.png',
             width: 25,
             height: 25,
-          ).toAppIcon,
+          )
+              .toAppIcon,
           addWidth(9),
           Text(
             'FAVORITES',
@@ -1597,52 +1173,47 @@ class MainHomeScreenState extends State<MainHomeScreen> {
           children: [
             ...wishList.model.value.data!
                 .map(
-                  (popularProduct) => Padding(
-                padding: const EdgeInsets.only(left: 14),
-                child: Stack(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Get.toNamed(
-                          SingleProductScreen.route,
-                          arguments: [
-                            popularProduct.id.toString(),
-                            popularProduct.imageUrl.toString(),
-                            popularProduct.name.toString()
-                          ],
-                        );
-                      },
-                      child: Container(
-                        height: 142,
-                        width: 130,
-                        decoration: BoxDecoration(
-                          borderRadius:
-                          BorderRadius.circular(10),
-                          color: Colors.white,
-                        ),
-                        child: Material(
-                          color: Colors.transparent,
-                          child: CachedNetworkImage(
-                            imageUrl: popularProduct.imageUrl
-                                .toString(),
-                            errorWidget: (_, __, ___) =>
-                            const SizedBox(
-                              height: 142,
-                              width: 130,
+                  (popularProduct) =>
+                  Padding(
+                    padding: const EdgeInsets.only(left: 14),
+                    child: Stack(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Get.toNamed(
+                              SingleProductScreen.route,
+                              arguments: [
+                                popularProduct.id.toString(),
+                                popularProduct.imageUrl.toString(),
+                                popularProduct.name.toString()
+                              ],
+                            );
+                          },
+                          child: Container(
+                            height: 142,
+                            width: 130,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white,
+                            ),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: CachedNetworkImage(
+                                imageUrl: popularProduct.imageUrl.toString(),
+                                errorWidget: (_, __, ___) =>
+                                const SizedBox(
+                                  height: 142,
+                                  width: 130,
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                        Positioned(
+                            left: 8, top: 8, child: buildPositioned(popularProduct.id.toString(), context))
+                      ],
                     ),
-                    Positioned(
-                        left: 8,
-                        top: 8,
-                        child: buildPositioned(
-                            popularProduct.id.toString(),
-                            context))
-                  ],
-                ),
-              ),
+                  ),
             )
                 .toList()
           ],
@@ -1654,83 +1225,18 @@ class MainHomeScreenState extends State<MainHomeScreen> {
     ]
         : [];
   }
-  Widget timerAd(BuildContext context) {
 
+  Widget timerAd(BuildContext context) {
     String apiTimeString = model.value.data!.timeBannerAd![0].offerDuration.toString();
     print(apiTimeString);
 
     return TimerWidgetScreen(
       time: apiTimeString,
       adsUrl: model.value.data!.timeBannerAd![0].adsUrl.toString(),
-      timeBannerAd: model.value.data!.timeBannerAd![0]  ,
+      timeBannerAd: model.value.data!.timeBannerAd![0],
     );
   }
 
-  // Container timerAd(BuildContext context) {
-  //   return Container(
-  //     padding: const EdgeInsets.only(top: 10, bottom: 10, left: 35, right: 5),
-  //     margin: const EdgeInsets.symmetric(horizontal: 14).copyWith(top: 20),
-  //     decoration: BoxDecoration(
-  //       image: DecorationImage(
-  //           image: NetworkImage(
-  //               model.value.data!.timeBannerAd![0].adsUrl.toString()),
-  //           fit: BoxFit.contain),
-  //     ),
-  //     height: 100,
-  //     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-  //       Expanded(
-  //         flex: 2,
-  //         child: time.value != "00:00"
-  //             ? Row(
-  //                 children: [
-  //                   Container(
-  //                     decoration: BoxDecoration(
-  //                         color: AppTheme.primaryColor,
-  //                         borderRadius: BorderRadius.circular(125)),
-  //                     padding: const EdgeInsets.symmetric(
-  //                         vertical: 3, horizontal: 22),
-  //                     child: Obx(() {
-  //                       return Text(
-  //                         time.value,
-  //                         style: GoogleFonts.poppins(
-  //                           fontWeight: FontWeight.w500,
-  //                           fontSize: 13,
-  //                           color: Colors.white,
-  //                         ),
-  //                       );
-  //                     }),
-  //                   ),
-  //                 ],
-  //               )
-  //             : const SizedBox(),
-  //       ),
-  //       Expanded(
-  //         flex: 3,
-  //         child: Column(
-  //             mainAxisAlignment: MainAxisAlignment.center,
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               Text(
-  //                 model.value.data!.timeBannerAd![0].adsTitle.toString(),
-  //                 style: GoogleFonts.poppins(
-  //                   fontWeight: FontWeight.w600,
-  //                   fontSize: 16,
-  //                   color: Colors.black,
-  //                 ),
-  //               ),
-  //               Text(
-  //                 model.value.data!.timeBannerAd![0].adsSubtitle.toString(),
-  //                 style: GoogleFonts.poppins(
-  //                   fontWeight: FontWeight.w400,
-  //                   fontSize: 13,
-  //                   color: const Color(0xff656565),
-  //                 ),
-  //               )
-  //             ]),
-  //       )
-  //     ]),
-  //   );
-  // }
   List<Widget> yallaMenu() {
     return [
       Row(
@@ -1738,12 +1244,10 @@ class MainHomeScreenState extends State<MainHomeScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           model.value.data!.yallaData!.icon != ""
-              ?  CachedNetworkImage(
+              ? CachedNetworkImage(
               width: 25,
               height: 25,
-              imageUrl: model.value.data!
-                  .yallaData!.icon
-                  .toString(),
+              imageUrl: model.value.data!.yallaData!.icon.toString(),
               errorWidget: (_, __, ___) =>
                   Image.asset(
                     'assets/images/chicken_icon.png',
@@ -1756,11 +1260,13 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                     width: 25,
                     height: 25,
                   ))
-              : Image.asset(
+              : Image
+              .asset(
             'assets/images/chicken_icon.png',
             width: 25,
             height: 25,
-          ).toAppIcon,
+          )
+              .toAppIcon,
           addWidth(9),
           Text(
             model.value.data!.yallaData!.title!.toUpperCase().toString(),
@@ -1773,38 +1279,38 @@ class MainHomeScreenState extends State<MainHomeScreen> {
         ],
       ).padded(givePadding: const EdgeInsets.only(left: 10)),
       addHeight(10),
-      GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        padding: const EdgeInsets.symmetric(horizontal: 5),
-        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 150,
-            crossAxisSpacing: 6,
-            mainAxisSpacing: 6,
-            childAspectRatio: 1),
-        itemCount: menuController.yalCategories.entries.length,
-        itemBuilder: (context, index) {
-          final shortcut = menuController.yalCategories.entries.toList()[index].value;
-          return GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onTap: () {
-              Get.toNamed(MenuScreen.route,
-                  arguments: shortcut.slug.toString());
-            },
-            child: Container(
-              decoration:
-              BoxDecoration(borderRadius: BorderRadius.circular(10)),
-              child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: CachedNetworkImage(
-                    imageUrl: shortcut.yallaImage.toString(),
-                    fit: BoxFit.cover,
-                    errorWidget: (_, __, ___) => const SizedBox(),
-                  )),
-            ),
-          );
-        },
-      ),
+
+      Obx(() {
+        if(menuController.refreshInt.value > 0) {}
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 5),
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 150, crossAxisSpacing: 6, mainAxisSpacing: 6, childAspectRatio: 1),
+          itemCount: menuController.yalCategories.entries.length,
+          itemBuilder: (context, index) {
+            print('manish');
+            final shortcut = menuController.yalCategories.entries.toList()[index].value;
+            return GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () {
+                Get.toNamed(MenuScreen.route, arguments: shortcut.slug.toString());
+              },
+              child: Container(
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: CachedNetworkImage(
+                      imageUrl: shortcut.yallaImage.toString(),
+                      fit: BoxFit.cover,
+                      errorWidget: (_, __, ___) => const SizedBox(),
+                    )),
+              ),
+            );
+          },
+        );
+      }),
       addHeight(20),
     ];
   }
@@ -1815,99 +1321,52 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       child: Row(
         children: [
           ...menuController.homeScreenTop.entries
-              .map((e) => Container(
-            width: 60,
-            margin: const EdgeInsets.symmetric(horizontal: 4),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                InkWell(
-                  onTap: () {
-                    Get.toNamed(MenuScreen.route,
-                        arguments: e.value.slug.toString());
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10)),
-                    margin: const EdgeInsets.all(0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(7),
-                      child: CachedNetworkImage(
-                        imageUrl: e.value.iconCate.toString(),
-                        width: 40,
-                        height: 40,
-                        errorWidget: (_, __, ___) => const SizedBox(
-                          width: 40,
-                          height: 40,
+              .map((e) =>
+              Container(
+                width: 60,
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Get.toNamed(MenuScreen.route, arguments: e.value.slug.toString());
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                        margin: const EdgeInsets.all(0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(7),
+                          child: CachedNetworkImage(
+                            imageUrl: e.value.iconCate.toString(),
+                            width: 40,
+                            height: 40,
+                            errorWidget: (_, __, ___) =>
+                            const SizedBox(
+                              width: 40,
+                              height: 40,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                    addHeight(5),
+                    Text(
+                      e.value.name.toString(),
+                      maxLines: 1,
+                      overflow: TextOverflow.visible,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 10,
+                        color: const Color(0xFF292323),
+                      ),
+                    ),
+                  ],
                 ),
-                addHeight(5),
-                Text(
-                  e.value.name.toString(),
-                  maxLines: 1,
-                  overflow: TextOverflow.visible,
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 10,
-                    color: const Color(0xFF292323),
-                  ),
-                ),
-              ],
-            ),
-          ))
+              ))
               .toList(),
-          // ...model.value.data!.category!.categories!
-          //     .map((cat) => Container(
-          //           width: 60,
-          //           margin: const EdgeInsets.symmetric(horizontal: 4),
-          //           child: Column(
-          //             mainAxisAlignment: MainAxisAlignment.center,
-          //             crossAxisAlignment: CrossAxisAlignment.center,
-          //             children: [
-          //               InkWell(
-          //                 onTap: () {
-          //                   Get.toNamed(MenuScreen.route,
-          //                       arguments: cat.slug.toString());
-          //                 },
-          //                 child: Container(
-          //                   decoration: BoxDecoration(
-          //                       borderRadius: BorderRadius.circular(10)),
-          //                   margin: const EdgeInsets.all(0),
-          //                   child: ClipRRect(
-          //                     borderRadius: BorderRadius.circular(7),
-          //                     child: Image.network(
-          //                       cat.imageUrl.toString(),
-          //                       width: 40,
-          //                       height: 40,
-          //                       errorBuilder: (_, __, ___) => const SizedBox(
-          //                         width: 40,
-          //                         height: 40,
-          //                       ),
-          //                     ),
-          //                   ),
-          //                 ),
-          //               ),
-          //               addHeight(5),
-          //               Text(
-          //                 cat.name.toString(),
-          //                 maxLines: 1,
-          //                 overflow: TextOverflow.ellipsis,
-          //                 textAlign: TextAlign.center,
-          //                 style: GoogleFonts.poppins(
-          //                   fontWeight: FontWeight.w400,
-          //                   fontSize: 10,
-          //                   color: const Color(0xFF292323),
-          //                 ),
-          //               ),
-          //             ],
-          //           ),
-          //         ))
-          //     .toList(),
           const SizedBox(
             width: 15,
           ),
@@ -1924,12 +1383,10 @@ class MainHomeScreenState extends State<MainHomeScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           model.value.data!.deliciousData!.icon != ""
-              ?  CachedNetworkImage(
+              ? CachedNetworkImage(
               width: 25,
               height: 25,
-              imageUrl: model.value.data!
-                  .deliciousData!.icon
-                  .toString(),
+              imageUrl: model.value.data!.deliciousData!.icon.toString(),
               errorWidget: (_, __, ___) =>
                   Image.asset(
                     'assets/images/chicken_icon.png',
@@ -1942,11 +1399,13 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                     width: 25,
                     height: 25,
                   ))
-              : Image.asset(
+              : Image
+              .asset(
             'assets/images/chicken_icon.png',
             width: 25,
             height: 25,
-          ).toAppIcon,
+          )
+              .toAppIcon,
           addWidth(6),
           Text(
             model.value.data!.deliciousData!.title!.toUpperCase().toString(),
@@ -1969,28 +1428,21 @@ class MainHomeScreenState extends State<MainHomeScreen> {
               children: [
                 Container(
                   height: 200,
-                  width: MediaQuery.of(context).size.width * .85,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * .85,
                   margin: const EdgeInsets.all(5).copyWith(left: 12, right: 0),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8.0),
                       color: Colors.white,
-                      boxShadow: const [
-                        BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 1,
-                            offset: Offset(1, 1))
-                      ]),
+                      boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 1, offset: Offset(1, 1))]),
                   child: InkWell(
                     onTap: () {
                       Get.toNamed(SingleProductScreen.route, arguments: [
-                        model.value.data!.categoryProducts!.products![index].id
-                            .toString(),
-                        model.value.data!.categoryProducts!.products![index]
-                            .imageUrl
-                            .toString(),
-                        model
-                            .value.data!.categoryProducts!.products![index].name
-                            .toString()
+                        model.value.data!.categoryProducts!.products![index].id.toString(),
+                        model.value.data!.categoryProducts!.products![index].imageUrl.toString(),
+                        model.value.data!.categoryProducts!.products![index].name.toString()
                       ]);
                     },
                     child: Column(
@@ -2004,12 +1456,11 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                             Material(
                               color: Colors.transparent,
                               child: CachedNetworkImage(
-                                imageUrl: model.value.data!.categoryProducts!
-                                    .products![index].imageUrl
-                                    .toString(),
+                                imageUrl: model.value.data!.categoryProducts!.products![index].imageUrl.toString(),
                                 width: 100,
                                 height: 100,
-                                errorWidget: (_, __, ___) => const SizedBox(
+                                errorWidget: (_, __, ___) =>
+                                const SizedBox(
                                   width: 100,
                                   height: 100,
                                 ),
@@ -2027,25 +1478,17 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                   Obx(() {
                                     if (cartController.refreshInt.value > 0) {
                                       cartController.price = model
-                                          .value
-                                          .data!
-                                          .categoryProducts!
-                                          .products![index]
-                                          .currencySymbol
+                                          .value.data!.categoryProducts!.products![index].currencySymbol
                                           .toString();
                                     }
                                     return Row(
                                       children: [
-                                        if (cartController.productsMap[model
-                                            .value
-                                            .data!
-                                            .categoryProducts!
-                                            .products![index]
-                                            .id
-                                            .toString()] !=
+                                        if (cartController.productsMap[
+                                        model.value.data!.categoryProducts!.products![index].id.toString()] !=
                                             null)
                                           Text(
-                                            "${cartController.productsMap[model.value.data!.categoryProducts!.products![index].id.toString()]}X",
+                                            "${cartController.productsMap[model.value.data!.categoryProducts!
+                                                .products![index].id.toString()]}X",
                                             style: GoogleFonts.poppins(
                                                 color: const Color(0xFFE02020),
                                                 fontSize: 15,
@@ -2053,9 +1496,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                           ),
                                         Expanded(
                                           child: Text(
-                                            model.value.data!.categoryProducts!
-                                                .products![index].name
-                                                .toString(),
+                                            model.value.data!.categoryProducts!.products![index].name.toString(),
                                             overflow: TextOverflow.ellipsis,
                                             maxLines: 1,
                                             softWrap: false,
@@ -2071,9 +1512,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                   }),
                                   addHeight(4),
                                   Text(
-                                    model.value.data!.categoryProducts!
-                                        .products![index].shortDescription
-                                        .toString(),
+                                    model.value.data!.categoryProducts!.products![index].shortDescription.toString(),
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 2,
                                     softWrap: false,
@@ -2093,42 +1532,21 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                       )),
                                   addHeight(10),
                                   Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       formatPrice2(
-                                        model
-                                            .value
-                                            .data!
-                                            .categoryProducts!
-                                            .products![index]
-                                            .regularPrice ??
-                                            '',
-                                        model
-                                            .value
-                                            .data!
-                                            .categoryProducts!
-                                            .products![index]
-                                            .currencySymbol ??
-                                            '',
+                                        model.value.data!.categoryProducts!.products![index].regularPrice ?? '',
+                                        model.value.data!.categoryProducts!.products![index].currencySymbol ?? '',
                                         GoogleFonts.poppins(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 13,
-                                            color: const Color(0xFF444444)),
+                                            fontWeight: FontWeight.w500, fontSize: 13, color: const Color(0xFF444444)),
                                       ),
                                       addWidth(20),
                                       Padding(
-                                        padding: const EdgeInsets.only(
-                                            right: 10, bottom: 10),
+                                        padding: const EdgeInsets.only(right: 10, bottom: 10),
                                         child: InkWell(
                                           onTap: () {
-                                            addToCart(model
-                                                .value
-                                                .data!
-                                                .categoryProducts!
-                                                .products![index]
-                                                .id
-                                                .toString());
+                                            addToCart(
+                                                model.value.data!.categoryProducts!.products![index].id.toString());
                                             cartBottomWidget();
                                           },
                                           child: Container(
@@ -2136,9 +1554,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                                             height: 25,
                                             // width: 100,
                                             decoration: BoxDecoration(
-                                                borderRadius:
-                                                BorderRadius.circular(6),
-                                                color: const Color(0xFFE02020)),
+                                                borderRadius: BorderRadius.circular(6), color: const Color(0xFFE02020)),
                                             child: Center(
                                               child: Text(
                                                 'ADD TO CART',
@@ -2180,22 +1596,20 @@ Future addToWishlist(id, context) async {
   final wishList = Get.put(WishlistController());
   Map<String, dynamic> map = {};
   map['product_id'] = id;
-  await Repositories()
-      .postApi(url: ApiUrls.addToWishlist, mapData: map, context: context)
-      .then((value) {
-    ModelResponseCommon modelAddToWishlist =
-    ModelResponseCommon.fromJson(jsonDecode(value));
+  await Repositories().postApi(url: ApiUrls.addToWishlist, mapData: map, context: context).then((value) {
+    ModelResponseCommon modelAddToWishlist = ModelResponseCommon.fromJson(jsonDecode(value));
     if (modelAddToWishlist.message.toString().contains("added")) {
       wishList.getWishListData();
       wishList.favProductsList.add(id.toString());
     } else {
-      wishList.favProductsList
-          .removeWhere((element) => element.toString() == id.toString());
-      wishList.model.value.data!
-          .removeWhere((element) => element.id.toString() == id.toString());
+      wishList.favProductsList.removeWhere((element) => element.toString() == id.toString());
+      wishList.model.value.data!.removeWhere((element) => element.id.toString() == id.toString());
     }
     if (modelAddToWishlist.status!) {
-      showToast(modelAddToWishlist.message.toString().split("'").first);
+      showToast(modelAddToWishlist.message
+          .toString()
+          .split("'")
+          .first);
     } else {
       showToast(modelAddToWishlist.message.toString());
     }
@@ -2264,11 +1678,12 @@ appBottomLogo() {
               child: Padding(
                 padding: const EdgeInsets.only(left: 10.0, right: 10),
                 child: CachedNetworkImage(
-                  progressIndicatorBuilder: (context, url, progress) => Center(
-                    child: CircularProgressIndicator(
-                      value: progress.progress,
-                    ),
-                  ),
+                  progressIndicatorBuilder: (context, url, progress) =>
+                      Center(
+                        child: CircularProgressIndicator(
+                          value: progress.progress,
+                        ),
+                      ),
                   imageUrl: modelSiteUrl.data!.first.cwLogo ?? '',
                 ),
               ),
@@ -2284,12 +1699,13 @@ appBottomLogo() {
             },
             child: Center(
               child: CachedNetworkImage(
-                progressIndicatorBuilder: (context, url, progress) => Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.black,
-                    value: progress.progress,
-                  ),
-                ),
+                progressIndicatorBuilder: (context, url, progress) =>
+                    Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.black,
+                        value: progress.progress,
+                      ),
+                    ),
                 imageUrl: modelSiteUrl.data!.first.mokaLogo ?? '',
               ),
             ),
@@ -2300,4 +1716,3 @@ appBottomLogo() {
     ],
   );
 }
-
