@@ -45,7 +45,7 @@ class _SplashScreen2State extends State<SplashScreen2> {
     animatedStarted = true;
     await Future.delayed(const Duration(milliseconds: 100));
     animate.value = true;
-    await Future.delayed(const Duration(milliseconds: 3500));
+    await Future.delayed(const Duration(milliseconds: 300));
     animate.value = false;
     await Future.delayed(const Duration(milliseconds: 900));
 
@@ -64,6 +64,7 @@ class _SplashScreen2State extends State<SplashScreen2> {
       url: ApiUrls.splashScreenUrl,
     )
         .then((value) {
+          print("log print ");
       modelSplash.value = SplashModel.fromJson(jsonDecode(value));
       if (modelSplash.value.status!) {
         statusOfSplash.value = RxStatus.success();

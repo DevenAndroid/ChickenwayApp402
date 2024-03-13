@@ -23,8 +23,8 @@ class ModelPopUp {
 }
 
 class Data {
-  String? title;
-  String? img;
+  dynamic title;
+  dynamic img;
 
   Data({this.title, this.img});
 

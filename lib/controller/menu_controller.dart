@@ -36,14 +36,11 @@ class ProductsMenuController extends GetxController {
   }
 
   Future getProducts() async {
-    await repositories
-        .postApi(url: ApiUrls.getAllMenuProductsUrl, mapData: {}).then((value) {
-      ModelFoodMenuProducts menuItemsModel =
-          ModelFoodMenuProducts.fromJson(jsonDecode(value));
-      menuItemsModel.data!.removeWhere((element) =>
-          element.productsData == null || element.productsData!.isEmpty);
+    await repositories.postApi(url: ApiUrls.getAllMenuProductsUrl, mapData: {}).then((value) {
+      ModelFoodMenuProducts menuItemsModel = ModelFoodMenuProducts.fromJson(jsonDecode(value));
+      menuItemsModel.data!.removeWhere((element) => element.productsData == null || element.productsData!.isEmpty);
       if (menuItemsModel.data != null) {
-        yalCategories.clear();
+         yalCategories.clear();
         forMenuScreen.clear();
         homeScreenTop.clear();
         for (var element in menuItemsModel.data!) {
@@ -79,6 +76,7 @@ class ProductsMenuController extends GetxController {
       }
       updateUi();
     });
+
   }
 
   getAll() {

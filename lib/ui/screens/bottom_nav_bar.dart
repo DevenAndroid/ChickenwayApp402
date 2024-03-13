@@ -36,6 +36,7 @@ import '../../controller/orders_controller.dart';
 import '../../helper/helper.dart';
 import '../../models/chicken/model_home.dart';
 import '../../models/match_apk_model.dart';
+import '../../models/model_food_menu.dart';
 import '../../models/model_popup_data.dart';
 import '../../models/model_shipping_methods.dart';
 import '../../models/notificaton_onclick_model.dart';
@@ -57,7 +58,6 @@ import 'menu_screen.dart';
 
 // String siteUrl = "";
 ModelSiteUrl modelSiteUrl = ModelSiteUrl();
-
 
 NotificationServices notificationServices = NotificationServices();
 
@@ -487,6 +487,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
   final profileController = Get.put(ProfileController());
   final addressController = Get.put(AddressController());
   final menuController = Get.put(ProductsMenuController());
+  // final menuController = Get.put(ProductsMenuController());
 
   Rx<ModelResponseCommon> modelDelete = ModelResponseCommon().obs;
 
@@ -615,7 +616,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
     map['fcm_token'] = fcmToekn!;
     log("Data ${map.toString()}");
     repositories
-        .postApi(url: ("https://chickenway.app/statging/wp-json/api/woocustomer/update_user_fcm_data"), mapData: map, context: context)
+        .postApi(url: ("https://chickenway.app/wp-json/api/woocustomer/update_user_fcm_data"), mapData: map, context: context)
         .then((value) {
       log("Data before login ${map.toString()}");
     });
@@ -737,17 +738,28 @@ class MainHomeScreenState extends State<MainHomeScreen> {
 
     manageSplash();
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+
       // version();
       popup();
       checkFirstAppLaunch();
+      // gg();
       manageSiteUrl();
-      menuController.getProducts();
-      homeData();
+       // menuController.getProducts();
+       homeData();
       cartController.resetAll();
+
+      // menuController.ic;
+      // gg();
+
 
     });
 
   }
+  //
+  // gg()
+  // async{
+  //   await menuController.getAllAsync();
+  // }
 
   bool noInternetRetry = false;
   RxString time = "00:00".obs;
@@ -804,8 +816,9 @@ class MainHomeScreenState extends State<MainHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    menuController.getProducts();
     var height= MediaQuery.of(context).size.height;
-
+     // menuController.getProducts();
 
     return showSplashScreen
         ? const SplashScreen()
@@ -832,16 +845,13 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                   await homeData();
                   await cartController.getData();
                   await wishList.getWishListData();
+                  await menuController.getProducts();
                   // if (menuController.forMenuScreen.isEmpty &&
                   //     menuController.storeInfo.data == null) {
                   await menuController.getAllAsync();
+
                   // }
                   manageSiteUrl();
-                  setState(() {
-
-
-                    menuController.getProducts();
-                  });
                 },
                 child: SingleChildScrollView(
                   child: Column(
@@ -1774,8 +1784,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
             childAspectRatio: 1),
         itemCount: menuController.yalCategories.entries.length,
         itemBuilder: (context, index) {
-          final shortcut =
-              menuController.yalCategories.entries.toList()[index].value;
+          final shortcut = menuController.yalCategories.entries.toList()[index].value;
           return GestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () {
