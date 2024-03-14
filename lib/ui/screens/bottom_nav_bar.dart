@@ -1281,7 +1281,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
       addHeight(10),
 
       Obx(() {
-        if(menuController.refreshInt.value > 0) {}
+        if (menuController.refreshInt.value > 0) {}
         return GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -1318,60 +1318,63 @@ class MainHomeScreenState extends State<MainHomeScreen> {
   SingleChildScrollView menuItems() {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          ...menuController.homeScreenTop.entries
-              .map((e) =>
-              Container(
-                width: 60,
-                margin: const EdgeInsets.symmetric(horizontal: 4),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Get.toNamed(MenuScreen.route, arguments: e.value.slug.toString());
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                        margin: const EdgeInsets.all(0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(7),
-                          child: CachedNetworkImage(
-                            imageUrl: e.value.iconCate.toString(),
-                            width: 40,
-                            height: 40,
-                            errorWidget: (_, __, ___) =>
-                            const SizedBox(
+      child: Obx(() {
+        if (menuController.refreshInt.value > 0) {}
+        return Row(
+          children: [
+            ...menuController.homeScreenTop.entries
+                .map((e) =>
+                Container(
+                  width: 60,
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Get.toNamed(MenuScreen.route, arguments: e.value.slug.toString());
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                          margin: const EdgeInsets.all(0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(7),
+                            child: CachedNetworkImage(
+                              imageUrl: e.value.iconCate.toString(),
                               width: 40,
                               height: 40,
+                              errorWidget: (_, __, ___) =>
+                              const SizedBox(
+                                width: 40,
+                                height: 40,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    addHeight(5),
-                    Text(
-                      e.value.name.toString(),
-                      maxLines: 1,
-                      overflow: TextOverflow.visible,
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 10,
-                        color: const Color(0xFF292323),
+                      addHeight(5),
+                      Text(
+                        e.value.name.toString(),
+                        maxLines: 1,
+                        overflow: TextOverflow.visible,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 10,
+                          color: const Color(0xFF292323),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ))
-              .toList(),
-          const SizedBox(
-            width: 15,
-          ),
-        ],
-      ),
+                    ],
+                  ),
+                ))
+                .toList(),
+            const SizedBox(
+              width: 15,
+            ),
+          ],
+        );
+      }),
     );
   }
 
@@ -1431,7 +1434,7 @@ class MainHomeScreenState extends State<MainHomeScreen> {
                   width: MediaQuery
                       .of(context)
                       .size
-                      .width * .85,
+                      .width * .90,
                   margin: const EdgeInsets.all(5).copyWith(left: 12, right: 0),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8.0),

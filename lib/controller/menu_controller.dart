@@ -63,6 +63,7 @@ class ProductsMenuController extends GetxController {
         homeScreenTop = Map.fromEntries(homeScreenTop.entries.toList()
           ..sort((a, b) => (int.tryParse(a.key) ?? 1000)
               .compareTo((int.tryParse(b.key) ?? 1000))));
+          updateUi();
         yalCategories = Map.fromEntries(yalCategories.entries.toList()
           ..sort((a, b) => (int.tryParse(a.key) ?? 1000)
               .compareTo((int.tryParse(b.key) ?? 1000))));

@@ -45,7 +45,7 @@ class _SplashScreen2State extends State<SplashScreen2> {
     animatedStarted = true;
     await Future.delayed(const Duration(milliseconds: 100));
     animate.value = true;
-    await Future.delayed(const Duration(milliseconds: 300));
+    await Future.delayed(const Duration(milliseconds: 3000));
     animate.value = false;
     await Future.delayed(const Duration(milliseconds: 900));
 
