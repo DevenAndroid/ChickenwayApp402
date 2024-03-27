@@ -50,7 +50,6 @@ class ApiUrls {
   static const String apkVersion = "https://chickenway.app/wp-json/api/woohomepage/get_apk_version";
   static const String deleteUser = "https://chickenway.app/wp-json/api/woocustomer/delete_user_account";
   static const String matchApkVersion = "https://chickenway.app/wp-json/api/woohomepage/send_apk_version";
-  // static const String aboutUs = "${apiBaseUrl}woohomepage/about_us";
   static const String privicyPolicy =
       "${apiBaseUrl}woohomepage/privacy_policy_screen";
   static const String termCondition =

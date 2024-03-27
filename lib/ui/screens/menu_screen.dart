@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collection/collection.dart';
 import 'package:badges/badges.dart';
@@ -421,7 +422,7 @@ class _MenuScreenState extends State<MenuScreen> {
   SliverAppBar firstAppBar(Size size) {
     return SliverAppBar(
       pinned: true,
-      expandedHeight: 365,
+      expandedHeight:Platform.isAndroid? 365:310,
       collapsedHeight: 56,
       flexibleSpace: headerSection(size),
       backgroundColor: Colors.white,

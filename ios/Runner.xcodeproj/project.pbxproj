@@ -388,14 +388,15 @@
 				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = V8W6U38L23;
 				ENABLE_BITCODE = NO;
-				FLUTTER_BUILD_NAME = 1.0.13;
+				FLUTTER_BUILD_NAME = 1.0.14;
+				FLUTTER_BUILD_NUMBER = 410;
 				INFOPLIST_FILE = Runner/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.13;
+				MARKETING_VERSION = 1.0.14;
 				PRODUCT_BUNDLE_IDENTIFIER = com.moka.chickenway;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -527,14 +528,15 @@
 				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = V8W6U38L23;
 				ENABLE_BITCODE = NO;
-				FLUTTER_BUILD_NAME = 1.0.13;
+				FLUTTER_BUILD_NAME = 1.0.14;
+				FLUTTER_BUILD_NUMBER = 410;
 				INFOPLIST_FILE = Runner/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.13;
+				MARKETING_VERSION = 1.0.14;
 				PRODUCT_BUNDLE_IDENTIFIER = com.moka.chickenway;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -558,14 +560,15 @@
 				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = V8W6U38L23;
 				ENABLE_BITCODE = NO;
-				FLUTTER_BUILD_NAME = 1.0.13;
+				FLUTTER_BUILD_NAME = 1.0.14;
+				FLUTTER_BUILD_NUMBER = 410;
 				INFOPLIST_FILE = Runner/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.13;
+				MARKETING_VERSION = 1.0.14;
 				PRODUCT_BUNDLE_IDENTIFIER = com.moka.chickenway;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
